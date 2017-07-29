@@ -11,7 +11,14 @@ function start(resilioConfigFilePath, callbackOnClose) {
     stdio: 'ignore'
   });
   if (callbackOnClose) {
-    resilioProcess.on('close', code => callbackOnClose(code, resilioConfigFilePath));
+    resilioProcess.on('close', code => {
+      if (code) {
+        console.warn("Resilio Sync crashed.");
+      } else {
+        console.log("Resilio Sync finished.");
+      }
+      callbackOnClose(code, resilioConfigFilePath);
+    });
   }
 }
 

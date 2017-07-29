@@ -31,16 +31,11 @@ function parseConfigFile(inputFilename, outputFilename) {
 }
 
 function startResilio(resilioConfigFilePath, watchmode) {
-  const callback = watchmode ? resilioOnWatchmodeClose : resilioOnDefaultClose;
+  const callback = watchmode ? resilioOnWatchmodeClose : null;
   resilio.start(resilioConfigFilePath, callback);
 }
 
-function resilioOnDefaultClose(code) {
-  console.log('Resilio Sync ended.', code);
-}
-
 function resilioOnWatchmodeClose(code, resilioConfigFilePath) {
-  console.log('Resilio Sync ended.', code);
   setTimeout(resilioConfigFilePath => startResilio(resilioConfigFilePath, true), 5000, resilioConfigFilePath);
 }
 
