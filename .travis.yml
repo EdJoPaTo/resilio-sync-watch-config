@@ -7,3 +7,5 @@ node_js:
   - "8.2"
   - "8"
   - "node"
+notifications:
+  email: false
