@@ -6,6 +6,9 @@ const fs = require('fs');
 const parseConfig = require('./parseConfig.js');
 const resilio = require('./resilio-sync.js');
 
+let shutdown = false;
+let tmpFolder;
+
 function usage(err) {
   const usage = 'usage: resilio-sync-watch-config [options] config.json';
   const options = [
@@ -31,11 +34,13 @@ function parseConfigFile(inputFilename, outputFilename) {
 }
 
 function startResilio(resilioConfigFilePath, watchmode) {
+  if (shutdown) cleanup();
   const callback = watchmode ? resilioOnWatchmodeClose : null;
   resilio.start(resilioConfigFilePath, callback);
 }
 
 function resilioOnWatchmodeClose(code, resilioConfigFilePath) {
+  if (shutdown) cleanup();
   setTimeout(resilioConfigFilePath => startResilio(resilioConfigFilePath, true), 5000, resilioConfigFilePath);
 }
 
@@ -43,6 +48,24 @@ function handleChange(configFilePath, resilioConfigFilePath) {
   console.log('Stop Resilio Sync…');
   resilio.stop();
   parseConfigFile(configFilePath, resilioConfigFilePath);
+}
+
+function handleExitRequest() {
+  console.log('exit request received.');
+  if (!shutdown) {
+    shutdown = true;
+    console.log('Stop Resilio…');
+    resilio.stop();
+  } else {
+    console.log('Force stop…');
+    process.exit(1);
+  }
+}
+
+function cleanup() {
+  if (tmpFolder)
+    fs.rmdirSync(tmpFolder);
+  process.exit(0);
 }
 
 let configFilePath;
@@ -66,8 +89,7 @@ try {
 
 let resilioConfigFilePath;
 if (start) {
-  //TODO: cleanup tmpFolder on finish
-  const tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
+  tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
   resilioConfigFilePath = tmpFolder + '/sync.conf';
 } else {
   resilioConfigFilePath = 'sync.conf';
@@ -77,6 +99,8 @@ parseConfigFile(configFilePath, resilioConfigFilePath);
 
 if (start) {
   startResilio(resilioConfigFilePath, watchmode);
+  process.on('SIGINT', handleExitRequest);
+  process.on('SIGTERM', handleExitRequest);
 }
 
 if (watchmode) {
