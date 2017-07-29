@@ -18,6 +18,9 @@
   },
   "author": "Edgar To",
   "license": "MIT",
+  "engines": {
+    "node": ">=6"
+  },
   "devDependencies": {
     "jasmine": "^2.7.0",
     "jshint": "^2.9.5"
