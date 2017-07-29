@@ -6,10 +6,6 @@ const fs = require('fs');
 const parseConfig = require('./parseConfig.js');
 const resilio = require('./resilio-sync.js');
 
-//TODO: cleanup tmpFolder on finish
-const tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
-const RESILIO_CONFIG = tmpFolder + '/sync.conf';
-
 function usage(err) {
   const usage = 'usage: resilio-sync-watch-config [options] config.json';
   const options = [
@@ -73,10 +69,19 @@ try {
   usage();
 }
 
-parseConfigFile(configFilePath, RESILIO_CONFIG);
+let resilioConfigFilePath;
+if (start) {
+  //TODO: cleanup tmpFolder on finish
+  const tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
+  resilioConfigFilePath = tmpFolder + '/sync.conf';
+} else {
+  resilioConfigFilePath = 'sync.conf';
+}
+
+parseConfigFile(configFilePath, resilioConfigFilePath);
 
 if (start) {
-  startResilio(RESILIO_CONFIG, watchmode);
+  startResilio(resilioConfigFilePath, watchmode);
 }
 
 if (watchmode) {
@@ -84,7 +89,7 @@ if (watchmode) {
   let lastChange = 0;
   fs.watch(configFilePath, () => {
     setTimeout(id => {
-      if (id === lastChange) handleChange(configFilePath, RESILIO_CONFIG);
+      if (id === lastChange) handleChange(configFilePath, resilioConfigFilePath);
     }, 100, ++lastChange);
   });
 }
