@@ -56,12 +56,17 @@ function handleChange(configFilePath) {
   parseConfigFile(configFilePath);
 }
 
+let configFilePath;
+let start;
+let watchmode;
+
 try {
   const args = process.argv.slice(2);
-  const configFilePath = args[args.length - 1];
   const help = args.some(s => s === '-h' || s === '--help');
-  const start = args.some(s => s === '-s' || s === '-w');
-  const watchmode = args.some(s => s === '-w');
+
+  configFilePath = args[args.length - 1];
+  start = args.some(s => s === '-s' || s === '-w');
+  watchmode = args.some(s => s === '-w');
 
   if (help || !configFilePath) {
     usage();
