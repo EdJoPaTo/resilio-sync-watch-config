@@ -9,7 +9,8 @@
   "scripts": {
     "jshint": "jshint *.js",
     "pretest": "npm run jshint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "jasmine": "jasmine",
+    "test": "npm run jasmine"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "author": "Edgar To",
   "license": "MIT",
   "devDependencies": {
+    "jasmine": "^2.7.0",
     "jshint": "^2.9.5"
   }
 }
