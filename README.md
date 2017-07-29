@@ -1,5 +1,7 @@
 # Resilio Sync Watch Config
 
+[![Build Status](https://travis-ci.org/EdJoPaTo/resilio-sync-watch-config.svg?branch=master)](https://travis-ci.org/EdJoPaTo/resilio-sync-watch-config)
+
 This tool was created to support the [Resilio Sync Home](//www.resilio.com/individuals/) software on headless devices.
 
 ## Install
