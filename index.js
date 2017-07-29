@@ -86,7 +86,7 @@ if (start) {
 if (watchmode) {
   console.log('watch', configFilePath);
   let lastChange = 0;
-  fs.watch(configFilePath, (eventType) => {
+  fs.watch(configFilePath, () => {
     setTimeout(id => {
       if (id === lastChange) handleChange(configFilePath);
     }, 100, ++lastChange);
