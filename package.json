@@ -14,15 +14,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/edjopato/resilio-sync-watch-config"
+    "url": "git+https://github.com/edjopato/resilio-sync-watch-config.git"
   },
   "author": "Edgar To",
   "license": "MIT",
   "engines": {
     "node": ">=6"
   },
+  "dependencies": {},
   "devDependencies": {
     "jasmine": "^2.7.0",
     "jshint": "^2.9.5"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
+  },
+  "homepage": "https://github.com/edjopato/resilio-sync-watch-config#readme"
 }
