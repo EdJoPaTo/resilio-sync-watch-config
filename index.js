@@ -2,12 +2,13 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
+
 const parseConfig = require('./parseConfig.js');
+const resilio = require('./resilio-sync.js');
 
 //TODO: cleanup tmpFolder on finish
 const tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
 const RESILIO_CONFIG = tmpFolder + '/sync.conf';
-let resilioProcess;
 
 function usage(err) {
   const usage = 'usage: resilio-sync-watch-config [options] config.json';
@@ -33,26 +34,23 @@ function parseConfigFile(filename) {
   }
 }
 
-function startSync(watchmodeEnabled) {
-  const rslsync = 'rslsync';
-  const syncArgs = ['--nodaemon', '--config', RESILIO_CONFIG];
-  const pipeOutputToNowhere = ">/dev/zero 2>/dev/zero";
+function startResilio(resilioConfigFilePath, watchmode) {
+  const callback = watchmode ? resilioOnWatchmodeClose : resilioOnDefaultClose;
+  resilio.start(resilioConfigFilePath, callback);
+}
 
-  console.log('start', rslsync, syncArgs);
-  resilioProcess = child_process.spawn(rslsync, syncArgs, {
-    stdio: 'ignore'
-  });
-  resilioProcess.on('close', (code) => {
-    console.log('Resilio Sync ended.', code);
-    if (watchmodeEnabled) {
-      setTimeout(startSync, 5000, watchmodeEnabled);
-    }
-  });
+function resilioOnDefaultClose(code) {
+  console.log('Resilio Sync ended.', code);
+}
+
+function resilioOnWatchmodeClose(code, resilioConfigFilePath) {
+  console.log('Resilio Sync ended.', code);
+  setTimeout(resilioConfigFilePath => startResilio(resilioConfigFilePath, true), 5000, resilioConfigFilePath);
 }
 
 function handleChange(configFilePath) {
   console.log('Stop Resilio Sync…');
-  resilioProcess.kill();
+  resilio.stop();
   parseConfigFile(configFilePath);
 }
 
@@ -78,7 +76,7 @@ try {
 parseConfigFile(configFilePath);
 
 if (start) {
-  startSync(watchmode);
+  startResilio(RESILIO_CONFIG, watchmode);
 }
 
 if (watchmode) {
