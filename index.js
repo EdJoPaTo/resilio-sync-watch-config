@@ -4,7 +4,9 @@ const child_process = require('child_process');
 const fs = require('fs');
 const parseConfig = require('./parseConfig.js');
 
-const RESILIO_CONFIG = 'sync.conf';
+//TODO: cleanup tmpFolder on finish
+const tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
+const RESILIO_CONFIG = tmpFolder + '/sync.conf';
 let resilioProcess;
 
 function usage(err) {
