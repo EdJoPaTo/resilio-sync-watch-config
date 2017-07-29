@@ -33,8 +33,6 @@ function parseConfigFile(filename) {
   }
 }
 
-let first = true;
-
 function startSync(watchmodeEnabled) {
   const rslsync = 'rslsync';
   const syncArgs = ['--nodaemon', '--config', RESILIO_CONFIG];
