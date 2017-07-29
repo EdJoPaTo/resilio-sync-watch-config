@@ -2,6 +2,24 @@
 
 This tool was created to support the [Resilio Sync Home](//www.resilio.com/individuals/) software on headless devices.
 
+## Install
+
+Just install it globally with npm:
+
+```sh
+npm i -g resilio-sync-watch-config
+```
+
+## Usage
+
+```sh
+resilio-sync-watch-config [options] config.json
+
+options:
+-s	Start Resilio Sync after config generation
+-w	Watch config. Restart Resilio Sync when changed. Implies -s
+```
+
 ## Backstory
 
 In my case I dont want to use the webgui so I created config files with the folders in it.
