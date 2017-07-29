@@ -1,24 +1,21 @@
 #!/usr/bin/env node
 
 const child_process = require('child_process');
+const cli = require('cli');
 const fs = require('fs');
 
 const parseConfig = require('./parseConfig.js');
 const resilio = require('./resilio-sync.js');
 
+cli.enable('version');
+cli.setUsage(cli.app + ' [options] config.json');
+cli.parse({
+  start: ['s', 'Start resilio sync after config generation'],
+  watchmode: ['w', 'Watch config changes and restart Resilio Sync on change. Implies -s']
+});
+
 let shutdown = false;
 let tmpFolder;
-
-function usage(err) {
-  const usage = 'usage: resilio-sync-watch-config [options] config.json';
-  const options = [
-    '-s\tStart Resilio Sync after config generation',
-    '-w\tWatch config. Restart Resilio Sync when changed. Implies -s'
-  ];
-
-  console.log(usage + '\n\noptions:\n' + options.join('\n'));
-  process.exit(err ? 1 : 0);
-}
 
 function parseConfigFile(inputFilename, outputFilename) {
   try {
@@ -68,27 +65,14 @@ function cleanup() {
   process.exit(0);
 }
 
-let configFilePath;
-let start;
-let watchmode;
-
-try {
-  const args = process.argv.slice(2);
-  const help = args.some(s => s === '-h' || s === '--help');
-
-  configFilePath = args[args.length - 1];
-  start = args.some(s => s === '-s' || s === '-w');
-  watchmode = args.some(s => s === '-w');
-
-  if (help || !configFilePath) {
-    usage();
-  }
-} catch (err) {
-  usage();
+if (cli.args.length !== 1) { // can not be the configFilePath
+  cli.getUsage();
+  process.exit(1);
 }
+const configFilePath = cli.args[0];
 
 let resilioConfigFilePath;
-if (start) {
+if (cli.options.start || cli.options.watchmode) {
   tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-');
   resilioConfigFilePath = tmpFolder + '/sync.conf';
 } else {
@@ -97,13 +81,13 @@ if (start) {
 
 parseConfigFile(configFilePath, resilioConfigFilePath);
 
-if (start) {
-  startResilio(resilioConfigFilePath, watchmode);
+if (cli.options.start || cli.options.watchmode) {
+  startResilio(resilioConfigFilePath, cli.options.watchmode);
   process.on('SIGINT', handleExitRequest);
   process.on('SIGTERM', handleExitRequest);
 }
 
-if (watchmode) {
+if (cli.options.watchmode) {
   console.log('watch', configFilePath);
   let lastChange = 0;
   fs.watch(configFilePath, () => {

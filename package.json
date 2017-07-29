@@ -21,7 +21,9 @@
   "engines": {
     "node": ">=6"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cli": "^1.0.1"
+  },
   "devDependencies": {
     "jasmine": "^2.7.0",
     "jshint": "^2.9.5"
