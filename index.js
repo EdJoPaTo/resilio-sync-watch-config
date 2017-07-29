@@ -21,13 +21,13 @@ function usage(err) {
   process.exit(err ? 1 : 0);
 }
 
-function parseConfigFile(filename) {
+function parseConfigFile(inputFilename, outputFilename) {
   try {
     console.log("generate config…");
-    const contentString = fs.readFileSync(filename, 'utf8');
+    const contentString = fs.readFileSync(inputFilename, 'utf8');
     const content = JSON.parse(contentString);
     const resilioConfig = parseConfig(content);
-    fs.writeFileSync(RESILIO_CONFIG, JSON.stringify(resilioConfig, null, '  '), 'utf8');
+    fs.writeFileSync(outputFilename, JSON.stringify(resilioConfig, null, '  '), 'utf8');
     child_process.execFileSync('mkdir', ['-p', resilioConfig.storage_path]);
   } catch (err) {
     console.error('generate config failed:', err);
@@ -48,10 +48,10 @@ function resilioOnWatchmodeClose(code, resilioConfigFilePath) {
   setTimeout(resilioConfigFilePath => startResilio(resilioConfigFilePath, true), 5000, resilioConfigFilePath);
 }
 
-function handleChange(configFilePath) {
+function handleChange(configFilePath, resilioConfigFilePath) {
   console.log('Stop Resilio Sync…');
   resilio.stop();
-  parseConfigFile(configFilePath);
+  parseConfigFile(configFilePath, resilioConfigFilePath);
 }
 
 let configFilePath;
@@ -73,7 +73,7 @@ try {
   usage();
 }
 
-parseConfigFile(configFilePath);
+parseConfigFile(configFilePath, RESILIO_CONFIG);
 
 if (start) {
   startResilio(RESILIO_CONFIG, watchmode);
@@ -84,7 +84,7 @@ if (watchmode) {
   let lastChange = 0;
   fs.watch(configFilePath, () => {
     setTimeout(id => {
-      if (id === lastChange) handleChange(configFilePath);
+      if (id === lastChange) handleChange(configFilePath, RESILIO_CONFIG);
     }, 100, ++lastChange);
   });
 }
