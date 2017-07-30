@@ -61,15 +61,15 @@ This config will lead to the following output config:
   "shared_folders": [
     {
       "dir": "/path/to/resilio/base/folder/uniStuff",
-      "secret": "FL2PHMUSM2GPOODM6XETAC7FUSIUB7SMH"
+      "secret": "<key>"
     },
     {
       "dir": "/path/to/resilio/base/folder/homeStuff",
-      "secret": "DO3CFXKN2BBZYT3EZV677QTANLYCQWEIK"
+      "secret": "<key>"
     },
     {
       "dir": "/path/to/resilio/base/folder/tmp",
-      "secret": "FURHCSUTIQ3SIT6XVDYUJSVUE7CHSZ6R3"
+      "secret": "<key>"
     }
   ],
   "folder_defaults.use_lan_broadcast": false,
