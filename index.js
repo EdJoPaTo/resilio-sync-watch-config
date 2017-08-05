@@ -10,6 +10,7 @@ const resilio = require('./resilio-sync.js');
 cli.enable('version');
 cli.setUsage(cli.app + ' [options] config.json');
 cli.parse({
+  resilioBin: ['b', 'Binary of Resilio. Can be used if rslsync is not in PATH.', 'file', 'rslsync'],
   start: ['s', 'Start resilio sync after config generation'],
   watchmode: ['w', 'Watch config changes and restart Resilio Sync on change. Implies -s']
 });
@@ -30,15 +31,15 @@ function parseConfigFile(inputFilename, outputFilename) {
   }
 }
 
-function startResilio(resilioConfigFilePath, watchmode) {
+function startResilio(resilioBinary, resilioConfigFilePath, watchmode) {
   if (shutdown) cleanup();
   const callback = watchmode ? resilioOnWatchmodeClose : null;
-  resilio.start(resilioConfigFilePath, callback);
+  resilio.start(resilioBinary, resilioConfigFilePath, callback);
 }
 
 function resilioOnWatchmodeClose(code, resilioConfigFilePath) {
   if (shutdown) cleanup();
-  setTimeout(resilioConfigFilePath => startResilio(resilioConfigFilePath, true), 5000, resilioConfigFilePath);
+  setTimeout(resilioConfigFilePath => startResilio(resilioBinary, resilioConfigFilePath, true), 5000, resilioConfigFilePath);
 }
 
 function handleChange(configFilePath, resilioConfigFilePath) {
@@ -82,7 +83,7 @@ if (cli.options.start || cli.options.watchmode) {
 parseConfigFile(configFilePath, resilioConfigFilePath);
 
 if (cli.options.start || cli.options.watchmode) {
-  startResilio(resilioConfigFilePath, cli.options.watchmode);
+  startResilio(cli.options.resilioBin, resilioConfigFilePath, cli.options.watchmode);
   process.on('SIGINT', handleExitRequest);
   process.on('SIGTERM', handleExitRequest);
 }

@@ -2,12 +2,11 @@ const spawn = require('child_process').spawn;
 
 let resilioProcess;
 
-function start(resilioConfigFilePath, callbackOnClose) {
-  const rslsync = 'rslsync';
+function start(resilioBinary, resilioConfigFilePath, callbackOnClose) {
   const syncArgs = ['--nodaemon', '--config', resilioConfigFilePath];
 
-  console.log('start', rslsync, 'with config', resilioConfigFilePath);
-  resilioProcess = spawn(rslsync, syncArgs, {
+  console.log('start', resilioBinary, 'with config', resilioConfigFilePath);
+  resilioProcess = spawn(resilioBinary, syncArgs, {
     stdio: 'ignore'
   });
   if (callbackOnClose) {
