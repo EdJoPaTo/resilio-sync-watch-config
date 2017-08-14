@@ -1,3 +1,31 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/edjopato/resilio-sync-watch-config/compare/v1.3.0...v1.4.0) (2017-08-14)
+
+
+### feat
+
+* allow use of ~ in basepath ([8304bc0](https://github.com/edjopato/resilio-sync-watch-config/commit/8304bc0)), closes [#8](https://github.com/edjopato/resilio-sync-watch-config/issues/8)
+
+### fix
+
+* cleanup tmpFolder before deleting it ([dc5b99e](https://github.com/edjopato/resilio-sync-watch-config/commit/dc5b99e)), closes [#5](https://github.com/edjopato/resilio-sync-watch-config/issues/5)
+
+### refactor
+
+* change resilio from methods to a class ([139b9f6](https://github.com/edjopato/resilio-sync-watch-config/commit/139b9f6)), closes [#7](https://github.com/edjopato/resilio-sync-watch-config/issues/7)
+* fix eslint 'no-return-assign' ([66c036c](https://github.com/edjopato/resilio-sync-watch-config/commit/66c036c))
+* move ensureTrailingSlash into its own method ([ae94f03](https://github.com/edjopato/resilio-sync-watch-config/commit/ae94f03))
+* only import method instead of all methods ([802de52](https://github.com/edjopato/resilio-sync-watch-config/commit/802de52))
+* use const for never reassigned variable ([f5d9c39](https://github.com/edjopato/resilio-sync-watch-config/commit/f5d9c39))
+
+### style
+
+* remove semicolon ([019547e](https://github.com/edjopato/resilio-sync-watch-config/commit/019547e))
+* use curly braces for singleline if ([351a8ba](https://github.com/edjopato/resilio-sync-watch-config/commit/351a8ba))
+* use singlequotes for strings ([c7b9498](https://github.com/edjopato/resilio-sync-watch-config/commit/c7b9498))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/edjopato/resilio-sync-watch-config/compare/v1.2.0...v1.3.0) (2017-08-05)
 
