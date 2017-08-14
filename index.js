@@ -5,7 +5,7 @@ const cli = require('cli')
 const fs = require('fs')
 
 const parseConfig = require('./parseConfig.js')
-const resilio = require('./resilio-sync.js')
+const Resilio = require('./resilio-sync.js')
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -31,18 +31,18 @@ function parseConfigFile(inputFilename, outputFilename) {
   }
 }
 
-function startResilio(resilioBinary, resilioConfigFilePath, watchmode) {
+function startResilio(resilio, watchmode) {
   if (shutdown) cleanup()
   const callback = watchmode ? resilioOnWatchmodeClose : null
-  resilio.start(resilioBinary, resilioConfigFilePath, callback)
+  resilio.start(callback, resilio)
 }
 
-function resilioOnWatchmodeClose(code, resilioConfigFilePath) {
+function resilioOnWatchmodeClose(code, resilio) {
   if (shutdown) cleanup()
-  setTimeout(resilioConfigFilePath => startResilio(resilioBinary, resilioConfigFilePath, true), 5000, resilioConfigFilePath)
+  setTimeout(resilio => startResilio(resilio, true), 5000, resilio)
 }
 
-function handleChange(configFilePath, resilioConfigFilePath) {
+function handleChange(resilio, configFilePath, resilioConfigFilePath) {
   console.log('Stop Resilio Sync…')
   resilio.stop()
   parseConfigFile(configFilePath, resilioConfigFilePath)
@@ -83,18 +83,21 @@ if (cli.options.start || cli.options.watchmode) {
 
 parseConfigFile(configFilePath, resilioConfigFilePath)
 
-if (cli.options.start || cli.options.watchmode) {
-  startResilio(cli.options.resilioBin, resilioConfigFilePath, cli.options.watchmode)
-  process.on('SIGINT', handleExitRequest)
-  process.on('SIGTERM', handleExitRequest)
-}
+// only continue when something wants to start resilio
+if (!cli.options.start && !cli.options.watchmode) process.exit(0)
+
+const resilio = new Resilio(cli.options.resilioBin, resilioConfigFilePath)
+
+startResilio(resilio, cli.options.watchmode)
+process.on('SIGINT', () => handleExitRequest(resilio))
+process.on('SIGTERM', () => handleExitRequest(resilio))
 
 if (cli.options.watchmode) {
   console.log('watch', configFilePath)
   let lastChange = 0
   fs.watch(configFilePath, () => {
     setTimeout(id => {
-      if (id === lastChange) handleChange(configFilePath, resilioConfigFilePath)
+      if (id === lastChange) handleChange(resilio, configFilePath, resilioConfigFilePath)
     }, 100, ++lastChange)
   })
 }

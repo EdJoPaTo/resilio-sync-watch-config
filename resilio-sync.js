@@ -1,31 +1,30 @@
 const spawn = require('child_process').spawn
 
-let resilioProcess
+module.exports = class Resilio {
+  constructor(resilioBinary, resilioConfigFilePath) {
+    this.resilioBinary = resilioBinary
+    this.resilioConfigFilePath = resilioConfigFilePath
+  }
 
-function start(resilioBinary, resilioConfigFilePath, callbackOnClose) {
-  const syncArgs = ['--nodaemon', '--config', resilioConfigFilePath]
+  start(callbackOnClose, ...callbackArgs) {
+    const syncArgs = ['--nodaemon', '--config', this.resilioConfigFilePath]
 
-  console.log('start', resilioBinary, 'with config', resilioConfigFilePath)
-  resilioProcess = spawn(resilioBinary, syncArgs, {
-    stdio: 'ignore'
-  })
-  if (callbackOnClose) {
-    resilioProcess.on('close', code => {
+    console.log('start', this.resilioBinary, 'with config', this.resilioConfigFilePath)
+    this.resilioProcess = spawn(this.resilioBinary, syncArgs, {
+      stdio: 'ignore'
+    })
+
+    this.resilioProcess.on('close', code => {
       if (code) {
         console.warn('Resilio Sync crashed.')
       } else {
         console.log('Resilio Sync finished.')
       }
-      callbackOnClose(code, resilioConfigFilePath)
+      if (callbackOnClose) callbackOnClose(code, ...callbackArgs)
     })
   }
-}
 
-function kill() {
-  resilioProcess.kill()
-}
-
-module.exports = {
-  start: start,
-  stop: kill
+  stop() {
+    this.resilioProcess.kill()
+  }
 }
