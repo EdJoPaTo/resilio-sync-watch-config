@@ -16,7 +16,9 @@ module.exports = function(jsonConfig) {
 
   if (jsonConfig.passthrough) {
     const passthroughKeys = Object.keys(jsonConfig.passthrough);
-    passthroughKeys.forEach(key => resilioConfig[key] = jsonConfig.passthrough[key]);
+    for (const key of passthroughKeys) {
+      resilioConfig[key] = jsonConfig.passthrough[key];
+    }
   }
 
   return resilioConfig;
