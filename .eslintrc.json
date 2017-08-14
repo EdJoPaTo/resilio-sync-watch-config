@@ -1,0 +1,33 @@
+{
+  "env": {
+    "es6": true,
+    "jasmine": true,
+    "node": true
+  },
+  "extends": "standard",
+  "plugins": [
+    "jasmine"
+  ],
+  "rules": {
+    "dot-notation": "error",
+    "no-multiple-empty-lines": ["warn", {
+      "max": 2,
+      "maxEOF": 1
+    }],
+    "no-var": "error",
+    "nonblock-statement-body-position": ["error"],
+    "object-property-newline": "error",
+    "prefer-const": "error",
+    "require-await": "error",
+    "semi": ["warn", "always"],
+    "sort-keys": "warn",
+    "sort-vars": "warn",
+    "space-before-function-paren": ["error", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "semi": ["warn", "always"],
+    "quotes": "warn"
+  }
+}
