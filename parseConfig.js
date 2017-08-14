@@ -1,7 +1,12 @@
 const os = require('os')
 
+function ensureTrailingSlash(input) {
+  if (input[input.length - 1] === '/') return input
+  else return input + '/'
+}
+
 module.exports = function(jsonConfig) {
-  const basedir = jsonConfig.basedir[jsonConfig.basedir.length - 1] === '/' ? jsonConfig.basedir : jsonConfig.basedir + '/'
+  const basedir = ensureTrailingSlash(jsonConfig.basedir)
 
 
   const resilioConfig = {}
