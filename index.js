@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const child_process = require('child_process');
+const { execFileSync } = require('child_process');
 const cli = require('cli');
 const fs = require('fs');
 
@@ -25,7 +25,7 @@ function parseConfigFile(inputFilename, outputFilename) {
     const content = JSON.parse(contentString);
     const resilioConfig = parseConfig(content);
     fs.writeFileSync(outputFilename, JSON.stringify(resilioConfig, null, '  '), 'utf8');
-    child_process.execFileSync('mkdir', ['-p', resilioConfig.storage_path]);
+    execFileSync('mkdir', ['-p', resilioConfig.storage_path]);
   } catch (err) {
     console.error('generate config failed:', err);
   }
