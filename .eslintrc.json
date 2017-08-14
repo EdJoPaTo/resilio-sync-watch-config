@@ -27,7 +27,6 @@
       "named": "never",
       "asyncArrow": "always"
     }],
-    "semi": ["warn", "always"],
     "quotes": "warn"
   }
 }
