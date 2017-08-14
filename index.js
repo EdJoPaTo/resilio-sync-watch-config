@@ -20,7 +20,7 @@ let tmpFolder;
 
 function parseConfigFile(inputFilename, outputFilename) {
   try {
-    console.log("generate config…");
+    console.log('generate config…');
     const contentString = fs.readFileSync(inputFilename, 'utf8');
     const content = JSON.parse(contentString);
     const resilioConfig = parseConfig(content);

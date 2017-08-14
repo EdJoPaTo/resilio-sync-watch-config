@@ -1,4 +1,4 @@
-const os = require("os");
+const os = require('os');
 
 module.exports = function(jsonConfig) {
   const basedir = jsonConfig.basedir[jsonConfig.basedir.length - 1] === '/' ? jsonConfig.basedir : jsonConfig.basedir + '/';

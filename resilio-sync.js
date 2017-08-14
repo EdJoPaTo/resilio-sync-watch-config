@@ -12,9 +12,9 @@ function start(resilioBinary, resilioConfigFilePath, callbackOnClose) {
   if (callbackOnClose) {
     resilioProcess.on('close', code => {
       if (code) {
-        console.warn("Resilio Sync crashed.");
+        console.warn('Resilio Sync crashed.');
       } else {
-        console.log("Resilio Sync finished.");
+        console.log('Resilio Sync finished.');
       }
       callbackOnClose(code, resilioConfigFilePath);
     });
