@@ -19,7 +19,6 @@
     "object-property-newline": "error",
     "prefer-const": "error",
     "require-await": "error",
-    "semi": ["warn", "always"],
     "sort-keys": "warn",
     "sort-vars": "warn",
     "space-before-function-paren": ["error", {
