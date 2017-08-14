@@ -62,6 +62,10 @@ function handleExitRequest() {
 
 function cleanup() {
   if (tmpFolder) {
+    try {
+      fs.unlinkSync(tmpFolder + '/sync.conf')
+    } catch (err) {}
+
     fs.rmdirSync(tmpFolder)
   }
   process.exit(0)
