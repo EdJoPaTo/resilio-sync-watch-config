@@ -22,13 +22,35 @@ describe('Config Parser', () => {
     expect(out.storage_path).toBe('/location/.sync')
   })
 
-  it('allowes basepath without ending slash', () => {
-    const input = {
-      basedir: '/location',
-      folders: {}
-    }
-    const out = parseConfig(input)
-    expect(out.storage_path).toBe('/location/.sync')
+  describe('basepath', () => {
+    it('without ending slash', () => {
+      const input = {
+        basedir: '/location',
+        folders: {}
+      }
+      const out = parseConfig(input)
+      expect(out.storage_path).toBe('/location/.sync')
+    })
+
+    it('accepts relative to pwd', () => {
+      const input = {
+        basedir: 'location/',
+        folders: {}
+      }
+
+      const out = parseConfig(input)
+      expect(out.storage_path).toBe('location/.sync')
+    })
+
+    it('accepts relative to home', () => {
+      const input = {
+        basedir: '~/location/',
+        folders: {}
+      }
+
+      const out = parseConfig(input)
+      expect(out.storage_path).toMatch('/home/\\S+/location/.sync')
+    })
   })
 
   describe('passthroughs', () => {

@@ -5,8 +5,22 @@ function ensureTrailingSlash(input) {
   else return input + '/'
 }
 
+function replaceWithHomedirIfNeeded(input) {
+  if (input.substring(0, 2) === '~/') {
+    const homedir = ensureTrailingSlash(os.homedir())
+    return homedir + input.substring(2)
+  }
+  return input
+}
+
+function parseBasepath(input) {
+  let current = ensureTrailingSlash(input)
+  current = replaceWithHomedirIfNeeded(current)
+  return current
+}
+
 module.exports = function(jsonConfig) {
-  const basedir = ensureTrailingSlash(jsonConfig.basedir)
+  const basedir = parseBasepath(jsonConfig.basedir)
 
 
   const resilioConfig = {}
