@@ -61,8 +61,9 @@ function handleExitRequest() {
 }
 
 function cleanup() {
-  if (tmpFolder)
+  if (tmpFolder) {
     fs.rmdirSync(tmpFolder);
+  }
   process.exit(0);
 }
 
