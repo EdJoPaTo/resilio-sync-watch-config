@@ -1,5 +1,6 @@
 spec/
 .*
+*.test.js
 
 # exclude npm pack packages
 *.tgz
