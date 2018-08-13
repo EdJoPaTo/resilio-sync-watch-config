@@ -1,1 +1,5 @@
 spec/
+.*
+
+# exclude npm pack packages
+*.tgz
