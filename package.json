@@ -8,6 +8,7 @@
   },
   "scripts": {
     "eslint": "eslint .",
+    "eslint-update": "eslint-update",
     "jasmine": "jasmine",
     "release": "standard-version",
     "pretest": "npm run eslint",
@@ -27,14 +28,20 @@
   },
   "devDependencies": {
     "eslint": "^5.3.0",
+    "eslint-config-edjopato": "^1.0.0",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-ava": "^5.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jasmine": "^2.8.4",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "jasmine": "^2.7.0",
     "standard-version": "^4.4.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": "edjopato"
   },
   "bugs": {
     "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
