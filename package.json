@@ -7,12 +7,13 @@
     "resilio-sync-watch-config": "index.js"
   },
   "scripts": {
-    "eslint": "eslint .",
+    "ava": "ava",
+    "ava:watch": "ava -w",
+    "eslint": "eslint",
     "eslint-update": "eslint-update",
-    "jasmine": "jasmine",
     "release": "standard-version",
-    "pretest": "npm run eslint",
-    "test": "npm run jasmine"
+    "pretest": "eslint .",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "cli": "^1.0.1"
   },
   "devDependencies": {
+    "ava": "^1.0.0-beta.7",
     "eslint": "^5.3.0",
     "eslint-config-edjopato": "^1.0.0",
     "eslint-config-standard": "^11.0.0",
@@ -36,7 +38,6 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "jasmine": "^2.7.0",
     "standard-version": "^4.4.0"
   },
   "eslintConfig": {
