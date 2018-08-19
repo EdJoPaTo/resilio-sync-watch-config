@@ -24,7 +24,6 @@ function parseBasepath(input) {
 module.exports = function(jsonConfig) {
   const basedir = parseBasepath(jsonConfig.basedir)
 
-
   const resilioConfig = {}
   resilioConfig.device_name = os.hostname()
   resilioConfig.storage_path = basedir + '.sync'
