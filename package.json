@@ -9,6 +9,7 @@
   "scripts": {
     "ava": "ava",
     "ava:watch": "ava -w",
+    "prerelease": "npm test",
     "release": "standard-version",
     "start": "echo 'Do not start with NPM. Use ./index.js instead. NPM is fishy with signals.'",
     "pretest": "xo",
