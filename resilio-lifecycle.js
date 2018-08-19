@@ -30,6 +30,7 @@ class ResilioLifecycle {
     console.log('Stop Resilio Sync…')
     this.running = false
     this.resilio.stop()
+    // Currently wrong so its disabled
     // console.log('Stopped Resilio Sync successfully')
   }
 
