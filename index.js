@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { execFileSync } = require('child_process')
+const {execFileSync} = require('child_process')
 const fs = require('fs')
 
 const cli = require('cli')

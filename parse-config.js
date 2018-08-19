@@ -21,7 +21,7 @@ function parseBasepath(input) {
   return current
 }
 
-module.exports = function(jsonConfig) {
+module.exports = function (jsonConfig) {
   const basedir = parseBasepath(jsonConfig.basedir)
 
   const resilioConfig = {}
