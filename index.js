@@ -71,9 +71,9 @@ function parseConfigFile(inputFilename, outputFilename) {
   }
 }
 
-function handleChange(configFilePath, resilioConfigFilePath) {
+async function handleChange(configFilePath, resilioConfigFilePath) {
   parseConfigFile(configFilePath, resilioConfigFilePath)
-  resilio.restart()
+  await resilio.restart()
 }
 
 function handleExitRequest() {

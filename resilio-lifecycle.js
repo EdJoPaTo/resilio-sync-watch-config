@@ -17,23 +17,20 @@ class ResilioLifecycle {
     console.log('Started Resilio Sync successfully')
   }
 
-  restart() {
+  async restart() {
     console.log('Restart Resilio Sync…')
     this.restarting = true
-    this.resilio.stop()
-    setTimeout(() => {
-      this.restarting = false
-      this.resilio.start(code => this.stoppedCallback(code))
-      console.log('Restarted Resilio Sync successfully')
-    }, 5000)
+    await this.resilio.stop()
+    this.restarting = false
+    this.resilio.start(code => this.stoppedCallback(code))
+    console.log('Restarted Resilio Sync successfully')
   }
 
-  stop() {
+  async stop() {
     console.log('Stop Resilio Sync…')
     this.running = false
-    this.resilio.stop()
-    // Currently wrong so its disabled
-    // console.log('Stopped Resilio Sync successfully')
+    await this.resilio.stop()
+    console.log('Stopped Resilio Sync successfully')
   }
 
   stoppedCallback(code) {

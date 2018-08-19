@@ -29,11 +29,21 @@ module.exports = class Resilio {
     })
   }
 
-  stop() {
+  async stop() {
     if (!this.running) {
-      return
+      return Promise.resolve()
     }
 
+    const promise = new Promise((resolve, reject) => {
+      this.resilioProcess.on('close', code => {
+        if (code) {
+          reject(code)
+        } else {
+          resolve()
+        }
+      })
+    })
     this.resilioProcess.kill()
+    return promise
   }
 }
