@@ -112,5 +112,6 @@ function cleanup() {
 
     fs.rmdirSync(tmpFolder)
   }
+  // The fs.watcher is still watching and has to be stopped
   process.exit(0)
 }
