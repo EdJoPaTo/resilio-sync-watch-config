@@ -43,8 +43,8 @@ if (!cli.options.start && !cli.options.watchmode) {
 const resilio = new Resilio(cli.options.resilioBin, resilioConfigFilePath)
 
 startResilio(resilio, cli.options.watchmode)
-process.on('SIGINT', () => handleExitRequest(resilio))
-process.on('SIGTERM', () => handleExitRequest(resilio))
+process.on('SIGINT', () => handleExitRequest())
+process.on('SIGTERM', () => handleExitRequest())
 
 if (cli.options.watchmode) {
   console.log('watch', configFilePath)
