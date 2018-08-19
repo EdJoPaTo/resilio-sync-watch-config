@@ -24,6 +24,8 @@ options:
 -w	Watch config. Restart Resilio Sync when changed. Implies -s
 ```
 
+Multiple config.json are possible in order to combine multiple configs into one
+
 ### systemd Service
 
 Instructions for this are in the subfolder `systemd`
