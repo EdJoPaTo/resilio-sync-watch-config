@@ -10,11 +10,14 @@ module.exports = class Resilio {
     const syncArgs = ['--nodaemon', '--config', this.resilioConfigFilePath]
 
     console.log('start', this.resilioBinary, 'with config', this.resilioConfigFilePath)
+
+    this.running = true
     this.resilioProcess = spawn(this.resilioBinary, syncArgs, {
       stdio: 'ignore'
     })
 
     this.resilioProcess.on('close', code => {
+      this.running = false
       if (code) {
         console.warn('Resilio Sync crashed.')
       } else {
@@ -27,6 +30,10 @@ module.exports = class Resilio {
   }
 
   stop() {
+    if (!this.running) {
+      return
+    }
+
     this.resilioProcess.kill()
   }
 }
