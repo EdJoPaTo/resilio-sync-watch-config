@@ -83,7 +83,6 @@ function handleExitRequest() {
     process.exit(1)
   } else {
     shutdown = true
-    console.log('Stop Resilio…')
     resilio.stop()
   }
 }

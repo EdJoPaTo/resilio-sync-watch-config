@@ -6,10 +6,18 @@ module.exports = class Resilio {
     this.resilioConfigFilePath = resilioConfigFilePath
   }
 
+  log(...args) {
+    console.log(new Date(), 'Resilio', this.resilioConfigFilePath, ...args)
+  }
+
+  warn(...args) {
+    console.warn(new Date(), 'Resilio', this.resilioConfigFilePath, ...args)
+  }
+
   start(callbackOnClose, ...callbackArgs) {
     const syncArgs = ['--nodaemon', '--config', this.resilioConfigFilePath]
 
-    console.log('start', this.resilioBinary, 'with config', this.resilioConfigFilePath)
+    this.log('start')
 
     this.running = true
     this.resilioProcess = spawn(this.resilioBinary, syncArgs, {
@@ -19,9 +27,9 @@ module.exports = class Resilio {
     this.resilioProcess.on('close', code => {
       this.running = false
       if (code) {
-        console.warn('Resilio Sync crashed.')
+        this.warn('crashed', code)
       } else {
-        console.log('Resilio Sync finished.')
+        this.log('finished')
       }
       if (callbackOnClose) {
         callbackOnClose(code, ...callbackArgs)
