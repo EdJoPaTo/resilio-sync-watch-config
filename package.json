@@ -9,11 +9,11 @@
   "scripts": {
     "ava": "ava",
     "ava:watch": "ava -w",
-    "eslint": "eslint",
-    "eslint-update": "eslint-update",
     "release": "standard-version",
-    "pretest": "eslint .",
-    "test": "ava"
+    "start": "node index.js",
+    "pretest": "xo",
+    "test": "ava",
+    "xo": "xo"
   },
   "repository": {
     "type": "git",
@@ -29,20 +29,25 @@
   },
   "devDependencies": {
     "ava": "^1.0.0-beta.7",
-    "eslint": "^5.3.0",
-    "eslint-config-edjopato": "^1.0.0",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-ava": "^5.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jasmine": "^2.8.4",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "standard-version": "^4.4.0"
+    "standard-version": "^4.4.0",
+    "xo": "^0.22.0"
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": "edjopato"
+  "xo": {
+    "space": true,
+    "semicolon": false,
+    "overrides": [
+      {
+        "files": "parse-config*.js",
+        "rules": {
+          "camelcase": [
+            "warn",
+            {
+              "properties": "never"
+            }
+          ]
+        }
+      }
+    ]
   },
   "bugs": {
     "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
