@@ -97,7 +97,9 @@ function cleanup() {
       fs.unlinkSync(tmpFolder + '/sync.conf')
     } catch (err) {}
 
-    fs.rmdirSync(tmpFolder)
+    try {
+      fs.rmdirSync(tmpFolder)
+    } catch (err) {}
   }
   // The fs.watcher is still watching and has to be stopped
   process.exit(0)
