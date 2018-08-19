@@ -28,7 +28,7 @@ function createFolderInFS(folderpath) {
 
 function watchFile(file, onChangeCallback) {
   fs.watch(file, {persistent: false}, debounce(curr => {
-    log(file, 'changed', curr)
+    log(file, 'changed')
     onChangeCallback(file, curr)
   }, 200))
 }
