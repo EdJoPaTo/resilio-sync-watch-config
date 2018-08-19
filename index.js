@@ -75,7 +75,7 @@ function cleanup() {
   process.exit(0)
 }
 
-if (cli.args.length !== 1) { // can not be the configFilePath
+if (cli.args.length !== 1) { // Can not be the configFilePath
   cli.getUsage()
   process.exit(1)
 }
@@ -91,7 +91,7 @@ if (cli.options.start || cli.options.watchmode) {
 
 parseConfigFile(configFilePath, resilioConfigFilePath)
 
-// only continue when something wants to start resilio
+// Only continue when something wants to start resilio
 if (!cli.options.start && !cli.options.watchmode) {
   process.exit(0)
 }
