@@ -6,7 +6,7 @@ const fs = require('fs')
 const cli = require('cli')
 
 const parseConfig = require('./parse-config')
-const Resilio = require('./resilio-sync.js')
+const ResilioLifecycle = require('./resilio-lifecycle')
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -40,9 +40,9 @@ if (!cli.options.start && !cli.options.watchmode) {
   process.exit(0)
 }
 
-const resilio = new Resilio(cli.options.resilioBin, resilioConfigFilePath)
+const resilio = new ResilioLifecycle(cli.options.resilioBin, resilioConfigFilePath, cleanup)
 
-startResilio(resilio, cli.options.watchmode)
+resilio.start()
 process.on('SIGINT', () => handleExitRequest())
 process.on('SIGTERM', () => handleExitRequest())
 
@@ -52,7 +52,7 @@ if (cli.options.watchmode) {
   fs.watchFile(configFilePath, () => {
     setTimeout(id => {
       if (id === lastChange) {
-        handleChange(resilio, configFilePath, resilioConfigFilePath)
+        handleChange(configFilePath, resilioConfigFilePath)
       }
     }, 100, ++lastChange)
   })
@@ -71,25 +71,9 @@ function parseConfigFile(inputFilename, outputFilename) {
   }
 }
 
-function startResilio(resilio, watchmode) {
-  if (shutdown) {
-    cleanup()
-  }
-  const callback = watchmode ? resilioOnWatchmodeClose : null
-  resilio.start(callback, resilio)
-}
-
-function resilioOnWatchmodeClose(code, resilio) {
-  if (shutdown) {
-    cleanup()
-  }
-  setTimeout(resilio => startResilio(resilio, true), 5000, resilio)
-}
-
-function handleChange(resilio, configFilePath, resilioConfigFilePath) {
-  console.log('Stop Resilio Sync…')
-  resilio.stop()
+function handleChange(configFilePath, resilioConfigFilePath) {
   parseConfigFile(configFilePath, resilioConfigFilePath)
+  resilio.restart()
 }
 
 function handleExitRequest() {
