@@ -13,7 +13,7 @@ class ResilioLifecycle {
   start() {
     console.log('Start Resilio Sync…')
     this.running = true
-    this.resilio.start(this.stoppedCallback)
+    this.resilio.start(code => this.stoppedCallback(code))
     console.log('Started Resilio Sync successfully')
   }
 
@@ -21,7 +21,7 @@ class ResilioLifecycle {
     console.log('Restart Resilio Sync…')
     this.resilio.stop()
     setTimeout(() => {
-      this.resilio.start(this.stoppedCallback)
+      this.resilio.start(code => this.stoppedCallback(code))
       console.log('Restarted Resilio Sync successfully')
     }, 5000)
   }
