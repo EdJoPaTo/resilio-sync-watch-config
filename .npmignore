@@ -1,6 +1,7 @@
 spec/
 .*
 *.test.js
+systemd/
 
 # exclude npm pack packages
 *.tgz

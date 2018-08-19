@@ -24,6 +24,10 @@ options:
 -w	Watch config. Restart Resilio Sync when changed. Implies -s
 ```
 
+### systemd Service
+
+Instructions for this are in the subfolder `systemd`
+
 ## Backstory
 
 In my case I dont want to use the webgui so I created config files with the folders in it.

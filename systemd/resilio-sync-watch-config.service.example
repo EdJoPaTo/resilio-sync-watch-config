@@ -1,0 +1,14 @@
+[Unit]
+Description=Run Resilio Sync Watch Config
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/absolute/path/to/index.js -sw with.json arguments.json
+WorkingDirectory=/absolute/path/to/
+User=rslsync
+Group=rslsync
+
+[Install]
+RequiredBy=multi-user.target
