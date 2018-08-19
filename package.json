@@ -37,7 +37,7 @@
     "semicolon": false,
     "overrides": [
       {
-        "files": "parse-config*.js",
+        "files": "src/parse-config*.js",
         "rules": {
           "camelcase": [
             "warn",

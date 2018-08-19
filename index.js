@@ -4,8 +4,8 @@ const fs = require('fs')
 
 const cli = require('cli')
 
-const ResilioLifecycle = require('./resilio-lifecycle')
-const ConfigFileHandler = require('./config-file-handler')
+const ResilioLifecycle = require('./src/resilio-lifecycle')
+const ConfigFileHandler = require('./src/config-file-handler')
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
