@@ -22,11 +22,11 @@ if (cli.options.watchmode) {
 let shutdown = false
 let tmpFolder
 
-if (cli.args.length !== 1) { // Can not be the configFilePath
+if (cli.args.length === 0) { // Can not be the configFilePaths
   cli.getUsage()
   process.exit(1)
 }
-const configFilePath = cli.args[0]
+const configFilePaths = cli.args
 
 let resilioConfigFilePath
 if (cli.options.start || cli.options.watchmode) {
@@ -36,7 +36,7 @@ if (cli.options.start || cli.options.watchmode) {
   resilioConfigFilePath = 'sync.conf'
 }
 
-const configFileHandler = new ConfigFileHandler(configFilePath, resilioConfigFilePath)
+const configFileHandler = new ConfigFileHandler(configFilePaths, resilioConfigFilePath)
 const resilio = new ResilioLifecycle(cli.options.resilioBin, resilioConfigFilePath, cleanup)
 
 doStuff()

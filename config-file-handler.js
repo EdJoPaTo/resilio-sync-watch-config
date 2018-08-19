@@ -7,6 +7,7 @@ const fsPromises = fs.promises
 
 const debounce = require('./debounce')
 const parseConfig = require('./parse-config')
+const {mergeMultipleConfigs} = require('./merge-multiple-configs')
 
 function log(...args) {
   console.log(new Date(), 'Config File', ...args)
@@ -34,8 +35,8 @@ function watchFile(file, onChangeCallback) {
 }
 
 class ConfigFileHandler {
-  constructor(configFile, resilioConfigFilePath) {
-    this.configFile = configFile
+  constructor(configFiles, resilioConfigFilePath) {
+    this.configFiles = configFiles
     this.resilioConfigFilePath = resilioConfigFilePath
   }
 
@@ -44,10 +45,13 @@ class ConfigFileHandler {
   }
 
   async generateResilioConfig(applyToFS = false) {
-    log('load config…')
-    const config = await loadFromFile(this.configFile)
+    log('load configs…')
+    const configs = await Promise.all(this.configFiles.map(file =>
+      loadFromFile(file)
+    ))
+    const mergedConfig = mergeMultipleConfigs(...configs)
     log('generate config…')
-    const resilioConfig = parseConfig(config)
+    const resilioConfig = parseConfig(mergedConfig)
     if (applyToFS) {
       log('create storage_path in filesystem…', resilioConfig.storage_path)
       await createFolderInFS(resilioConfig.storage_path)
@@ -60,7 +64,7 @@ class ConfigFileHandler {
 
   watch(onChangeCallback) {
     log('start watching…')
-    watchFile(this.configFile, onChangeCallback)
+    this.configFiles.forEach(file => watchFile(file, onChangeCallback))
   }
 }
 
