@@ -15,10 +15,7 @@ function parseConfig(jsonConfig) {
   }))
 
   if (jsonConfig.passthrough) {
-    const passthroughKeys = Object.keys(jsonConfig.passthrough)
-    for (const key of passthroughKeys) {
-      resilioConfig[key] = jsonConfig.passthrough[key]
-    }
+    Object.assign(resilioConfig, jsonConfig.passthrough)
   }
 
   return resilioConfig
