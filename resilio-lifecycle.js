@@ -19,8 +19,10 @@ class ResilioLifecycle {
 
   restart() {
     console.log('Restart Resilio Sync…')
+    this.restarting = true
     this.resilio.stop()
     setTimeout(() => {
+      this.restarting = false
       this.resilio.start(code => this.stoppedCallback(code))
       console.log('Restarted Resilio Sync successfully')
     }, 5000)
@@ -35,6 +37,18 @@ class ResilioLifecycle {
   }
 
   stoppedCallback(code) {
+    if (this.running && !this.restarting) {
+      if (code) {
+        console.log('Resilio crashed. Restart in 5 Seconds…')
+        setTimeout(() => {
+          this.resilio.start(code => this.stoppedCallback(code))
+          console.log('Restarted Resilio Sync successfully')
+        }, 5000)
+      } else {
+        throw new Error('Resilio ended without being told')
+      }
+    }
+
     if (code || !this.running) {
       this.finalCallback(code)
     }
