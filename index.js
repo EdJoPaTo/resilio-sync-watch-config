@@ -32,13 +32,17 @@ function parseConfigFile(inputFilename, outputFilename) {
 }
 
 function startResilio(resilio, watchmode) {
-  if (shutdown) cleanup()
+  if (shutdown) {
+    cleanup()
+  }
   const callback = watchmode ? resilioOnWatchmodeClose : null
   resilio.start(callback, resilio)
 }
 
 function resilioOnWatchmodeClose(code, resilio) {
-  if (shutdown) cleanup()
+  if (shutdown) {
+    cleanup()
+  }
   setTimeout(resilio => startResilio(resilio, true), 5000, resilio)
 }
 
@@ -88,7 +92,9 @@ if (cli.options.start || cli.options.watchmode) {
 parseConfigFile(configFilePath, resilioConfigFilePath)
 
 // only continue when something wants to start resilio
-if (!cli.options.start && !cli.options.watchmode) process.exit(0)
+if (!cli.options.start && !cli.options.watchmode) {
+  process.exit(0)
+}
 
 const resilio = new Resilio(cli.options.resilioBin, resilioConfigFilePath)
 
@@ -101,7 +107,9 @@ if (cli.options.watchmode) {
   let lastChange = 0
   fs.watch(configFilePath, () => {
     setTimeout(id => {
-      if (id === lastChange) handleChange(resilio, configFilePath, resilioConfigFilePath)
+      if (id === lastChange) {
+        handleChange(resilio, configFilePath, resilioConfigFilePath)
+      }
     }, 100, ++lastChange)
   })
 }

@@ -1,8 +1,10 @@
 const os = require('os')
 
 function ensureTrailingSlash(input) {
-  if (input[input.length - 1] === '/') return input
-  else return input + '/'
+  if (input[input.length - 1] === '/') {
+    return input
+  }
+  return input + '/'
 }
 
 function replaceWithHomedirIfNeeded(input) {

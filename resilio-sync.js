@@ -20,7 +20,9 @@ module.exports = class Resilio {
       } else {
         console.log('Resilio Sync finished.')
       }
-      if (callbackOnClose) callbackOnClose(code, ...callbackArgs)
+      if (callbackOnClose) {
+        callbackOnClose(code, ...callbackArgs)
+      }
     })
   }
 
