@@ -39,11 +39,21 @@ class ResilioLifecycle {
   stoppedCallback(code) {
     if (this.running && !this.restarting) {
       if (code) {
-        console.log('Resilio crashed. Restart in 5 Seconds…')
-        setTimeout(() => {
-          this.resilio.start(code => this.stoppedCallback(code))
-          console.log('Restarted Resilio Sync successfully')
-        }, 5000)
+        console.log(`Resilio crashed with code ${code}.`)
+        if (!this.crashes) {
+          this.crashes = 0
+        }
+        this.crashes++
+
+        if (this.crashes < 3) {
+          console.log(`Restart Resilio… Attempt ${this.crashes}`)
+          setTimeout(() => {
+            this.resilio.start(code => this.stoppedCallback(code))
+            console.log('Restarted Resilio Sync successfully')
+          }, 5000)
+        } else {
+          throw new Error(`Resilio crashed ${this.crashes} times. Abort.`)
+        }
       } else {
         throw new Error('Resilio ended without being told')
       }
