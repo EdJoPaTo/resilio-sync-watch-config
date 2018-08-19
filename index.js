@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const { execFileSync } = require('child_process')
-const cli = require('cli')
 const fs = require('fs')
+
+const cli = require('cli')
 
 const parseConfig = require('./parse-config')
 const Resilio = require('./resilio-sync.js')
