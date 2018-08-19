@@ -54,13 +54,13 @@ function handleChange(resilio, configFilePath, resilioConfigFilePath) {
 
 function handleExitRequest() {
   console.log('exit request received.')
-  if (!shutdown) {
+  if (shutdown) {
+    console.log('Force stop…')
+    process.exit(1)
+  } else {
     shutdown = true
     console.log('Stop Resilio…')
     resilio.stop()
-  } else {
-    console.log('Force stop…')
-    process.exit(1)
   }
 }
 
