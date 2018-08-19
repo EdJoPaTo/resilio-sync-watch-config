@@ -49,7 +49,7 @@ process.on('SIGTERM', () => handleExitRequest(resilio))
 if (cli.options.watchmode) {
   console.log('watch', configFilePath)
   let lastChange = 0
-  fs.watch(configFilePath, () => {
+  fs.watchFile(configFilePath, () => {
     setTimeout(id => {
       if (id === lastChange) {
         handleChange(resilio, configFilePath, resilioConfigFilePath)
