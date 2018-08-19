@@ -10,7 +10,7 @@
     "ava": "ava",
     "ava:watch": "ava -w",
     "release": "standard-version",
-    "start": "node index.js",
+    "start": "echo 'Do not start with NPM. Use ./index.js instead. NPM is fishy with signals.'",
     "pretest": "xo",
     "test": "ava",
     "xo": "xo"
