@@ -16,6 +16,10 @@ cli.parse({
   watchmode: ['w', 'Watch config changes and restart Resilio Sync on change. Implies -s']
 })
 
+if (cli.options.watchmode) {
+  cli.options.start = true
+}
+
 let shutdown = false
 let tmpFolder
 
