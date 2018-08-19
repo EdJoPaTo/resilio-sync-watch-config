@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-const {execFileSync} = require('child_process')
 const fs = require('fs')
 
 const cli = require('cli')
 
-const parseConfig = require('./parse-config')
 const ResilioLifecycle = require('./resilio-lifecycle')
+const ConfigFileHandler = require('./config-file-handler')
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -37,47 +36,28 @@ if (cli.options.start || cli.options.watchmode) {
   resilioConfigFilePath = 'sync.conf'
 }
 
-parseConfigFile(configFilePath, resilioConfigFilePath)
-
-// Only continue when something wants to start resilio
-if (!cli.options.start && !cli.options.watchmode) {
-  process.exit(0)
-}
-
+const configFileHandler = new ConfigFileHandler(configFilePath, resilioConfigFilePath)
 const resilio = new ResilioLifecycle(cli.options.resilioBin, resilioConfigFilePath, cleanup)
 
-resilio.start()
-process.on('SIGINT', () => handleExitRequest())
-process.on('SIGTERM', () => handleExitRequest())
+doStuff()
+async function doStuff() {
+  await configFileHandler.generateResilioConfig(true)
 
-if (cli.options.watchmode) {
-  console.log('watch', configFilePath)
-  let lastChange = 0
-  fs.watchFile(configFilePath, () => {
-    setTimeout(id => {
-      if (id === lastChange) {
-        handleChange(configFilePath, resilioConfigFilePath)
-      }
-    }, 100, ++lastChange)
-  })
-}
-
-function parseConfigFile(inputFilename, outputFilename) {
-  try {
-    console.log('generate config…')
-    const contentString = fs.readFileSync(inputFilename, 'utf8')
-    const content = JSON.parse(contentString)
-    const resilioConfig = parseConfig(content)
-    fs.writeFileSync(outputFilename, JSON.stringify(resilioConfig, null, '  '), 'utf8')
-    execFileSync('mkdir', ['-p', resilioConfig.storage_path])
-  } catch (err) {
-    console.error('generate config failed:', err)
+  // Only continue when something wants to start resilio
+  if (!cli.options.start && !cli.options.watchmode) {
+    return
   }
-}
 
-async function handleChange(configFilePath, resilioConfigFilePath) {
-  parseConfigFile(configFilePath, resilioConfigFilePath)
-  await resilio.restart()
+  resilio.start()
+  process.on('SIGINT', () => handleExitRequest())
+  process.on('SIGTERM', () => handleExitRequest())
+
+  if (cli.options.watchmode) {
+    configFileHandler.watch(async () => {
+      await configFileHandler.generateResilioConfig(true)
+      await resilio.restart()
+    })
+  }
 }
 
 function handleExitRequest() {
@@ -101,6 +81,4 @@ function cleanup() {
       fs.rmdirSync(tmpFolder)
     } catch (err) {}
   }
-  // The fs.watcher is still watching and has to be stopped
-  process.exit(0)
 }
