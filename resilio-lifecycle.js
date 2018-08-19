@@ -46,7 +46,7 @@ class ResilioLifecycle {
         this.crashes++
 
         if (this.crashes < 3) {
-          console.log(`Restart Resilio… Attempt ${this.crashes}`)
+          console.log(`Restart Resilio in 5 seconds… Attempt ${this.crashes}`)
           setTimeout(() => {
             this.resilio.start(code => this.stoppedCallback(code))
             console.log('Restarted Resilio Sync successfully')
