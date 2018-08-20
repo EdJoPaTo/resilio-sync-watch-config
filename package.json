@@ -1,6 +1,6 @@
 {
   "name": "resilio-sync-watch-config",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Small tool to create a resilio config and watch for changes to restart the sync daemon on changes",
   "main": "index.js",
   "bin": {
@@ -36,17 +36,22 @@
   "xo": {
     "space": true,
     "semicolon": false,
-    "overrides": [{
-      "files": [
-        "src/parse-config*.js",
-        "src/runmodes*.test.js"
-      ],
-      "rules": {
-        "camelcase": ["warn", {
-          "properties": "never"
-        }]
+    "overrides": [
+      {
+        "files": [
+          "src/parse-config*.js",
+          "src/runmodes*.test.js"
+        ],
+        "rules": {
+          "camelcase": [
+            "warn",
+            {
+              "properties": "never"
+            }
+          ]
+        }
       }
-    }]
+    ]
   },
   "bugs": {
     "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"

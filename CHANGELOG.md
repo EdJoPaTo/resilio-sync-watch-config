@@ -1,3 +1,34 @@
+# Change Log
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/edjopato/resilio-sync-watch-config/compare/v1.4.0...v1.5.0) (2018-08-20)
+
+
+### Bug Fixes
+
+* correctly output to wait 5 seconds until doing something ([5a47588](https://github.com/edjopato/resilio-sync-watch-config/commit/5a47588))
+* fix an issue with watch ([8da3377](https://github.com/edjopato/resilio-sync-watch-config/commit/8da3377))
+* polyfill fsPromises when needed ([89e058e](https://github.com/edjopato/resilio-sync-watch-config/commit/89e058e))
+* preserve context of this ([7e9aa3d](https://github.com/edjopato/resilio-sync-watch-config/commit/7e9aa3d))
+* remove confusing logged value ([e422e6f](https://github.com/edjopato/resilio-sync-watch-config/commit/e422e6f))
+* tmp folder could not exist but thats no problem ([61435b3](https://github.com/edjopato/resilio-sync-watch-config/commit/61435b3))
+
+
+### Features
+
+* improve logging ([78249ac](https://github.com/edjopato/resilio-sync-watch-config/commit/78249ac))
+* make things async ([0a08148](https://github.com/edjopato/resilio-sync-watch-config/commit/0a08148))
+* merge multiple configs ([d749e0a](https://github.com/edjopato/resilio-sync-watch-config/commit/d749e0a))
+* only restart Resilio after crash 3 times ([88859ff](https://github.com/edjopato/resilio-sync-watch-config/commit/88859ff))
+* restart resilio-sync on crash ([f65c862](https://github.com/edjopato/resilio-sync-watch-config/commit/f65c862))
+* track running state ([435881c](https://github.com/edjopato/resilio-sync-watch-config/commit/435881c))
+* use fs.watchFile instead of fs.watch ([2e85e8a](https://github.com/edjopato/resilio-sync-watch-config/commit/2e85e8a))
+* watchmode implies start ([0fad176](https://github.com/edjopato/resilio-sync-watch-config/commit/0fad176))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/edjopato/resilio-sync-watch-config/compare/v1.3.0...v1.4.0) (2017-08-14)
 
@@ -119,6 +150,3 @@
 
 * add jasmine with some basic tests ([04132b4](https://github.com/edjopato/resilio-sync-watch-config/commit/04132b4))
 * add travis-ci description ([4fa4427](https://github.com/edjopato/resilio-sync-watch-config/commit/4fa4427))
-
-
-
