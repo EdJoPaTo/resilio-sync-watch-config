@@ -36,19 +36,17 @@
   "xo": {
     "space": true,
     "semicolon": false,
-    "overrides": [
-      {
-        "files": "src/parse-config*.js",
-        "rules": {
-          "camelcase": [
-            "warn",
-            {
-              "properties": "never"
-            }
-          ]
-        }
+    "overrides": [{
+      "files": [
+        "src/parse-config*.js",
+        "src/runmodes*.test.js"
+      ],
+      "rules": {
+        "camelcase": ["warn", {
+          "properties": "never"
+        }]
       }
-    ]
+    }]
   },
   "bugs": {
     "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
