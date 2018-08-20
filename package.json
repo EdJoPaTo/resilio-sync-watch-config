@@ -23,7 +23,7 @@
   "author": "Edgar To",
   "license": "MIT",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "dependencies": {
     "cli": "^1.0.1"
