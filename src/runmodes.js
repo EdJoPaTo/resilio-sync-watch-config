@@ -5,9 +5,16 @@ const ResilioLifecycle = require('./resilio-lifecycle')
 
 const fsPromises = fs.promises
 
-async function createConfig(inputConfigFilePaths, resilioConfigFilePath, generateFoldersOnFilesystem = false, saveConfigOnFilesystem = true) {
+function createConfigFile(inputConfigFilePaths, resilioConfigFilePath, generateFoldersOnFilesystem = true) {
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
-  const config = await configFileHandler.generateResilioConfig(generateFoldersOnFilesystem, saveConfigOnFilesystem)
+  return configFileHandler.generateResilioConfig(generateFoldersOnFilesystem, true)
+}
+
+async function generateConfig(inputConfigs, generateFoldersOnFilesystem = false) {
+  const config = ConfigFileHandler.parseMultipleConfigs(inputConfigs)
+  if (generateFoldersOnFilesystem) {
+    await ConfigFileHandler.createFoldersOfConfig(config)
+  }
   return config
 }
 
@@ -42,6 +49,7 @@ function cleanup(tmpFolder) {
 }
 
 module.exports = {
-  createConfig,
+  createConfigFile,
+  generateConfig,
   startResilioFromConfigs
 }

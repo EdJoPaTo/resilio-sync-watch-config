@@ -4,7 +4,7 @@ const cli = require('cli')
 
 const runmodes = require('./src/runmodes')
 
-const {createConfig, startResilioFromConfigs} = runmodes
+const {createConfigFile, startResilioFromConfigs} = runmodes
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -30,7 +30,7 @@ doStuff()
 async function doStuff() {
   if (!cli.options.start && !cli.options.watchmode) {
     const resilioConfigFilePath = 'sync.conf'
-    await createConfig(configFilePaths, resilioConfigFilePath, true, true)
+    await createConfigFile(configFilePaths, resilioConfigFilePath, true)
   }
 
   if (cli.options.start) {
