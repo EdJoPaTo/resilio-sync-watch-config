@@ -44,7 +44,7 @@ class ConfigFileHandler {
     log(...args)
   }
 
-  async generateResilioConfig(applyToFS = false) {
+  async generateResilioConfig(createFoldersOnFS = true, saveToFS = false) {
     log('load configs…')
     const configs = await Promise.all(this.configFiles.map(file =>
       loadFromFile(file)
@@ -52,9 +52,11 @@ class ConfigFileHandler {
     const mergedConfig = mergeMultipleConfigs(...configs)
     log('generate config…')
     const resilioConfig = parseConfig(mergedConfig)
-    if (applyToFS) {
+    if (createFoldersOnFS) {
       log('create storage_path in filesystem…', resilioConfig.storage_path)
       await createFolderInFS(resilioConfig.storage_path)
+    }
+    if (saveToFS) {
       log('save resilio config…', this.resilioConfigFilePath)
       await saveToFile(this.resilioConfigFilePath, resilioConfig)
     }

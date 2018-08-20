@@ -41,7 +41,7 @@ const resilio = new ResilioLifecycle(cli.options.resilioBin, resilioConfigFilePa
 
 doStuff()
 async function doStuff() {
-  await configFileHandler.generateResilioConfig(true)
+  await configFileHandler.generateResilioConfig(true, true)
 
   // Only continue when something wants to start resilio
   if (!cli.options.start && !cli.options.watchmode) {
@@ -54,7 +54,7 @@ async function doStuff() {
 
   if (cli.options.watchmode) {
     configFileHandler.watch(async () => {
-      await configFileHandler.generateResilioConfig(true)
+      await configFileHandler.generateResilioConfig(true, true)
       await resilio.restart()
     })
   }
