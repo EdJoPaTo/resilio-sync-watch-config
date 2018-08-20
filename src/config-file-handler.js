@@ -31,7 +31,7 @@ function watchFile(file, onChangeCallback) {
   fs.watch(file, {persistent: false}, debounce(curr => {
     log(file, 'changed')
     onChangeCallback(file, curr)
-  }, 200))
+  }, 500))
 }
 
 class ConfigFileHandler {
