@@ -44,17 +44,25 @@ class ConfigFileHandler {
     log(...args)
   }
 
+  static parseMultipleConfigs(configs) {
+    const mergedConfig = mergeMultipleConfigs(...configs)
+    return parseConfig(mergedConfig)
+  }
+
+  static createFoldersOfConfig(resilioConfig) {
+    return createFolderInFS(resilioConfig.storage_path)
+  }
+
   async generateResilioConfig(createFoldersOnFS = true, saveToFS = false) {
     log('load configs…')
     const configs = await Promise.all(this.configFiles.map(file =>
       loadFromFile(file)
     ))
-    const mergedConfig = mergeMultipleConfigs(...configs)
     log('generate config…')
-    const resilioConfig = parseConfig(mergedConfig)
+    const resilioConfig = this.constructor.parseMultipleConfigs(configs)
     if (createFoldersOnFS) {
-      log('create storage_path in filesystem…', resilioConfig.storage_path)
-      await createFolderInFS(resilioConfig.storage_path)
+      log('create folders in filesystem…', resilioConfig.storage_path)
+      await this.constructor.createFoldersOfConfig(resilioConfig)
     }
     if (saveToFS) {
       log('save resilio config…', this.resilioConfigFilePath)
