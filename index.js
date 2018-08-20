@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-
 const cli = require('cli')
 
-const ResilioLifecycle = require('./src/resilio-lifecycle')
-const ConfigFileHandler = require('./src/config-file-handler')
+const runmodes = require('./src/runmodes')
+
+const {createConfig, startResilioFromConfigs} = runmodes
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -20,7 +19,6 @@ if (cli.options.watchmode) {
 }
 
 let shutdown = false
-let tmpFolder
 
 if (cli.args.length === 0) { // Can not be the configFilePaths
   cli.getUsage()
@@ -28,39 +26,22 @@ if (cli.args.length === 0) { // Can not be the configFilePaths
 }
 const configFilePaths = cli.args
 
-let resilioConfigFilePath
-if (cli.options.start || cli.options.watchmode) {
-  tmpFolder = fs.mkdtempSync('/tmp/resilio-sync-watch-config-')
-  resilioConfigFilePath = tmpFolder + '/sync.conf'
-} else {
-  resilioConfigFilePath = 'sync.conf'
-}
-
-const configFileHandler = new ConfigFileHandler(configFilePaths, resilioConfigFilePath)
-const resilio = new ResilioLifecycle(cli.options.resilioBin, resilioConfigFilePath, cleanup)
-
 doStuff()
 async function doStuff() {
-  await configFileHandler.generateResilioConfig(true, true)
-
-  // Only continue when something wants to start resilio
   if (!cli.options.start && !cli.options.watchmode) {
-    return
+    const resilioConfigFilePath = 'sync.conf'
+    await createConfig(configFilePaths, resilioConfigFilePath, true, true)
   }
 
-  resilio.start()
-  process.on('SIGINT', () => handleExitRequest())
-  process.on('SIGTERM', () => handleExitRequest())
+  if (cli.options.start) {
+    const resilio = await startResilioFromConfigs(configFilePaths, cli.options.watchmode, cli.options.resilioBin)
 
-  if (cli.options.watchmode) {
-    configFileHandler.watch(async () => {
-      await configFileHandler.generateResilioConfig(true, true)
-      await resilio.restart()
-    })
+    process.on('SIGINT', () => handleExitRequest(resilio))
+    process.on('SIGTERM', () => handleExitRequest(resilio))
   }
 }
 
-function handleExitRequest() {
+function handleExitRequest(resilio) {
   console.log('exit request received.')
   if (shutdown) {
     console.log('Force stop…')
@@ -71,14 +52,4 @@ function handleExitRequest() {
   }
 }
 
-function cleanup() {
-  if (tmpFolder) {
-    try {
-      fs.unlinkSync(tmpFolder + '/sync.conf')
-    } catch (err) {}
-
-    try {
-      fs.rmdirSync(tmpFolder)
-    } catch (err) {}
-  }
-}
+module.exports = runmodes
