@@ -56,12 +56,10 @@ test('basedir can be relative to home', t => {
   t.regex(out.storage_path, regex)
 })
 
-const inputPassthrough = Object.assign({}, inputBasicConfig, {
-  passthrough: {
-    device_name: 'sparta',
-    what_the: 'hell'
-  }
-})
+const inputPassthrough = {...inputBasicConfig, passthrough: {
+  device_name: 'sparta',
+  what_the: 'hell'
+}}
 
 test('adds passthrough', t => {
   const out = parseConfig(inputPassthrough)
@@ -74,11 +72,9 @@ test('overrides device_name', t => {
 })
 
 test('contains the shared folder', t => {
-  const input = Object.assign({}, inputBasicConfig, {
-    folders: {
-      tmp: 'XYZ'
-    }
-  })
+  const input = {...inputBasicConfig, folders: {
+    tmp: 'XYZ'
+  }}
 
   const out = parseConfig(input)
   t.deepEqual(out.shared_folders, [
