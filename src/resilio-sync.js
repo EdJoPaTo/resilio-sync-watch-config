@@ -37,7 +37,7 @@ module.exports = class Resilio {
     })
   }
 
-  async stop() {
+  stop() {
     if (!this.running) {
       return Promise.resolve()
     }
