@@ -3,7 +3,7 @@ const fs = require('fs')
 const ConfigFileHandler = require('./config-file-handler')
 const ResilioLifecycle = require('./resilio-lifecycle')
 
-const fsPromises = fs.promises
+const fsPromises = fs.promises || require('./polyfill-fs-promise')
 
 function createConfigFile(inputConfigFilePaths, resilioConfigFilePath, generateFoldersOnFilesystem = true) {
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
