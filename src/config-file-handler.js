@@ -2,10 +2,11 @@ const childProcess = require('child_process')
 const fs = require('fs')
 const util = require('util')
 
+const debounce = require('debounce-promise')
+
 const exec = util.promisify(childProcess.exec)
 const fsPromises = fs.promises || require('./polyfill-fs-promise')
 
-const debounce = require('./debounce')
 const parseConfig = require('./parse-config')
 const {mergeMultipleConfigs} = require('./merge-multiple-configs')
 
