@@ -1,7 +1,0 @@
-.*
-*.test.js
-systemd/
-test-runmodes/
-
-# exclude npm pack packages
-*.tgz
