@@ -9,8 +9,6 @@
   "scripts": {
     "ava": "ava",
     "ava:watch": "ava -w",
-    "prerelease": "npm test",
-    "release": "standard-version",
     "start": "echo 'Do not start with NPM. Use ./index.js instead. NPM is fishy with signals.'",
     "pretest": "xo",
     "test": "ava",
@@ -31,7 +29,6 @@
   },
   "devDependencies": {
     "ava": "^1.0.0-beta.7",
-    "standard-version": "^4.4.0",
     "xo": "^0.22.0"
   },
   "files": [
