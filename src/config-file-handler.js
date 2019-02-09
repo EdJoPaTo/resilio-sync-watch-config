@@ -61,14 +61,17 @@ class ConfigFileHandler {
     ))
     log('generate config…')
     const resilioConfig = this.constructor.parseMultipleConfigs(configs)
+
     if (createFoldersOnFS) {
       log('create folders in filesystem…', resilioConfig.storage_path)
       await this.constructor.createFoldersOfConfig(resilioConfig)
     }
+
     if (saveToFS) {
       log('save resilio config…', this.resilioConfigFilePath)
       await saveToFile(this.resilioConfigFilePath, resilioConfig)
     }
+
     log('successfully generated config')
     return resilioConfig
   }

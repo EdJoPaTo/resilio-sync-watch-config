@@ -4,6 +4,7 @@ function ensureTrailingSlash(input) {
   if (input[input.length - 1] === '/') {
     return input
   }
+
   return input + '/'
 }
 
@@ -12,6 +13,7 @@ function replaceWithHomedirIfNeeded(input) {
     const homedir = ensureTrailingSlash(os.homedir())
     return homedir + input.substring(2)
   }
+
   return input
 }
 

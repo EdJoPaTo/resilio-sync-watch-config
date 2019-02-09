@@ -15,6 +15,7 @@ async function generateConfig(inputConfigs, generateFoldersOnFilesystem = false)
   if (generateFoldersOnFilesystem) {
     await ConfigFileHandler.createFoldersOfConfig(config)
   }
+
   return config
 }
 
@@ -41,11 +42,11 @@ async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFil
 function cleanup(tmpFolder) {
   try {
     fs.unlinkSync(tmpFolder + '/sync.conf')
-  } catch (err) {}
+  } catch (error) {}
 
   try {
     fs.rmdirSync(tmpFolder)
-  } catch (err) {}
+  } catch (error) {}
 }
 
 module.exports = {

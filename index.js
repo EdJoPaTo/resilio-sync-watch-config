@@ -24,6 +24,7 @@ if (cli.args.length === 0) { // Can not be the configFilePaths
   cli.getUsage()
   process.exit(1)
 }
+
 const configFilePaths = cli.args
 
 doStuff()

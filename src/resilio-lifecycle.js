@@ -48,6 +48,7 @@ class ResilioLifecycle {
         if (!this.crashes) {
           this.crashes = 0
         }
+
         this.crashes++
 
         if (this.crashes < 3) {

@@ -7,10 +7,12 @@ function onlyUnique(value, index, self) {
 function isObject(item) {
   return (item && typeof item === 'object' && !Array.isArray(item))
 }
+
 function mergeDeep(target, ...sources) {
   if (sources.length === 0) {
     return target
   }
+
   const source = sources.shift()
 
   if (isObject(target) && isObject(source)) {
@@ -21,6 +23,7 @@ function mergeDeep(target, ...sources) {
             [key]: {}
           })
         }
+
         mergeDeep(target[key], source[key])
       } else {
         Object.assign(target, {
@@ -43,6 +46,7 @@ function mergeMultipleConfigs(...configs) {
   if (differingBasedirs.length === 0) {
     throw new Error('There is no basedir defined.')
   }
+
   if (differingBasedirs.length > 1) {
     throw new Error('There is more than one basedir defined. This is dangerous and therefore that allowed.')
   }

@@ -31,6 +31,7 @@ module.exports = class Resilio {
       } else {
         this.log('finished')
       }
+
       if (callbackOnClose) {
         callbackOnClose(code, ...callbackArgs)
       }
