@@ -27,7 +27,7 @@
     "debounce-promise": "^3.1.0"
   },
   "devDependencies": {
-    "ava": "^1.2.1",
+    "ava": "^2.1.0",
     "xo": "^0.24.0"
   },
   "files": [
