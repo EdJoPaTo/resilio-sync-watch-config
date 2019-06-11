@@ -7,11 +7,8 @@
     "resilio-sync-watch-config": "index.js"
   },
   "scripts": {
-    "ava": "ava",
     "start": "echo 'Do not start with NPM. Use ./index.js instead. NPM is fishy with signals.'",
-    "pretest": "xo",
-    "test": "ava",
-    "xo": "xo"
+    "test": "xo && nyc ava"
   },
   "repository": {
     "type": "git",
@@ -28,6 +25,7 @@
   },
   "devDependencies": {
     "ava": "^2.1.0",
+    "nyc": "^14.1.1",
     "xo": "^0.24.0"
   },
   "files": [
