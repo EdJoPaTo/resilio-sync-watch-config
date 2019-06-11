@@ -1,6 +1,6 @@
 {
   "name": "resilio-sync-watch-config",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Small tool to create a resilio config and watch for changes to restart the sync daemon on changes",
   "main": "index.js",
   "bin": {
