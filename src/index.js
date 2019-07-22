@@ -2,7 +2,7 @@
 
 const cli = require('cli')
 
-const runmodes = require('./src/runmodes')
+const runmodes = require('./runmodes')
 
 const {createConfigFile, startResilioFromConfigs} = runmodes
 
