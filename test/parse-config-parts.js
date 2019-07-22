@@ -1,5 +1,6 @@
-const test = require('ava')
-const {ensureTrailingSlash, replaceWithHomedirIfNeeded} = require('./parse-config-parts')
+import test from 'ava'
+
+import {ensureTrailingSlash, replaceWithHomedirIfNeeded} from '../src/parse-config-parts'
 
 test('ensureTrailingSlash with slash', t => {
   t.is(ensureTrailingSlash('test/'), 'test/')

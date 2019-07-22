@@ -1,5 +1,6 @@
-const test = require('ava')
-const {mergeMultipleConfigs} = require('./merge-multiple-configs')
+import test from 'ava'
+
+import {mergeMultipleConfigs} from '../src/merge-multiple-configs'
 
 const config1 = {
   basedir: '/location/',

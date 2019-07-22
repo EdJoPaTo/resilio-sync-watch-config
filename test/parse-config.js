@@ -1,5 +1,6 @@
-const test = require('ava')
-const parseConfig = require('./parse-config')
+import test from 'ava'
+
+import parseConfig from '../src/parse-config'
 
 const inputBasicConfig = {
   basedir: '/location/',

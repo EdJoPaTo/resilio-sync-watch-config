@@ -29,8 +29,7 @@
     "xo": "^0.24.0"
   },
   "files": [
-    "src/*.js",
-    "!*.test.js"
+    "src/*.js"
   ],
   "xo": {
     "space": true,
@@ -38,8 +37,8 @@
     "overrides": [
       {
         "files": [
-          "src/parse-config*.js",
-          "src/runmodes*.test.js"
+          "*/parse-config*.js",
+          "test/runmodes*.js"
         ],
         "rules": {
           "camelcase": [
