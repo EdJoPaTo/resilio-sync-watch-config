@@ -17,7 +17,7 @@
   "author": "Edgar To",
   "license": "MIT",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
     "cli": "^1.0.1",

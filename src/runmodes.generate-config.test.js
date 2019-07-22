@@ -3,7 +3,7 @@ const fs = require('fs')
 const test = require('ava')
 const {generateConfig} = require('./runmodes')
 
-const fsPromises = fs.promises || require('./polyfill-fs-promise')
+const fsPromises = fs.promises
 
 const BASEDIR = 'test-runmodes/'
 

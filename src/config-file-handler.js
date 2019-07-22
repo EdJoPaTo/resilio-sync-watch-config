@@ -5,7 +5,7 @@ const util = require('util')
 const debounce = require('debounce-promise')
 
 const exec = util.promisify(childProcess.exec)
-const fsPromises = fs.promises || require('./polyfill-fs-promise')
+const fsPromises = fs.promises
 
 const parseConfig = require('./parse-config')
 const {mergeMultipleConfigs} = require('./merge-multiple-configs')
