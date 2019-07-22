@@ -2,12 +2,12 @@
   "name": "resilio-sync-watch-config",
   "version": "1.5.1",
   "description": "Small tool to create a resilio config and watch for changes to restart the sync daemon on changes",
-  "main": "src/index.js",
+  "main": "source/index.js",
   "bin": {
-    "resilio-sync-watch-config": "src/index.js"
+    "resilio-sync-watch-config": "source/index.js"
   },
   "scripts": {
-    "start": "echo 'Do not start with NPM. Use ./src/index.js instead. NPM is fishy with signals.'",
+    "start": "echo 'Do not start with NPM. Use ./source/index.js instead. NPM is fishy with signals.'",
     "test": "xo && nyc ava"
   },
   "repository": {
@@ -29,7 +29,7 @@
     "xo": "^0.24.0"
   },
   "files": [
-    "src/*.js"
+    "source/*.js"
   ],
   "xo": {
     "space": true,

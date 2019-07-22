@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import test from 'ava'
 
-import {generateConfig} from '../src/runmodes'
+import {generateConfig} from '../source/runmodes'
 
 const BASEDIR = 'test-runmodes/'
 

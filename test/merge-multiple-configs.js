@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import {mergeMultipleConfigs} from '../src/merge-multiple-configs'
+import {mergeMultipleConfigs} from '../source/merge-multiple-configs'
 
 const config1 = {
   basedir: '/location/',
