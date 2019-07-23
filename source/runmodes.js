@@ -3,7 +3,8 @@ const fs = require('fs')
 const ConfigFileHandler = require('./config-file-handler')
 const ResilioLifecycle = require('./resilio-lifecycle')
 
-const fsPromises = fs.promises
+const {unlinkSync, rmdirSync} = fs
+const {mkdtemp} = fs.promises
 
 function createConfigFile(inputConfigFilePaths, resilioConfigFilePath, generateFoldersOnFilesystem = true) {
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
@@ -20,7 +21,7 @@ async function generateConfig(inputConfigs, generateFoldersOnFilesystem = false)
 }
 
 async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFiles = false, resilioBinary = 'rslsync') {
-  const tmpFolder = await fsPromises.mkdtemp('/tmp/resilio-sync-watch-config-')
+  const tmpFolder = await mkdtemp('/tmp/resilio-sync-watch-config-')
   const resilioConfigFilePath = tmpFolder + '/sync.conf'
 
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
@@ -41,11 +42,11 @@ async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFil
 
 function cleanup(tmpFolder) {
   try {
-    fs.unlinkSync(tmpFolder + '/sync.conf')
+    unlinkSync(tmpFolder + '/sync.conf')
   } catch (error) {}
 
   try {
-    fs.rmdirSync(tmpFolder)
+    rmdirSync(tmpFolder)
   } catch (error) {}
 }
 
