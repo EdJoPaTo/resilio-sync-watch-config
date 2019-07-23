@@ -1,17 +1,19 @@
-const fs = require('fs')
+import fs from 'fs'
 
-const ConfigFileHandler = require('./config-file-handler')
-const ResilioLifecycle = require('./resilio-lifecycle')
+import {ResilioConfig} from './types'
+
+import ConfigFileHandler from './config-file-handler'
+import ResilioLifecycle from './resilio-lifecycle'
 
 const {unlinkSync, rmdirSync} = fs
 const {mkdtemp} = fs.promises
 
-function createConfigFile(inputConfigFilePaths, resilioConfigFilePath, generateFoldersOnFilesystem = true) {
+export async function createConfigFile(inputConfigFilePaths: string[], resilioConfigFilePath: string, generateFoldersOnFilesystem = true): Promise<ResilioConfig> {
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
   return configFileHandler.generateResilioConfig(generateFoldersOnFilesystem, true)
 }
 
-async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFiles = false, resilioBinary = 'rslsync') {
+export async function startResilioFromConfigs(inputConfigFilePaths: string[], watchInputConfigFiles = false, resilioBinary = 'rslsync'): Promise<ResilioLifecycle> {
   const tmpFolder = await mkdtemp('/tmp/resilio-sync-watch-config-')
   const resilioConfigFilePath = tmpFolder + '/sync.conf'
 
@@ -31,7 +33,7 @@ async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFil
   return resilio
 }
 
-function cleanup(tmpFolder) {
+function cleanup(tmpFolder: string): void {
   try {
     unlinkSync(tmpFolder + '/sync.conf')
   } catch (_) {}
