@@ -1,10 +1,11 @@
-const os = require('os')
-const {parseBasepath} = require('./parse-config-parts')
+import os from 'os'
 
-function parseConfig(jsonConfig) {
+import {parseBasepath} from './parse-config-parts'
+
+export default function parseConfig(jsonConfig: any): any {
   const basedir = parseBasepath(jsonConfig.basedir)
 
-  const resilioConfig = {}
+  const resilioConfig: any = {}
   resilioConfig.device_name = os.hostname()
   resilioConfig.storage_path = basedir + '.sync'
 
@@ -20,5 +21,3 @@ function parseConfig(jsonConfig) {
 
   return resilioConfig
 }
-
-module.exports = parseConfig
