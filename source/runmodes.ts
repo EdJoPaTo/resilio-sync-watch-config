@@ -4,6 +4,7 @@ import {ResilioConfig} from './config'
 
 import ConfigFileHandler from './config-file-handler'
 import ResilioLifecycle from './resilio-lifecycle'
+import ResilioProcess from './resilio-sync-process'
 
 const {unlinkSync, rmdirSync} = fs
 const {mkdtemp} = fs.promises
@@ -18,7 +19,10 @@ export async function startResilioFromConfigs(inputConfigFilePaths: string[], wa
   const resilioConfigFilePath = tmpFolder + '/sync.conf'
 
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
-  const resilio = new ResilioLifecycle(resilioBinary, resilioConfigFilePath, () => cleanup(tmpFolder))
+  const resilio = new ResilioLifecycle(
+    new ResilioProcess(resilioBinary, resilioConfigFilePath),
+    () => cleanup(tmpFolder)
+  )
 
   await configFileHandler.generateResilioConfig(true, true)
   resilio.start()

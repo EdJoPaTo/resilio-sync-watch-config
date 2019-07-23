@@ -2,8 +2,6 @@ import ResilioProcess from './resilio-sync-process'
 
 // This handles the livecycle of the resilio process.
 export default class ResilioLifecycle {
-  private readonly _resilio: ResilioProcess
-
   private _running = false
 
   private _restarting = false
@@ -11,33 +9,30 @@ export default class ResilioLifecycle {
   private _crashes = 0
 
   constructor(
-    // TODO: directly accept ResilioProcess
-    resilioBinary: string, resilioConfigFilePath: string,
-    private finalCallback: (code: number, signal: string) => void
-  ) {
-    this._resilio = new ResilioProcess(resilioBinary, resilioConfigFilePath)
-  }
+    private readonly resilio: ResilioProcess,
+    private readonly finalCallback: (code: number, signal: string) => void
+  ) {}
 
   start(): void {
     this._log('Start Resilio Sync…')
     this._running = true
-    this._resilio.start((code, signal) => this._stoppedCallback(code, signal))
+    this.resilio.start((code, signal) => this._stoppedCallback(code, signal))
     this._log('Started Resilio Sync successfully')
   }
 
   async restart(): Promise<void> {
     this._log('Restart Resilio Sync…')
     this._restarting = true
-    await this._resilio.stop()
+    await this.resilio.stop()
     this._restarting = false
-    this._resilio.start((code, signal) => this._stoppedCallback(code, signal))
+    this.resilio.start((code, signal) => this._stoppedCallback(code, signal))
     this._log('Restarted Resilio Sync successfully')
   }
 
   async stop(): Promise<void> {
     this._log('Stop Resilio Sync…')
     this._running = false
-    await this._resilio.stop()
+    await this.resilio.stop()
     this._log('Stopped Resilio Sync successfully')
   }
 
@@ -51,7 +46,7 @@ export default class ResilioLifecycle {
         if (this._crashes < 3) {
           this._log(`Restart Resilio in 5 seconds… Attempt ${this._crashes}`)
           setTimeout(() => {
-            this._resilio.start((code, signal) => this._stoppedCallback(code, signal))
+            this.resilio.start((code, signal) => this._stoppedCallback(code, signal))
             this._log('Restarted Resilio Sync successfully')
           }, 5000)
         } else {
