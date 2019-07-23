@@ -1,4 +1,4 @@
-import os from 'os'
+import {hostname} from 'os'
 
 import {OwnConfig, ResilioConfig} from './types'
 
@@ -8,7 +8,7 @@ export default function parseConfig(jsonConfig: OwnConfig): ResilioConfig {
   const basedir = parseBasepath(jsonConfig.basedir)
 
   const resilioConfig: any = {}
-  resilioConfig.device_name = os.hostname()
+  resilioConfig.device_name = hostname()
   resilioConfig.storage_path = basedir + '.sync'
 
   const foldernames = Object.keys(jsonConfig.folders)

@@ -1,4 +1,4 @@
-import os from 'os'
+import {homedir} from 'os'
 
 export function ensureTrailingSlash(input: string): string {
   if (input.endsWith('/')) {
@@ -10,8 +10,7 @@ export function ensureTrailingSlash(input: string): string {
 
 export function replaceWithHomedirIfNeeded(input: string): string {
   if (input.startsWith('~/')) {
-    const homedir = ensureTrailingSlash(os.homedir())
-    return homedir + input.substring(2)
+    return ensureTrailingSlash(homedir()) + input.substring(2)
   }
 
   return input
