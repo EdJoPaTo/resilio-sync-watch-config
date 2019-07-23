@@ -1,8 +1,10 @@
-import fs from 'fs'
+import * as fs from 'fs'
 
 import test from 'ava'
 
 import {generateConfig} from '../source/runmodes'
+
+const {mkdtemp, rmdir, stat} = fs.promises
 
 const BASEDIR = 'test-runmodes/'
 
@@ -34,7 +36,7 @@ test('sample config correctly parsed', async t => {
 })
 
 test('storage_path folder is created', async t => {
-  const tmpDir = await fs.promises.mkdtemp(BASEDIR)
+  const tmpDir = await mkdtemp(BASEDIR)
   const result = await generateConfig([
     baseConfig,
     {basedir: tmpDir}
@@ -42,17 +44,17 @@ test('storage_path folder is created', async t => {
   t.is(result.storage_path, tmpDir + '/.sync')
 
   try {
-    const stat = await fs.promises.stat(result.storage_path)
-    t.log('bob', stat)
-    t.true(stat.isDirectory())
+    const storagePathStat = await stat(result.storage_path)
+    t.log('bob', storagePathStat)
+    t.true(storagePathStat.isDirectory())
   } catch (error) {
     t.log(error)
     t.fail('folder was not created: ' + result.storage_path)
   }
 
   try {
-    await fs.promises.rmdir(result.storage_path)
+    await rmdir(result.storage_path)
   } catch (_) {}
 
-  await fs.promises.rmdir(tmpDir)
+  await rmdir(tmpDir)
 })
