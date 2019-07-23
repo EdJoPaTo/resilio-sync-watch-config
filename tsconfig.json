@@ -1,0 +1,12 @@
+{
+	"extends": "@sindresorhus/tsconfig",
+	"include": [
+		"source"
+	],
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"allowJs": true,
+		"declaration": false,
+		"outDir": "dist"
+	}
+}

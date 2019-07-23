@@ -17,7 +17,7 @@ const baseConfig = {
 }
 
 test('sample config correctly parsed', async t => {
-  const result = await generateConfig([
+  const result: any = await generateConfig([
     baseConfig,
     {basedir: BASEDIR}
   ], false)
