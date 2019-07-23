@@ -1,11 +1,8 @@
-const childProcess = require('child_process')
 const fs = require('fs')
-const util = require('util')
 
 const debounce = require('debounce-promise')
 
-const exec = util.promisify(childProcess.exec)
-const fsPromises = fs.promises
+const {readFile, writeFile, mkdir} = fs.promises
 
 const parseConfig = require('./parse-config')
 const {mergeMultipleConfigs} = require('./merge-multiple-configs')
@@ -15,17 +12,13 @@ function log(...args) {
 }
 
 async function loadFromFile(filepath) {
-  const content = await fsPromises.readFile(filepath, 'utf8')
+  const content = await readFile(filepath, 'utf8')
   return JSON.parse(content)
 }
 
 function saveToFile(filepath, json) {
   const content = JSON.stringify(json, null, 2)
-  return fsPromises.writeFile(filepath, content, 'utf8')
-}
-
-function createFolderInFS(folderpath) {
-  return exec(`mkdir -p ${folderpath}`)
+  return writeFile(filepath, content, 'utf8')
 }
 
 function watchFile(file, onChangeCallback) {
@@ -51,7 +44,7 @@ class ConfigFileHandler {
   }
 
   static createFoldersOfConfig(resilioConfig) {
-    return createFolderInFS(resilioConfig.storage_path)
+    return mkdir(resilioConfig.storage_path, {recursive: true})
   }
 
   async generateResilioConfig(createFoldersOnFS = true, saveToFS = false) {
