@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-const cli = require('cli')
+import cli from 'cli'
 
-const {createConfigFile, startResilioFromConfigs} = require('./runmodes')
+import {createConfigFile, startResilioFromConfigs} from './runmodes'
+import ResilioLifecycle from './resilio-lifecycle'
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -26,7 +27,7 @@ if (cli.args.length === 0) { // Can not be the configFilePaths
 const configFilePaths = cli.args
 
 doStuff()
-async function doStuff() {
+async function doStuff(): Promise<void> {
   if (!cli.options.start && !cli.options.watchmode) {
     const resilioConfigFilePath = 'sync.conf'
     await createConfigFile(configFilePaths, resilioConfigFilePath, true)
@@ -40,7 +41,7 @@ async function doStuff() {
   }
 }
 
-function handleExitRequest(resilio) {
+function handleExitRequest(resilio: ResilioLifecycle): void {
   console.log('exit request received.')
   if (shutdown) {
     console.log('Force stop…')
