@@ -46,12 +46,13 @@ test('storage_path folder is created', async t => {
     t.log('bob', stat)
     t.true(stat.isDirectory())
   } catch (error) {
+    t.log(error)
     t.fail('folder was not created: ' + result.storage_path)
   }
 
   try {
     await fs.promises.rmdir(result.storage_path)
-  } catch (error) {}
+  } catch (_) {}
 
   await fs.promises.rmdir(tmpDir)
 })
