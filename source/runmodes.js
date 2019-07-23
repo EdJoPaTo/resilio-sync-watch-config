@@ -11,15 +11,6 @@ function createConfigFile(inputConfigFilePaths, resilioConfigFilePath, generateF
   return configFileHandler.generateResilioConfig(generateFoldersOnFilesystem, true)
 }
 
-async function generateConfig(inputConfigs, generateFoldersOnFilesystem = false) {
-  const config = ConfigFileHandler.parseMultipleConfigs(inputConfigs)
-  if (generateFoldersOnFilesystem) {
-    await ConfigFileHandler.createFoldersOfConfig(config)
-  }
-
-  return config
-}
-
 async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFiles = false, resilioBinary = 'rslsync') {
   const tmpFolder = await mkdtemp('/tmp/resilio-sync-watch-config-')
   const resilioConfigFilePath = tmpFolder + '/sync.conf'
@@ -52,6 +43,5 @@ function cleanup(tmpFolder) {
 
 module.exports = {
   createConfigFile,
-  generateConfig,
   startResilioFromConfigs
 }
