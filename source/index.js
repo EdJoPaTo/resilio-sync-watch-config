@@ -2,9 +2,7 @@
 
 const cli = require('cli')
 
-const runmodes = require('./runmodes')
-
-const {createConfigFile, startResilioFromConfigs} = runmodes
+const {createConfigFile, startResilioFromConfigs} = require('./runmodes')
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -52,5 +50,3 @@ function handleExitRequest(resilio) {
     resilio.stop()
   }
 }
-
-module.exports = runmodes
