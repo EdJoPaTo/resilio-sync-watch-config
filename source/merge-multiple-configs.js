@@ -1,7 +1,4 @@
-// https://stackoverflow.com/a/14438954
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index
-}
+const arrayFilterUnique = require('array-filter-unique')
 
 // https://stackoverflow.com/a/34749873
 function isObject(item) {
@@ -42,7 +39,8 @@ function mergeMultipleConfigs(...configs) {
   const differingBasedirs = configs
     .map(o => o.basedir)
     .filter(o => o)
-    .filter(onlyUnique)
+    .filter(arrayFilterUnique())
+
   if (differingBasedirs.length === 0) {
     throw new Error('There is no basedir defined.')
   }
