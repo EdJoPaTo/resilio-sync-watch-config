@@ -43,11 +43,11 @@ async function startResilioFromConfigs(inputConfigFilePaths, watchInputConfigFil
 function cleanup(tmpFolder) {
   try {
     unlinkSync(tmpFolder + '/sync.conf')
-  } catch (error) {}
+  } catch (_) {}
 
   try {
     rmdirSync(tmpFolder)
-  } catch (error) {}
+  } catch (_) {}
 }
 
 module.exports = {
