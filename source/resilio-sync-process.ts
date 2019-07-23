@@ -4,8 +4,8 @@ export default class ResilioProcess {
   private _resilioProcess?: ChildProcess
 
   constructor(
-    private resilioBinary: string,
-    private resilioConfigFilePath: string
+    private readonly resilioBinary: string,
+    private readonly resilioConfigFilePath: string
   ) {}
 
   log(...args: any[]): void {
