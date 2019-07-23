@@ -31,28 +31,23 @@
   "files": [
     "source/*.js"
   ],
+  "bugs": {
+    "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
+  },
+  "homepage": "https://github.com/edjopato/resilio-sync-watch-config#readme",
   "xo": {
     "space": true,
     "semicolon": false,
     "overrides": [
       {
         "files": [
-          "*/parse-config*.js",
-          "test/runmodes*.js"
+          "*/parse-config*.*",
+          "test/runmodes*.*"
         ],
         "rules": {
-          "camelcase": [
-            "warn",
-            {
-              "properties": "never"
-            }
-          ]
+          "camelcase": "off"
         }
       }
     ]
-  },
-  "bugs": {
-    "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
-  },
-  "homepage": "https://github.com/edjopato/resilio-sync-watch-config#readme"
+  }
 }
