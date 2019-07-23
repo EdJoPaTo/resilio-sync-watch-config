@@ -23,8 +23,8 @@ const config2 = {
 }
 
 test('does not change the input objects', t => {
-  const input1 = {test: 1}
-  const input2 = {test: 2}
+  const input1: any = {test: 1}
+  const input2: any = {test: 2}
   const input3 = {basedir: 'foobar'}
   const input4 = {folders: {stuff: 'X'}}
   mergeMultipleConfigs(input1, input2, input3, input4)

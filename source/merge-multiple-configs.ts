@@ -1,6 +1,6 @@
 import arrayFilterUnique from 'array-filter-unique'
 
-import {OwnConfig} from './types'
+import {OwnConfig, OwnConfigPart} from './types'
 
 // https://stackoverflow.com/a/34749873
 function isObject(item: any): boolean {
@@ -35,7 +35,7 @@ function mergeDeep(target: any, ...sources: any[]): any {
   return mergeDeep(target, ...sources)
 }
 
-export function mergeMultipleConfigs(...configs: OwnConfig[]): OwnConfig {
+export function mergeMultipleConfigs(...configs: OwnConfigPart[]): OwnConfig {
   const result = mergeDeep({}, ...configs)
 
   const differingBasedirs = configs
