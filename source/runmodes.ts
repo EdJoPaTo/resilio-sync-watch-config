@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 
-import {ResilioConfig} from './types'
+import {ResilioConfig} from './config'
 
 import ConfigFileHandler from './config-file-handler'
 import ResilioLifecycle from './resilio-lifecycle'

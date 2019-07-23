@@ -75,8 +75,7 @@
     "overrides": [
       {
         "files": [
-          "source/types.ts",
-          "*/parse-config*.*"
+          "*/config/*.*"
         ],
         "rules": {
           "@typescript-eslint/camelcase": "off",

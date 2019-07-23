@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import {ensureTrailingSlash, replaceWithHomedirIfNeeded} from '../source/parse-config-parts'
+import {ensureTrailingSlash, replaceWithHomedirIfNeeded} from '../../source/config/parse-config-parts'
 
 test('ensureTrailingSlash with slash', t => {
   t.is(ensureTrailingSlash('test/'), 'test/')

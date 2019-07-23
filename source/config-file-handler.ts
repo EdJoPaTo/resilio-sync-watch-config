@@ -2,10 +2,7 @@ import * as fs from 'fs'
 
 import debounce from 'debounce-promise'
 
-import {ResilioConfig, OwnConfig} from './types'
-
-import parseConfig from './parse-config'
-import {mergeMultipleConfigs} from './merge-multiple-configs'
+import {ResilioConfig, OwnConfigPart, parseConfigs} from './config'
 
 const {readFile, writeFile, mkdir} = fs.promises
 
@@ -13,7 +10,7 @@ function log(...args: any[]): void {
   console.log(new Date(), 'Config File', ...args)
 }
 
-async function loadFromFile(filepath: string): Promise<OwnConfig> {
+async function loadFromFile(filepath: string): Promise<OwnConfigPart> {
   const content = await readFile(filepath, 'utf8')
   return JSON.parse(content)
 }
@@ -37,11 +34,6 @@ export default class ConfigFileHandler {
     private resilioConfigFilePath: string
   ) {}
 
-  static parseMultipleConfigs(configs: OwnConfig[]): ResilioConfig {
-    const mergedConfig = mergeMultipleConfigs(...configs)
-    return parseConfig(mergedConfig)
-  }
-
   static async createFoldersOfConfig(resilioConfig: ResilioConfig): Promise<void> {
     return mkdir(resilioConfig.storage_path, {recursive: true})
   }
@@ -54,7 +46,7 @@ export default class ConfigFileHandler {
       )
     )
     log('generate config…')
-    const resilioConfig = ConfigFileHandler.parseMultipleConfigs(configs)
+    const resilioConfig = parseConfigs(...configs)
 
     if (createFoldersOnFS) {
       this._log('create folders in filesystem…', resilioConfig.storage_path)
