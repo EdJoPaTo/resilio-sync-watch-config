@@ -75,6 +75,7 @@
     "overrides": [
       {
         "files": [
+          "source/types.ts",
           "*/parse-config*.*"
         ],
         "rules": {
