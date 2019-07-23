@@ -57,7 +57,3 @@ export function mergeMultipleConfigs(...configs: OwnConfig[]): OwnConfig {
 
   return result
 }
-
-module.exports = {
-  mergeMultipleConfigs
-}

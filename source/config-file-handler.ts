@@ -79,6 +79,3 @@ export default class ConfigFileHandler {
     log(...args)
   }
 }
-
-// TODO: remove when TypeScript migration is finished
-module.exports = ConfigFileHandler

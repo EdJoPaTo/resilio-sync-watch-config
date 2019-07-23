@@ -65,7 +65,6 @@
       "ts"
     ],
     "rules": {
-      "@typescript-eslint/no-var-requires": "warn",
       "@typescript-eslint/indent": "off",
       "@typescript-eslint/semi": [
         "error",

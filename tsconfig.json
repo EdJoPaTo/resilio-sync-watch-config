@@ -5,8 +5,6 @@
 	],
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"allowJs": true,
-		"declaration": false,
 		"outDir": "dist"
 	}
 }

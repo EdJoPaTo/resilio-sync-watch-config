@@ -42,8 +42,3 @@ function cleanup(tmpFolder: string): void {
     rmdirSync(tmpFolder)
   } catch (_) {}
 }
-
-module.exports = {
-  createConfigFile,
-  startResilioFromConfigs
-}

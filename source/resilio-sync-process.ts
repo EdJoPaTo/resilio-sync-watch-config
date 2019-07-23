@@ -63,6 +63,3 @@ export default class ResilioProcess {
     return promise
   }
 }
-
-// TODO: remove when TypeScript migration is finished
-module.exports = ResilioProcess

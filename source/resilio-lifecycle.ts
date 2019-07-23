@@ -75,6 +75,3 @@ export default class ResilioLifecycle {
     console.warn(new Date(), 'Lifecycle', ...args)
   }
 }
-
-// TODO: remove when TypeScript migration is finished
-module.exports = ResilioLifecycle
