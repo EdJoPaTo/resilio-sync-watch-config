@@ -1,8 +1,10 @@
 import os from 'os'
 
+import {OwnConfig, ResilioConfig} from './types'
+
 import {parseBasepath} from './parse-config-parts'
 
-export default function parseConfig(jsonConfig: any): any {
+export default function parseConfig(jsonConfig: OwnConfig): ResilioConfig {
   const basedir = parseBasepath(jsonConfig.basedir)
 
   const resilioConfig: any = {}

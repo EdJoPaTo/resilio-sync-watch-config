@@ -63,7 +63,7 @@ const inputPassthrough = {...inputBasicConfig, passthrough: {
 }}
 
 test('adds passthrough', t => {
-  const out: any = parseConfig(inputPassthrough)
+  const out = parseConfig(inputPassthrough)
   t.is(out.what_the, 'hell')
 })
 
