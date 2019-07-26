@@ -7,7 +7,13 @@ export async function runWithSpecificFiles(resilio: ResilioWithOwnConfigs, input
 
   if (watchInputConfigFiles) {
     watchDebounced(
-      async () => resilio.syncConfigFiles(...inputConfigFilePaths),
+      async () => {
+        try {
+          await resilio.syncConfigFiles(...inputConfigFilePaths)
+        } catch (error) {
+          console.error(new Date(), 'run with specific files', 'error while restarting', error)
+        }
+      },
       ...inputConfigFilePaths
     )
   }
