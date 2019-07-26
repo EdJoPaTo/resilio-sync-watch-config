@@ -2,9 +2,8 @@
 
 import cli from 'cli'
 
-import {onlyParseFile} from './runmode'
+import {onlyParseFile, runWithSpecificFiles} from './runmode'
 
-import {startResilioFromConfigs} from './runmodes'
 import {ResilioLifecycle} from './resilio'
 
 cli.enable('version')
@@ -36,7 +35,7 @@ async function doStuff(): Promise<void> {
   }
 
   if (cli.options.start) {
-    const resilio = await startResilioFromConfigs(configFilePaths, cli.options.watchmode, cli.options.resilioBin)
+    const resilio = await runWithSpecificFiles(configFilePaths, cli.options.watchmode, cli.options.resilioBin)
 
     process.on('SIGINT', () => handleExitRequest(resilio))
     process.on('SIGTERM', () => handleExitRequest(resilio))

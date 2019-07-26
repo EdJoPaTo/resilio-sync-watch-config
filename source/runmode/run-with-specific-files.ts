@@ -1,12 +1,12 @@
 import * as fs from 'fs'
 
-import {ResilioLifecycle, ResilioProcess} from './resilio'
-import ConfigFileHandler from './config-file-handler'
+import {ResilioLifecycle, ResilioProcess} from '../resilio'
+import ConfigFileHandler from '../config-file-handler'
 
 const {unlinkSync, rmdirSync} = fs
 const {mkdtemp} = fs.promises
 
-export async function startResilioFromConfigs(inputConfigFilePaths: string[], watchInputConfigFiles = false, resilioBinary = 'rslsync'): Promise<ResilioLifecycle> {
+export async function runWithSpecificFiles(inputConfigFilePaths: string[], watchInputConfigFiles = false, resilioBinary: string): Promise<ResilioLifecycle> {
   const tmpFolder = await mkdtemp('/tmp/resilio-sync-watch-config-')
   const resilioConfigFilePath = tmpFolder + '/sync.conf'
 
