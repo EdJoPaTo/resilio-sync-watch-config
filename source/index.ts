@@ -30,7 +30,7 @@ const configFilePaths = cli.args
 doStuff()
 async function doStuff(): Promise<void> {
   if (!cli.options.start && !cli.options.watchmode) {
-    const resilioConfigFilePath = 'sync.conf'
+    const resilioConfigFilePath = '/dev/stdout'
     await onlyParseFile(configFilePaths, resilioConfigFilePath, true)
   }
 
