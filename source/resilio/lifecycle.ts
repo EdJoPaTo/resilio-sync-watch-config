@@ -21,6 +21,11 @@ export class ResilioLifecycle {
   }
 
   async restart(): Promise<void> {
+    if (!this._running) {
+      this.start()
+      return
+    }
+
     this._log('Restart Resilio Sync…')
     this._restarting = true
     await this.resilio.stop()

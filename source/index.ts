@@ -3,6 +3,7 @@
 import cli from 'cli'
 
 import {onlyParseFile, runWithSpecificFiles} from './runmode'
+import {ResilioWithOwnConfigs} from './resilio'
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
@@ -30,13 +31,15 @@ async function doStuff(): Promise<void> {
   if (!cli.options.start && !cli.options.watchmode) {
     const resilioConfigFilePath = '/dev/stdout'
     await onlyParseFile(configFilePaths, resilioConfigFilePath, true)
+    return
   }
 
-  if (cli.options.start) {
-    const resilio = await runWithSpecificFiles(configFilePaths, cli.options.watchmode, cli.options.resilioBin)
+  const resilio = new ResilioWithOwnConfigs(cli.options.resilioBin)
+  process.on('SIGINT', () => handleExitRequest(resilio))
+  process.on('SIGTERM', () => handleExitRequest(resilio))
 
-    process.on('SIGINT', () => handleExitRequest(resilio))
-    process.on('SIGTERM', () => handleExitRequest(resilio))
+  if (cli.options.start) {
+    await runWithSpecificFiles(resilio, configFilePaths, cli.options.watchmode)
   }
 }
 
