@@ -1,8 +1,7 @@
 import * as fs from 'fs'
 
+import {ResilioLifecycle, ResilioProcess} from './resilio'
 import ConfigFileHandler from './config-file-handler'
-import ResilioLifecycle from './resilio-lifecycle'
-import ResilioProcess from './resilio-sync-process'
 
 const {unlinkSync, rmdirSync} = fs
 const {mkdtemp} = fs.promises

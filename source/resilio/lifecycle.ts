@@ -1,7 +1,7 @@
-import ResilioProcess from './resilio-sync-process'
+import {ResilioProcess} from './process'
 
 // This handles the livecycle of the resilio process.
-export default class ResilioLifecycle {
+export class ResilioLifecycle {
   private _running = false
 
   private _restarting = false

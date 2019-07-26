@@ -1,6 +1,6 @@
 import {spawn, ChildProcess} from 'child_process'
 
-export default class ResilioProcess {
+export class ResilioProcess {
   private _resilioProcess?: ChildProcess
 
   constructor(

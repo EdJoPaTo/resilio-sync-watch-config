@@ -5,7 +5,7 @@ import cli from 'cli'
 import onlyParseFile from './runmode/only-parse-file'
 
 import {startResilioFromConfigs} from './runmodes'
-import ResilioLifecycle from './resilio-lifecycle'
+import {ResilioLifecycle} from './resilio'
 
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
