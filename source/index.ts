@@ -4,8 +4,6 @@ import cli from 'cli'
 
 import {onlyParseFile, runWithSpecificFiles} from './runmode'
 
-import {ResilioLifecycle} from './resilio'
-
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
 cli.parse({
@@ -42,13 +40,13 @@ async function doStuff(): Promise<void> {
   }
 }
 
-function handleExitRequest(resilio: ResilioLifecycle): void {
+function handleExitRequest(stoppable: {stop: () => void}): void {
   console.log('exit request received.')
   if (shutdown) {
     console.log('Force stop…')
     process.exit(1)
   } else {
     shutdown = true
-    resilio.stop()
+    stoppable.stop()
   }
 }
