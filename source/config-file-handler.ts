@@ -4,7 +4,9 @@ import debounce from 'debounce-promise'
 
 import {ResilioConfig, OwnConfigPart, parseConfigs} from './config'
 
-const {readFile, writeFile, mkdir} = fs.promises
+import {createStoragePathOfConfig} from './filesystem/resilio-config'
+
+const {readFile, writeFile} = fs.promises
 
 function log(...args: any[]): void {
   console.log(new Date(), 'Config File', ...args)
@@ -34,10 +36,6 @@ export default class ConfigFileHandler {
     private resilioConfigFilePath: string
   ) {}
 
-  static async createFoldersOfConfig(resilioConfig: ResilioConfig): Promise<void> {
-    return mkdir(resilioConfig.storage_path, {recursive: true})
-  }
-
   async generateResilioConfig(createFoldersOnFS = true, saveToFS = false): Promise<ResilioConfig> {
     this._log('load configs…')
     const configs = await Promise.all(
@@ -50,7 +48,7 @@ export default class ConfigFileHandler {
 
     if (createFoldersOnFS) {
       this._log('create folders in filesystem…', resilioConfig.storage_path)
-      await ConfigFileHandler.createFoldersOfConfig(resilioConfig)
+      await createStoragePathOfConfig(resilioConfig)
     }
 
     if (saveToFS) {
