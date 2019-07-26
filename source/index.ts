@@ -2,7 +2,9 @@
 
 import cli from 'cli'
 
-import {createConfigFile, startResilioFromConfigs} from './runmodes'
+import onlyParseFile from './runmode/only-parse-file'
+
+import {startResilioFromConfigs} from './runmodes'
 import ResilioLifecycle from './resilio-lifecycle'
 
 cli.enable('version')
@@ -30,7 +32,7 @@ doStuff()
 async function doStuff(): Promise<void> {
   if (!cli.options.start && !cli.options.watchmode) {
     const resilioConfigFilePath = 'sync.conf'
-    await createConfigFile(configFilePaths, resilioConfigFilePath, true)
+    await onlyParseFile(configFilePaths, resilioConfigFilePath, true)
   }
 
   if (cli.options.start) {
