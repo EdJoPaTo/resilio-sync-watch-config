@@ -1,7 +1,5 @@
 import * as fs from 'fs'
 
-import {ResilioConfig} from './config'
-
 import ConfigFileHandler from './config-file-handler'
 import ResilioLifecycle from './resilio-lifecycle'
 import ResilioProcess from './resilio-sync-process'
@@ -9,9 +7,9 @@ import ResilioProcess from './resilio-sync-process'
 const {unlinkSync, rmdirSync} = fs
 const {mkdtemp} = fs.promises
 
-export async function createConfigFile(inputConfigFilePaths: string[], resilioConfigFilePath: string, generateFoldersOnFilesystem = true): Promise<ResilioConfig> {
+export async function createConfigFile(inputConfigFilePaths: string[], resilioConfigFilePath: string, generateFoldersOnFilesystem = true): Promise<void> {
   const configFileHandler = new ConfigFileHandler(inputConfigFilePaths, resilioConfigFilePath)
-  return configFileHandler.generateResilioConfig(generateFoldersOnFilesystem, true)
+  return configFileHandler.generateResilioConfig(generateFoldersOnFilesystem)
 }
 
 export async function startResilioFromConfigs(inputConfigFilePaths: string[], watchInputConfigFiles = false, resilioBinary = 'rslsync'): Promise<ResilioLifecycle> {
@@ -24,12 +22,12 @@ export async function startResilioFromConfigs(inputConfigFilePaths: string[], wa
     () => cleanup(tmpFolder)
   )
 
-  await configFileHandler.generateResilioConfig(true, true)
+  await configFileHandler.generateResilioConfig(true)
   resilio.start()
 
   if (watchInputConfigFiles) {
     configFileHandler.watch(async () => {
-      await configFileHandler.generateResilioConfig(true, true)
+      await configFileHandler.generateResilioConfig(true)
       await resilio.restart()
     })
   }
