@@ -1,4 +1,4 @@
-import {watch} from 'fs'
+import {watch, FSWatcher} from 'fs'
 
 import debounce from 'debounce-promise'
 
@@ -7,9 +7,10 @@ import debounce from 'debounce-promise'
 // Alternative would be to use accumulated debounce
 type ChangeCallback = () => void
 
-export function watchDebounced(somethingChangedCallback: ChangeCallback, ...filesOrDirectories: readonly string[]): void {
+export function watchDebounced(somethingChangedCallback: ChangeCallback, ...filesOrDirectories: readonly string[]): readonly FSWatcher[] {
   const watchFunc = debounce(() => somethingChangedCallback(), 500)
-  for (const f of filesOrDirectories) {
-    watch(f, {persistent: false}, watchFunc)
-  }
+  const watcher = filesOrDirectories
+    .map(f => watch(f, {persistent: false}, watchFunc))
+
+  return watcher
 }
