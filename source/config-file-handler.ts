@@ -1,10 +1,9 @@
 import * as fs from 'fs'
 
-import debounce from 'debounce-promise'
-
 import {ResilioConfig, OwnConfigPart, parseConfigs} from './config'
 
 import {createStoragePathOfConfig} from './filesystem/resilio-config'
+import {watchDebounced} from './filesystem/watch'
 
 const {readFile, writeFile} = fs.promises
 
@@ -20,14 +19,6 @@ async function loadFromFile(filepath: string): Promise<OwnConfigPart> {
 async function saveToFile(filepath: string, json: any): Promise<void> {
   const content = JSON.stringify(json, null, 2)
   return writeFile(filepath, content, 'utf8')
-}
-
-function watchFile(file: string, onChangeCallback: (file: string, curr: any) => void): void {
-  fs.watch(file, {persistent: false}, debounce((curr: any) => {
-    // TODO: type curr, see https://nodejs.org/api/fs.html#fs_fs_watch_filename_options_listener
-    log(file, 'changed', curr)
-    onChangeCallback(file, curr)
-  }, 500))
 }
 
 export default class ConfigFileHandler {
@@ -60,9 +51,9 @@ export default class ConfigFileHandler {
     return resilioConfig
   }
 
-  watch(onChangeCallback: (file: string, curr: any) => void): void {
+  watch(onChangeCallback: () => void): void {
     this._log('start watching…')
-    this.configFiles.forEach(file => watchFile(file, onChangeCallback))
+    watchDebounced(onChangeCallback, ...this.configFiles)
   }
 
   private _log(...args: any[]): void {
