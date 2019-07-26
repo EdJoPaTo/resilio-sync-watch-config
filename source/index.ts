@@ -2,7 +2,7 @@
 
 import cli from 'cli'
 
-import onlyParseFile from './runmode/only-parse-file'
+import {onlyParseFile} from './runmode'
 
 import {startResilioFromConfigs} from './runmodes'
 import {ResilioLifecycle} from './resilio'
