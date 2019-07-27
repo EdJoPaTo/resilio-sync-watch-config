@@ -57,6 +57,22 @@
       "ts-node/register"
     ]
   },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "source"
+    ],
+    "exclude": [
+      "**/*.test.ts"
+    ],
+    "all": true,
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
   "xo": {
     "space": true,
     "semicolon": false,
