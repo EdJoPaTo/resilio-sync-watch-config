@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/absolute/path/to/index.js -sw with.json arguments.json
+ExecStart=/absolute/path/to/index.js --basedir /home/rslsync/folders --keyfile path/to/keyfile.txt
 WorkingDirectory=/absolute/path/to/
 User=rslsync
 Group=rslsync
