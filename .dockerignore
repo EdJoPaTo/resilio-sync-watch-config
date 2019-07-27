@@ -1,0 +1,9 @@
+.*
+*.md
+**/*.test.*
+coverage
+dist
+Dockerfile
+node_modules
+systemd
+test
