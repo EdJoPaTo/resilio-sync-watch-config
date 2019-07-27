@@ -27,6 +27,7 @@ if (cli.options.watchmode) {
 let shutdown = false
 
 const wrongUsage = (cli.args.length === 0 && !cli.options.key && !cli.options.keyfile) ||
+  ((cli.options.key || cli.options.keyfile) && cli.args.length > 0) ||
   ((cli.options.key || cli.options.keyfile) ? !cli.options.basedir : cli.options.basedir) // Both or none: key and basedir
 
 if (wrongUsage) {
