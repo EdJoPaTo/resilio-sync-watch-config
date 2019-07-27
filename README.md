@@ -4,11 +4,12 @@
 [![node](https://img.shields.io/node/v/resilio-sync-watch-config.svg)](https://www.npmjs.com/package/resilio-sync-watch-config)
 [![Build Status](https://travis-ci.org/EdJoPaTo/resilio-sync-watch-config.svg?branch=master)](https://travis-ci.org/EdJoPaTo/resilio-sync-watch-config)
 [![Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config)
-[![Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/dev-status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config?type=dev)
+[![Dev Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/dev-status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config?type=dev)
+[![Docker Hub Image](https://images.microbadger.com/badges/image/edjopato/resilio-sync-watch-config.svg)](https://microbadger.com/images/edjopato/resilio-sync-watch-config)
 
 This tool was created to support the [Resilio Sync Home](//www.resilio.com/individuals/) software on headless devices.
 
-## Install
+## Install locally
 
 Just install it globally with npm:
 
@@ -20,17 +21,60 @@ npm i -g resilio-sync-watch-config
 
 ```sh
 resilio-sync-watch-config [options] config.json
+Usage:
+  index.js [options] config.json
 
-options:
--s	Start Resilio Sync after config generation
--w	Watch config. Restart Resilio Sync when changed. Implies -s
+Options:
+  -b, --resilioBin [FILE]Binary of Resilio. Can be used if rslsync is not in
+                         PATH.  (Default is rslsync)
+  -s, --start BOOL       Start resilio sync after config generation
+  -w, --watchmode BOOL   Watch config changes and restart Resilio Sync on
+                         change. Implies -s
+  -k, --key STRING       Key of Resilio Sync Share which contains configs to
+                         load. Should be read-only key. Implies -sw and
+                         requires --basedir
+  -f, --keyfile FILE     File containing the key of a Resilio Sync Share. See
+                         --key
+  -b, --basedir DIR      Basedir used to sync Resilio Sync Share into. See
+                         --key
+  -v, --version          Display the current version
+  -h, --help             Display help and usage details
 ```
 
-Multiple config.json are possible in order to combine multiple configs into one
+Multiple config.json are possible in order to combine multiple configs into one.
+When using `--key` or `--keyfile` every `*.json` directly placed into the shared folder is combined and used.
 
 ### systemd Service
 
 Instructions for this are in the subfolder `systemd`
+
+## Install via docker
+
+Use the [Docker Image](https://hub.docker.com/r/edjopato/resilio-sync-watch-config) inside a Docker Swarm.
+Provide the secret `/run/secrets/resilio-share.txt` which will be used as `--keyfile`.
+
+See [Usage](#Usage) and the Dockerfile CMD for more info what happens there.
+
+Example compose file which is deployed as a docker stack:
+
+```yml
+version: '3.7'
+
+secrets:
+  resilio-share.txt:
+    file: secrets/resilio-share.txt
+
+volumes:
+  folders:
+
+services:
+  watch-config:
+    image: edjopato/resilio-sync-watch-config:2
+    secrets:
+      - resilio-share.txt
+    volumes:
+      - folders:/folders
+```
 
 ## Backstory
 
