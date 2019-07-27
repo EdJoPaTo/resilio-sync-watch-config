@@ -2,7 +2,6 @@
 coverage
 dist
 node_modules/
-test-runmodes/*/*
 
 # exclude npm pack packages
 *.tgz
