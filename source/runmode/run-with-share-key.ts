@@ -23,7 +23,8 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
     .map(o => o.dir)[0]
   await mkdir(actualBasepath, {recursive: true})
 
-  await resilio.syncConfigs(initConfig)
+  const possibleConfigsWhileStartup = await loadConfigs(actualBasepath)
+  await resilio.syncConfigs(...possibleConfigsWhileStartup, initConfig)
 
   watchDebounced(
     async () => {
@@ -40,12 +41,12 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
 
 async function loadConfigs(basepath: string): Promise<readonly OwnConfigPart[]> {
   const content = await readdir(basepath, {withFileTypes: true})
-        const configFiles = content
-          .filter(o => o.isFile())
-          .filter(o => o.name.endsWith('.json'))
-          .map(o => o.name)
+  const configFiles = content
+    .filter(o => o.isFile())
+    .filter(o => o.name.endsWith('.json'))
+    .map(o => o.name)
 
-        console.log(new Date(), 'run with share key', 'found config files', configFiles)
+  console.log(new Date(), 'run with share key', 'found config files', configFiles)
 
   const fullpathConfigFiles = configFiles.map(o => path.join(basepath, o))
   return loadFromFile(...fullpathConfigFiles)
