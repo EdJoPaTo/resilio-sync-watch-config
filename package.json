@@ -7,6 +7,8 @@
     "resilio-sync-watch-config": "dist/index.js"
   },
   "scripts": {
+    "build": "del dist && tsc",
+    "prepare": "npm run build",
     "start": "echo 'Do not start with NPM. NPM is fishy with signals.'",
     "test": "xo && nyc ava"
   },
