@@ -8,7 +8,7 @@ import 'source-map-support/register'
 import cli from 'cli'
 
 import {onlyParseFile, runWithSpecificFiles, runWithShareKey} from './runmode'
-import {ResilioWithOwnConfigs} from './resilio'
+import {ResilioWithOwnConfigs, ResilioSync} from './resilio'
 
 const {readFile} = fs.promises
 
@@ -53,7 +53,9 @@ async function doStuff(): Promise<void> {
   }
 
   try {
-    const resilio = new ResilioWithOwnConfigs(cli.options.resilioBin)
+    const resilio = new ResilioWithOwnConfigs(
+      new ResilioSync(cli.options.resilioBin)
+    )
     process.on('SIGINT', () => handleExitRequest(resilio))
     process.on('SIGTERM', () => handleExitRequest(resilio))
 

@@ -1,29 +1,22 @@
-import {OwnConfigPart} from '../config'
+import {OwnConfigPart, parseConfigs} from '../config'
 
-import {createConfigOnFS} from '../filesystem/resilio-config'
-import {createTempConfigFile} from '../filesystem/temp-config-file'
 import {loadFromFile} from '../filesystem/own-config'
 
-import {ResilioLifecycle} from './lifecycle'
-import {ResilioProcess} from './process'
+import {ResilioSync} from './resilio-sync'
 
 export class ResilioWithOwnConfigs {
-  private readonly _configPath: string
-
-  private readonly _lifecycle: ResilioLifecycle
-
-  constructor(resilioBinary: string) {
-    const tempConfig = createTempConfigFile()
-    this._configPath = tempConfig.filepath
-    this._lifecycle = new ResilioLifecycle(
-      new ResilioProcess(resilioBinary, tempConfig.filepath),
-      tempConfig.cleanupFunc
-    )
-  }
+  constructor(
+    private readonly resilio: ResilioSync
+  ) {}
 
   async syncConfigs(...ownConfigs: readonly OwnConfigPart[]): Promise<void> {
-    await createConfigOnFS(this._configPath, true, ...ownConfigs)
-    await this._lifecycle.restart()
+    const resilioConfig = parseConfigs(...ownConfigs)
+
+    await this.resilio.syncConfig(resilioConfig, (code, signal) => {
+      if (code) {
+        console.log(new Date(), 'ResilioWithOwnConfig', 'crashed', code, signal)
+      }
+    })
   }
 
   async syncConfigFiles(...ownConfigFiles: readonly string[]): Promise<void> {
@@ -32,6 +25,6 @@ export class ResilioWithOwnConfigs {
   }
 
   async stop(): Promise<void> {
-    await this._lifecycle.stop()
+    await this.resilio.stop()
   }
 }
