@@ -8,18 +8,8 @@ export class ResilioProcess {
     private readonly resilioConfigFilePath: string
   ) {}
 
-  log(...args: any[]): void {
-    console.log(new Date(), 'Resilio', this.resilioConfigFilePath, ...args)
-  }
-
-  warn(...args: any[]): void {
-    console.warn(new Date(), 'Resilio', this.resilioConfigFilePath, ...args)
-  }
-
   start(callbackOnClose: (code: number, signal: string) => void): void {
     const syncArgs = ['--nodaemon', '--config', this.resilioConfigFilePath]
-
-    this.log('start')
 
     this._resilioProcess = spawn(this.resilioBinary, syncArgs, {
       stdio: 'ignore'
@@ -27,15 +17,7 @@ export class ResilioProcess {
 
     this._resilioProcess.on('close', (code, signal) => {
       this._resilioProcess = undefined
-      if (code) {
-        this.warn('crashed', code, signal)
-      } else {
-        this.log('finished')
-      }
-
-      if (callbackOnClose) {
-        callbackOnClose(code, signal)
-      }
+      callbackOnClose(code, signal)
     })
   }
 
