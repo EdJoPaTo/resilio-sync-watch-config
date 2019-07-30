@@ -1,8 +1,8 @@
+import {ResilioSync} from 'resilio-sync'
+
 import {OwnConfigPart, parseConfigs} from '../config'
 
 import {loadFromFile} from '../filesystem/own-config'
-
-import {ResilioSync} from './resilio-sync'
 
 export class ResilioWithOwnConfigs {
   constructor(

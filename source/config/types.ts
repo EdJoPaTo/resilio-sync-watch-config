@@ -13,14 +13,3 @@ export interface OwnConfigPart {
   folders?: OwnConfigFolders;
   passthrough?: any;
 }
-
-export interface ResilioConfigFolder {
-  dir: string;
-  secret: string;
-}
-
-export interface ResilioConfig {
-  device_name: string;
-  storage_path: string;
-  shared_folders: ResilioConfigFolder[];
-}

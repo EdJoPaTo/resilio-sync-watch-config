@@ -1,6 +1,8 @@
 import {hostname} from 'os'
 
-import {OwnConfig, OwnConfigFolders, ResilioConfig, ResilioConfigFolder} from './types'
+import {ResilioConfig, ResilioConfigFolder} from 'resilio-sync'
+
+import {OwnConfig, OwnConfigFolders} from './types'
 
 import {parseBasepath} from './parse-config-parts'
 

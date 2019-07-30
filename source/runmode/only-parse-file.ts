@@ -1,8 +1,9 @@
+import * as resilio from 'resilio-sync'
+
 import writeJsonFile from 'write-json-file'
 
 import {parseConfigs} from '../config'
 
-import {createStoragePathOfConfig} from '../filesystem/resilio-config'
 import {loadFromFile} from '../filesystem/own-config'
 
 export async function onlyParseFile(inputConfigFilePaths: string[], resilioConfigFilePath: string, generateFoldersOnFilesystem = true): Promise<void> {
@@ -10,7 +11,7 @@ export async function onlyParseFile(inputConfigFilePaths: string[], resilioConfi
   const resilioConfig = parseConfigs(...ownConfigs)
 
   if (generateFoldersOnFilesystem) {
-    createStoragePathOfConfig(resilioConfig)
+    resilio.generateFoldersOnFilesystem(resilioConfig)
   }
 
   await writeJsonFile(resilioConfigFilePath, resilioConfig)

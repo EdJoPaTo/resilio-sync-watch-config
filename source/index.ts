@@ -5,10 +5,11 @@ import * as fs from 'fs'
 /* eslint import/no-unassigned-import: off */
 import 'source-map-support/register'
 
+import {ResilioSync} from 'resilio-sync'
 import cli from 'cli'
 
 import {onlyParseFile, runWithSpecificFiles, runWithShareKey} from './runmode'
-import {ResilioWithOwnConfigs, ResilioSync} from './resilio'
+import {ResilioWithOwnConfigs} from './resilio'
 
 const {readFile} = fs.promises
 
