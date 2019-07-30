@@ -2,6 +2,9 @@
 
 import * as fs from 'fs'
 
+/* eslint import/no-unassigned-import: off */
+import 'source-map-support/register'
+
 import cli from 'cli'
 
 import {onlyParseFile, runWithSpecificFiles, runWithShareKey} from './runmode'

@@ -23,4 +23,4 @@ COPY --from=rslsync /usr/bin/rslsync /usr/bin/rslsync
 COPY --from=node-builder /build/node_modules ./node_modules
 COPY --from=node-builder /build/dist ./
 
-CMD [ "/usr/local/bin/node", "-r", "source-map-support/register", "index.js", "--basedir", "/folders", "--keyfile", "/run/secrets/resilio-share.txt" ]
+CMD [ "/usr/local/bin/node", "index.js", "--basedir", "/folders", "--keyfile", "/run/secrets/resilio-share.txt" ]
