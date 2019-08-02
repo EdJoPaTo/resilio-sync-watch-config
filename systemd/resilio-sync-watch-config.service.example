@@ -5,8 +5,8 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/absolute/path/to/index.js --basedir /home/rslsync/folders --keyfile path/to/keyfile.txt
-WorkingDirectory=/absolute/path/to/
+ExecStart=/usr/lib/node_modules/resilio-sync-watch-config/dist/index.js --basedir /home/rslsync/folders --keyfile /home/rslsync/share.txt
+WorkingDirectory=/home/rslsync
 User=rslsync
 Group=rslsync
 
