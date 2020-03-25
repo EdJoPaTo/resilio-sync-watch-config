@@ -10,7 +10,7 @@ export function ensureTrailingSlash(input: string): string {
 
 export function replaceWithHomedirIfNeeded(input: string): string {
   if (input.startsWith('~/')) {
-    return ensureTrailingSlash(homedir()) + input.substring(2)
+    return ensureTrailingSlash(homedir()) + input.slice(2)
   }
 
   return input

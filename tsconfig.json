@@ -1,10 +1,12 @@
 {
 	"extends": "@sindresorhus/tsconfig",
 	"include": [
-		"source"
+		"source",
+		"test"
 	],
 	"compilerOptions": {
 		"esModuleInterop": true,
+		"sourceMap": true,
 		"outDir": "dist"
 	}
 }

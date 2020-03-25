@@ -53,7 +53,7 @@ test('basedir can be relative to home', t => {
     folders: {}
   }
   const out = parseConfig(input)
-  const regex = new RegExp('/\\S+/\\S+/location/.sync')
+  const regex = /\/\S+\/\S+\/location\/\.sync/
   t.regex(out.storage_path, regex)
 })
 

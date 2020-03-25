@@ -71,18 +71,24 @@ test('error when basedir differs', t => {
     basedir: 'somewhere/over/the/rainbow'
   }
 
-  t.throws(() => mergeMultipleConfigs(config1, config), /basedir/)
+  t.throws(() => mergeMultipleConfigs(config1, config), {
+    message: /basedir/
+  })
 })
 
 test('error when no basedir', t => {
   const config = {}
 
-  t.throws(() => mergeMultipleConfigs(config), /basedir/)
+  t.throws(() => mergeMultipleConfigs(config), {
+    message: /basedir/
+  })
 })
 
 test('error when folders object missing', t => {
   const config = {
     basedir: '42'
   }
-  t.throws(() => mergeMultipleConfigs(config), /folders/)
+  t.throws(() => mergeMultipleConfigs(config), {
+    message: /folders/
+  })
 })
