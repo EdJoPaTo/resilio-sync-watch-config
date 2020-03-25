@@ -18,29 +18,29 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
     }
   }
 
-  const actualBasepath = parseConfigs(initConfig).shared_folders
+  const configFolder = parseConfigs(initConfig).shared_folders
     .filter(o => o.dir.endsWith('/.config'))
     .map(o => o.dir)[0]
-  await mkdir(actualBasepath, {recursive: true})
+  await mkdir(configFolder, {recursive: true})
 
-  const possibleConfigsWhileStartup = await loadConfigs(actualBasepath)
-  await resilio.syncConfigs(...possibleConfigsWhileStartup, initConfig)
+  const availableConfigsOnStartup = await loadConfigs(configFolder)
+  await resilio.syncConfigs(...availableConfigsOnStartup, initConfig)
 
   watchDebounced(
     async () => {
       try {
-        const ownConfigParts = await loadConfigs(actualBasepath)
+        const ownConfigParts = await loadConfigs(configFolder)
         await resilio.syncConfigs(...ownConfigParts, initConfig)
       } catch (error) {
         console.error(new Date(), 'run with share key', 'error while restarting', error)
       }
     },
-    actualBasepath
+    configFolder
   )
 }
 
-async function loadConfigs(basepath: string): Promise<readonly OwnConfigPart[]> {
-  const content = await readdir(basepath, {withFileTypes: true})
+async function loadConfigs(configFolder: string): Promise<readonly OwnConfigPart[]> {
+  const content = await readdir(configFolder, {withFileTypes: true})
   const configFiles = content
     .filter(o => o.isFile())
     .filter(o => o.name.endsWith('.json'))
@@ -48,6 +48,6 @@ async function loadConfigs(basepath: string): Promise<readonly OwnConfigPart[]> 
 
   console.log(new Date(), 'run with share key', 'found config files', configFiles)
 
-  const fullpathConfigFiles = configFiles.map(o => path.join(basepath, o))
+  const fullpathConfigFiles = configFiles.map(o => path.join(configFolder, o))
   return loadFromFile(...fullpathConfigFiles)
 }
