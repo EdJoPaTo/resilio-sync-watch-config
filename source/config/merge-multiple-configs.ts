@@ -35,7 +35,7 @@ function mergeDeep(target: any, ...sources: any[]): any {
   return mergeDeep(target, ...sources)
 }
 
-export default function mergeMultipleConfigs(...configs: OwnConfigPart[]): OwnConfig {
+export function mergeMultipleConfigs(...configs: OwnConfigPart[]): OwnConfig {
   const result = mergeDeep({}, ...configs)
 
   const differingBasedirs = configs

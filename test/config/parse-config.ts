@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import parseConfig from '../../source/config/parse-config'
+import {parseConfig} from '../../source/config/parse-config'
 
 const inputBasicConfig = {
   basedir: '/location/',

@@ -1,8 +1,8 @@
 import {ResilioConfig} from 'resilio-sync'
 
+import {mergeMultipleConfigs} from './merge-multiple-configs'
 import {OwnConfigPart} from './types'
-import mergeMultipleConfigs from './merge-multiple-configs'
-import parseConfig from './parse-config'
+import {parseConfig} from './parse-config'
 
 export * from './types'
 
