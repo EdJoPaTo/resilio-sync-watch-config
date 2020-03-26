@@ -1,8 +1,8 @@
 import * as fs from 'fs'
 
-import {OwnConfigPart} from '../config'
+import {OwnConfig, OwnConfigPart} from '../config'
 
-const {readFile} = fs.promises
+const {readdir, readFile, rmdir} = fs.promises
 
 async function readJsonFile(filepath: string): Promise<OwnConfigPart> {
   const content = await readFile(filepath, 'utf8')
@@ -15,4 +15,20 @@ export async function loadFromFile(...filepaths: readonly string[]): Promise<rea
       async file => readJsonFile(file)
     )
   )
+}
+
+export async function removeSuperfluousFolders(absoluteBasepath: string, config: OwnConfig): Promise<readonly string[]> {
+  const expected = [
+    '.sync',
+    ...Object.keys(config.folders)
+  ]
+
+  const actual = await readdir(absoluteBasepath)
+  const superfluous = actual.filter(o => !expected.includes(o))
+
+  await Promise.all(
+    superfluous.map(async o => rmdir(absoluteBasepath + o, {recursive: true}))
+  )
+
+  return superfluous
 }

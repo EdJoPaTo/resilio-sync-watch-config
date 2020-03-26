@@ -4,8 +4,9 @@ import * as path from 'path'
 import {ResilioWithOwnConfigs} from '../resilio'
 
 import {OwnConfig, OwnConfigPart} from '../config'
+import {mergeMultipleConfigs} from '../config/merge-multiple-configs'
 
-import {loadFromFile} from '../filesystem/own-config'
+import {loadFromFile, removeSuperfluousFolders} from '../filesystem/own-config'
 import {parseBasepath} from '../filesystem/path'
 import {watchDebounced} from '../filesystem/watch'
 
@@ -26,11 +27,19 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
   const availableConfigsOnStartup = await loadConfigs(configFolder)
   await resilio.syncConfigs(...availableConfigsOnStartup, initConfig)
 
+  await removeSuperfluousFoldersLogged(absoluteBasepath,
+    mergeMultipleConfigs(...availableConfigsOnStartup, initConfig)
+  )
+
   watchDebounced(
     async () => {
       try {
         const ownConfigParts = await loadConfigs(configFolder)
         await resilio.syncConfigs(...ownConfigParts, initConfig)
+
+        await removeSuperfluousFoldersLogged(absoluteBasepath,
+          mergeMultipleConfigs(...ownConfigParts, initConfig)
+        )
       } catch (error) {
         console.error(new Date(), 'run with share key', 'error while restarting', error)
       }
@@ -50,4 +59,12 @@ async function loadConfigs(configFolder: string): Promise<readonly OwnConfigPart
 
   const fullpathConfigFiles = configFiles.map(o => path.join(configFolder, o))
   return loadFromFile(...fullpathConfigFiles)
+}
+
+async function removeSuperfluousFoldersLogged(absoluteBasepath: string, config: OwnConfig): Promise<void> {
+  const removedFolders = await removeSuperfluousFolders(absoluteBasepath, config)
+
+  if (removedFolders.length > 0) {
+    console.log(new Date(), 'run with share key', 'remove superfluous folders', removedFolders.length, removedFolders)
+  }
 }
