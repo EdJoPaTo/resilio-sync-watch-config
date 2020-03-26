@@ -8,7 +8,7 @@ import debounce from 'debounce-promise'
 type ChangeCallback = () => void
 
 export function watchDebounced(somethingChangedCallback: ChangeCallback, ...filesOrDirectories: readonly string[]): readonly FSWatcher[] {
-  const watchFunc = debounce(() => somethingChangedCallback(), 500)
+  const watchFunc = debounce(() => somethingChangedCallback(), 15000)
   const watcher = filesOrDirectories
     .map(f => watch(f, {persistent: false}, watchFunc))
 
