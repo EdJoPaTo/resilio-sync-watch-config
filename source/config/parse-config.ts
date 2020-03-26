@@ -2,9 +2,9 @@ import {hostname} from 'os'
 
 import {ResilioConfig, ResilioConfigFolder} from 'resilio-sync'
 
-import {OwnConfig, OwnConfigFolders} from './types'
+import {parseBasepath} from '../filesystem/path'
 
-import {parseBasepath} from './parse-config-parts'
+import {OwnConfig, OwnConfigFolders} from './types'
 
 export function parseConfig(jsonConfig: OwnConfig): ResilioConfig {
   const basedir = parseBasepath(jsonConfig.basedir)
