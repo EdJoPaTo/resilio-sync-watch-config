@@ -3,9 +3,10 @@ import * as path from 'path'
 
 import {ResilioWithOwnConfigs} from '../resilio'
 
-import {OwnConfig, parseConfigs, OwnConfigPart} from '../config'
+import {OwnConfig, OwnConfigPart} from '../config'
 
 import {loadFromFile} from '../filesystem/own-config'
+import {parseBasepath} from '../filesystem/path'
 import {watchDebounced} from '../filesystem/watch'
 
 const {readdir, mkdir} = fs.promises
@@ -18,9 +19,8 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
     }
   }
 
-  const configFolder = parseConfigs(initConfig).shared_folders
-    .filter(o => o.dir.endsWith('/.config'))
-    .map(o => o.dir)[0]
+  const absoluteBasepath = parseBasepath(basedir)
+  const configFolder = absoluteBasepath + '.config'
   await mkdir(configFolder, {recursive: true})
 
   const availableConfigsOnStartup = await loadConfigs(configFolder)
