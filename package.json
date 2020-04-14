@@ -30,7 +30,7 @@
     "array-filter-unique": "^2.1.0",
     "cli": "^1.0.1",
     "debounce-promise": "^3.1.0",
-    "resilio-sync": "^0.1.0",
+    "resilio-sync": "^1.0.0",
     "source-map-support": "^0.5.12",
     "write-json-file": "^4.1.1"
   },
@@ -38,13 +38,13 @@
     "@sindresorhus/tsconfig": "^0.7.0",
     "@types/cli": "^0.11.19",
     "@types/debounce-promise": "^3.1.1",
-    "@types/node": "^12.6.8",
+    "@types/node": "^13.11.1",
     "ava": "^3.5.1",
     "del-cli": "^3.0.0",
     "nyc": "^15.0.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3",
-    "xo": "^0.28.0"
+    "xo": "^0.29.1"
   },
   "bugs": {
     "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"
@@ -72,17 +72,10 @@
   "xo": {
     "space": true,
     "semicolon": false,
-    "extends": "xo-typescript",
-    "extensions": [
-      "ts"
-    ],
     "rules": {
       "node/no-unsupported-features/node-builtins": "warn",
-      "@typescript-eslint/indent": "off",
-      "@typescript-eslint/semi": [
-        "error",
-        "never"
-      ],
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/prefer-readonly-parameter-types": "off",
       "ava/no-ignored-test-files": "off"
     },
     "overrides": [
