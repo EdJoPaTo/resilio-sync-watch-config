@@ -1,6 +1,4 @@
-type Dictionary<T> = {[key: string]: T}
-
-export type OwnConfigFolders = Dictionary<string>
+export type OwnConfigFolders = Record<string, string>
 
 export interface OwnConfig {
   basedir: string;
