@@ -3,7 +3,7 @@ import * as path from 'path'
 
 import {ResilioWithOwnConfigs} from '../resilio'
 
-import {OwnConfig, OwnConfigPart} from '../config'
+import {OwnConfig} from '../config'
 import {mergeMultipleConfigs} from '../config/merge-multiple-configs'
 
 import {loadFromFile, removeSuperfluousFolders} from '../filesystem/own-config'
@@ -48,7 +48,7 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
   )
 }
 
-async function loadConfigs(configFolder: string): Promise<readonly OwnConfigPart[]> {
+async function loadConfigs(configFolder: string): Promise<ReadonlyArray<Partial<OwnConfig>>> {
   const content = await readdir(configFolder, {withFileTypes: true})
   const configFiles = content
     .filter(o => o.isFile())

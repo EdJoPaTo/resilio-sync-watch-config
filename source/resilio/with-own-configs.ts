@@ -1,6 +1,6 @@
 import {ResilioSync} from 'resilio-sync'
 
-import {OwnConfigPart, parseConfigs} from '../config'
+import {OwnConfig, parseConfigs} from '../config'
 
 import {loadFromFile} from '../filesystem/own-config'
 
@@ -9,7 +9,7 @@ export class ResilioWithOwnConfigs {
     private readonly resilio: ResilioSync
   ) {}
 
-  async syncConfigs(...ownConfigs: readonly OwnConfigPart[]): Promise<void> {
+  async syncConfigs(...ownConfigs: ReadonlyArray<Partial<OwnConfig>>): Promise<void> {
     const resilioConfig = parseConfigs(...ownConfigs)
 
     await this.resilio.syncConfig(resilioConfig, (code, signal) => {

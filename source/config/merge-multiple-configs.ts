@@ -1,13 +1,13 @@
 import arrayFilterUnique from 'array-filter-unique'
 
-import {OwnConfig, OwnConfigPart} from './types'
+import {OwnConfig} from './types'
 
 // https://stackoverflow.com/a/34749873
-function isObject(item: any): boolean {
+function isObject(item: any): item is Record<any, unknown> {
   return (item && typeof item === 'object' && !Array.isArray(item))
 }
 
-function mergeDeep(target: any, ...sources: any[]): any {
+function mergeDeep<T>(target: T, ...sources: T[]): T {
   if (sources.length === 0) {
     return target
   }
@@ -35,7 +35,7 @@ function mergeDeep(target: any, ...sources: any[]): any {
   return mergeDeep(target, ...sources)
 }
 
-export function mergeMultipleConfigs(...configs: OwnConfigPart[]): OwnConfig {
+export function mergeMultipleConfigs(...configs: ReadonlyArray<Partial<OwnConfig>>): OwnConfig {
   const result = mergeDeep({}, ...configs)
 
   const differingBasedirs = configs
@@ -51,9 +51,9 @@ export function mergeMultipleConfigs(...configs: OwnConfigPart[]): OwnConfig {
     throw new Error('There is more than one basedir defined. This is dangerous and therefore that allowed.')
   }
 
-  if (!result.folders || result.folders === 0) {
+  if (!result.folders || Object.keys(result.folders).length === 0) {
     throw new Error('There are no folders defined. Sync will be useless.')
   }
 
-  return result
+  return result as OwnConfig
 }

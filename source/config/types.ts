@@ -7,9 +7,3 @@ export interface OwnConfig {
   folders: OwnConfigFolders;
   passthrough?: any;
 }
-
-export interface OwnConfigPart {
-  basedir?: string;
-  folders?: OwnConfigFolders;
-  passthrough?: any;
-}
