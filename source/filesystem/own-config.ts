@@ -18,13 +18,13 @@ export async function loadFromFile(...filepaths: readonly string[]): Promise<Rea
 }
 
 export async function removeSuperfluousFolders(absoluteBasepath: string, config: OwnConfig): Promise<readonly string[]> {
-  const expected = [
+  const expected = new Set([
     '.sync',
     ...Object.keys(config.folders)
-  ]
+  ])
 
   const actual = await readdir(absoluteBasepath)
-  const superfluous = actual.filter(o => !expected.includes(o))
+  const superfluous = actual.filter(o => !expected.has(o))
 
   await Promise.all(
     superfluous.map(async o => rmdir(absoluteBasepath + o, {recursive: true}))
