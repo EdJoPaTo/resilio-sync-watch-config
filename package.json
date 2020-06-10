@@ -21,7 +21,11 @@
     "type": "git",
     "url": "git+https://github.com/edjopato/resilio-sync-watch-config.git"
   },
-  "author": "Edgar To",
+	"author": {
+		"name": "EdJoPaTo",
+		"email": "resilio-sync-watch-config-npm-package@edjopato.de",
+		"url": "https://EdJoPaTo.de"
+	},
   "license": "MIT",
   "engines": {
     "node": ">=10.17"
