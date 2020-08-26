@@ -13,6 +13,15 @@ import {ResilioWithOwnConfigs} from './resilio'
 
 const {readFile} = fs.promises
 
+interface CliOptions {
+  start?: boolean;
+  readonly basedir?: string;
+  readonly key?: string;
+  readonly keyfile?: string;
+  readonly resilioBin?: string;
+  readonly watchmode?: boolean;
+}
+
 cli.enable('version')
 cli.setUsage(cli.app + ' [options] config.json')
 cli.parse({
@@ -24,29 +33,36 @@ cli.parse({
   basedir: ['b', 'Basedir used to sync Resilio Sync Share into. See --key', 'dir']
 })
 
-if (cli.options.watchmode) {
-  cli.options.start = true
+let {start} = cli.options as CliOptions
+const {basedir, key, keyfile, resilioBin, watchmode} = cli.options as CliOptions
+const configFilePaths = cli.args
+
+if (watchmode) {
+  start = true
 }
 
 let shutdown = false
 
-const wrongUsage = (cli.args.length === 0 && !cli.options.key && !cli.options.keyfile) ||
-  ((cli.options.key || cli.options.keyfile) && cli.args.length > 0) ||
-  ((cli.options.key || cli.options.keyfile) ? !cli.options.basedir : cli.options.basedir) // Both or none: key and basedir
-
-if (wrongUsage) {
-  cli.getUsage()
-  process.exit(1)
-}
-
-const configFilePaths = cli.args
-
 async function doStuff(): Promise<void> {
-  if (!cli.options.start &&
-    !cli.options.watchmode &&
-    !cli.options.key &&
-    !cli.options.keyfile
-  ) {
+  // When there is no key(file) of a share with configs and no configs passed via arguments
+  if (cli.args.length === 0 && !key && !keyfile) {
+    cli.getUsage()
+    process.exit(1)
+  }
+
+  // When there is a key(file) the configs are in it, not given via arguments
+  if ((key || keyfile) && configFilePaths.length > 0) {
+    cli.getUsage()
+    process.exit(1)
+  }
+
+  // When there is a key(file), there has to be a basedir. If not, there shouldnt be a basefile
+  if ((key || keyfile) ? !basedir : basedir) {
+    cli.getUsage()
+    process.exit(1)
+  }
+
+  if (!start && !watchmode && !key && !keyfile) {
     const resilioConfigFilePath = '/dev/stdout'
     await onlyParseFile(configFilePaths, resilioConfigFilePath, true)
     return
@@ -54,18 +70,18 @@ async function doStuff(): Promise<void> {
 
   try {
     const resilio = new ResilioWithOwnConfigs(
-      new ResilioSync(cli.options.resilioBin)
+      new ResilioSync(resilioBin)
     )
     process.on('SIGINT', () => handleExitRequest(resilio))
     process.on('SIGTERM', () => handleExitRequest(resilio))
 
-    if (cli.options.key) {
-      await runWithShareKey(resilio, cli.options.basedir, cli.options.key)
-    } else if (cli.options.keyfile) {
-      const shareKey = await readFile(cli.options.keyfile, 'utf8')
-      await runWithShareKey(resilio, cli.options.basedir, shareKey.trim())
-    } else if (cli.options.start) {
-      await runWithSpecificFiles(resilio, configFilePaths, cli.options.watchmode)
+    if (key && basedir) {
+      await runWithShareKey(resilio, basedir, key)
+    } else if (keyfile && basedir) {
+      const shareKey = await readFile(keyfile, 'utf8')
+      await runWithShareKey(resilio, basedir, shareKey.trim())
+    } else if (start) {
+      await runWithSpecificFiles(resilio, configFilePaths, Boolean(watchmode))
     }
   } catch (error) {
     console.error('error on startup', error)
