@@ -21,11 +21,11 @@
     "type": "git",
     "url": "git+https://github.com/edjopato/resilio-sync-watch-config.git"
   },
-	"author": {
-		"name": "EdJoPaTo",
-		"email": "resilio-sync-watch-config-npm-package@edjopato.de",
-		"url": "https://EdJoPaTo.de"
-	},
+  "author": {
+    "name": "EdJoPaTo",
+    "email": "resilio-sync-watch-config-npm-package@edjopato.de",
+    "url": "https://EdJoPaTo.de"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=10.17"
@@ -42,13 +42,13 @@
     "@sindresorhus/tsconfig": "^0.7.0",
     "@types/cli": "^0.11.19",
     "@types/debounce-promise": "^3.1.1",
-    "@types/node": "^13.11.1",
+    "@types/node": "^14.6.0",
     "ava": "^3.5.1",
     "del-cli": "^3.0.0",
     "nyc": "^15.0.0",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3",
-    "xo": "^0.29.1"
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2",
+    "xo": "^0.33.0"
   },
   "bugs": {
     "url": "https://github.com/edjopato/resilio-sync-watch-config/issues"

@@ -11,7 +11,7 @@ export async function onlyParseFile(inputConfigFilePaths: string[], resilioConfi
   const resilioConfig = parseConfigs(...ownConfigs)
 
   if (generateFoldersOnFilesystem) {
-    resilio.generateFoldersOnFilesystem(resilioConfig)
+    await resilio.generateFoldersOnFilesystem(resilioConfig)
   }
 
   await writeJsonFile(resilioConfigFilePath, resilioConfig)

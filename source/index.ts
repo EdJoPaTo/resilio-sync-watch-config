@@ -41,7 +41,6 @@ if (wrongUsage) {
 
 const configFilePaths = cli.args
 
-doStuff()
 async function doStuff(): Promise<void> {
   if (!cli.options.start &&
     !cli.options.watchmode &&
@@ -83,3 +82,6 @@ function handleExitRequest(stoppable: {stop: () => void}): void {
     stoppable.stop()
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+doStuff()
