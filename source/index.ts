@@ -88,7 +88,7 @@ async function doStuff(): Promise<void> {
   }
 }
 
-function handleExitRequest(stoppable: {stop: () => void}): void {
+function handleExitRequest(stoppable: {readonly stop: () => void}): void {
   console.log('exit request received.')
   if (shutdown) {
     console.log('Force stop…')

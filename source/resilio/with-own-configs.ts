@@ -6,6 +6,7 @@ import {loadFromFile} from '../filesystem/own-config'
 
 export class ResilioWithOwnConfigs {
   constructor(
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
     private readonly resilio: ResilioSync
   ) {}
 

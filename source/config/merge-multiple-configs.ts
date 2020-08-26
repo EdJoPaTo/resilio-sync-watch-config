@@ -7,12 +7,12 @@ function isObject(item: any): item is Record<any, unknown> {
   return (item && typeof item === 'object' && !Array.isArray(item))
 }
 
-function mergeDeep<T>(target: T, ...sources: T[]): T {
+function mergeDeep<T>(target: T, ...sources: readonly T[]): T {
   if (sources.length === 0) {
     return target
   }
 
-  const source = sources.shift()
+  const source = sources[0]
 
   if (isObject(target) && isObject(source)) {
     for (const key in source) {
@@ -32,7 +32,7 @@ function mergeDeep<T>(target: T, ...sources: T[]): T {
     }
   }
 
-  return mergeDeep(target, ...sources)
+  return mergeDeep(target, ...sources.slice(1))
 }
 
 export function mergeMultipleConfigs(...configs: ReadonlyArray<Partial<OwnConfig>>): OwnConfig {

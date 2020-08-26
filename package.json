@@ -78,8 +78,8 @@
     "semicolon": false,
     "rules": {
       "node/no-unsupported-features/node-builtins": "warn",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/prefer-readonly-parameter-types": "off",
+      "@typescript-eslint/no-unsafe-member-access": "error",
+      "@typescript-eslint/prefer-readonly-parameter-types": "error",
       "ava/no-ignored-test-files": "off"
     },
     "overrides": [
@@ -90,6 +90,15 @@
         "rules": {
           "@typescript-eslint/camelcase": "off",
           "camelcase": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.test.*",
+          "test/**/*.*"
+        ],
+        "rules": {
+          "@typescript-eslint/prefer-readonly-parameter-types": "off"
         }
       }
     ]

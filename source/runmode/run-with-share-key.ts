@@ -12,6 +12,7 @@ import {watchDebounced} from '../filesystem/watch'
 
 const {readdir, mkdir} = fs.promises
 
+// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: string, shareKey: string): Promise<void> {
   const initConfig: OwnConfig = {
     basedir,
@@ -49,7 +50,7 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
 }
 
 async function loadConfigs(configFolder: string): Promise<ReadonlyArray<Partial<OwnConfig>>> {
-  const content = await readdir(configFolder, {withFileTypes: true})
+  const content: ReadonlyArray<Readonly<fs.Dirent>> = await readdir(configFolder, {withFileTypes: true})
   const configFiles = content
     .filter(o => o.isFile())
     .filter(o => o.name.endsWith('.json'))

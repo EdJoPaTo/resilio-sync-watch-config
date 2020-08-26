@@ -1,7 +1,7 @@
-export type OwnConfigFolders = Record<string, string>
+export type OwnConfigFolders = Readonly<Record<string, string>>
 
 export interface OwnConfig {
-  basedir: string;
-  folders: OwnConfigFolders;
-  passthrough?: any;
+  readonly basedir: string;
+  readonly folders: OwnConfigFolders;
+  readonly passthrough?: Readonly<Record<string, Readonly<unknown>>>;
 }

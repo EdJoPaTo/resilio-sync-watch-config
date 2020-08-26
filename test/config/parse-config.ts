@@ -64,6 +64,7 @@ const inputPassthrough = {...inputBasicConfig, passthrough: {
 
 test('adds passthrough', t => {
   const out: any = parseConfig(inputPassthrough)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   t.is(out.what_the, 'hell')
 })
 
