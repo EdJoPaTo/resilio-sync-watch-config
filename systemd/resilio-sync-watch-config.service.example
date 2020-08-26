@@ -2,9 +2,12 @@
 Description=Run Resilio Sync Watch Config
 Wants=network-online.target
 After=network-online.target
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
+Restart=always
+RestartSec=20
 ExecStart=/usr/lib/node_modules/resilio-sync-watch-config/dist/index.js --basedir /home/rslsync/folders --keyfile /home/rslsync/share.txt
 WorkingDirectory=/home/rslsync
 User=rslsync
