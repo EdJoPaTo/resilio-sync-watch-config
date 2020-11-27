@@ -41,7 +41,7 @@ export async function runWithShareKey(resilio: ResilioWithOwnConfigs, basedir: s
         await removeSuperfluousFoldersLogged(absoluteBasepath,
           mergeMultipleConfigs(...ownConfigParts, initConfig)
         )
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(new Date(), 'run with share key', 'error while restarting', error)
       }
     },

@@ -83,7 +83,7 @@ async function doStuff(): Promise<void> {
     } else if (start) {
       await runWithSpecificFiles(resilio, configFilePaths, Boolean(watchmode))
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('error on startup', error)
   }
 }

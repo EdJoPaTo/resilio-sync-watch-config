@@ -11,7 +11,7 @@ export async function runWithSpecificFiles(resilio: ResilioWithOwnConfigs, input
       async () => {
         try {
           await resilio.syncConfigFiles(...inputConfigFilePaths)
-        } catch (error) {
+        } catch (error: unknown) {
           console.error(new Date(), 'run with specific files', 'error while restarting', error)
         }
       },
