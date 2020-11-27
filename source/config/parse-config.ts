@@ -23,8 +23,8 @@ export function parseConfig(jsonConfig: OwnConfig): ResilioConfig {
 }
 
 function parseFolders(basedir: string, folders: OwnConfigFolders): ResilioConfigFolder[] {
-  const foldernames = Object.keys(folders)
-  return foldernames.map(name => parseFolder(basedir, name, folders[name]))
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  return Object.entries(folders).map(([name, secret]) => parseFolder(basedir, name, secret))
 }
 
 function parseFolder(basedir: string, name: string, secret: string): ResilioConfigFolder {
