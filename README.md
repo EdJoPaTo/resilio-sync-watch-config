@@ -2,7 +2,6 @@
 
 [![NPM Version](https://img.shields.io/npm/v/resilio-sync-watch-config.svg)](https://www.npmjs.com/package/resilio-sync-watch-config)
 [![node](https://img.shields.io/node/v/resilio-sync-watch-config.svg)](https://www.npmjs.com/package/resilio-sync-watch-config)
-[![Build Status](https://travis-ci.org/EdJoPaTo/resilio-sync-watch-config.svg?branch=master)](https://travis-ci.org/EdJoPaTo/resilio-sync-watch-config)
 [![Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config)
 [![Dev Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/dev-status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config?type=dev)
 [![Docker Hub Image](https://images.microbadger.com/badges/image/edjopato/resilio-sync-watch-config.svg)](https://microbadger.com/images/edjopato/resilio-sync-watch-config)
