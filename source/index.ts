@@ -72,8 +72,12 @@ async function doStuff(): Promise<void> {
     const resilio = new ResilioWithOwnConfigs(
       new ResilioSync(resilioBin)
     )
-    process.on('SIGINT', () => handleExitRequest(resilio))
-    process.on('SIGTERM', () => handleExitRequest(resilio))
+    process.on('SIGINT', () => {
+      handleExitRequest(resilio)
+    })
+    process.on('SIGTERM', () => {
+      handleExitRequest(resilio)
+    })
 
     if (key && basedir) {
       await runWithShareKey(resilio, basedir, key)

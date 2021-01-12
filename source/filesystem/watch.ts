@@ -8,7 +8,9 @@ import debounce from 'debounce-promise'
 type ChangeCallback = () => void
 
 export function watchDebounced(somethingChangedCallback: ChangeCallback, ...filesOrDirectories: readonly string[]): readonly FSWatcher[] {
-  const debouncedUserFunc = debounce(() => somethingChangedCallback(), 15000)
+  const debouncedUserFunc = debounce(() => {
+    somethingChangedCallback()
+  }, 15000)
   const watchFunc = async (_event: string, filename: string) => {
     if (filename.endsWith('.json')) {
       await debouncedUserFunc()
