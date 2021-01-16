@@ -4,7 +4,7 @@
 [![node](https://img.shields.io/node/v/resilio-sync-watch-config.svg)](https://www.npmjs.com/package/resilio-sync-watch-config)
 [![Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config)
 [![Dev Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/dev-status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config?type=dev)
-[![Docker Hub Image](https://images.microbadger.com/badges/image/edjopato/resilio-sync-watch-config.svg)](https://microbadger.com/images/edjopato/resilio-sync-watch-config)
+[![Docker Hub Image](https://img.shields.io/docker/image-size/edjopato/resilio-sync-watch-config)](https://hub.docker.com/r/edjopato/resilio-sync-watch-config)
 
 This tool was created to support the [Resilio Sync Home](//www.resilio.com/individuals/) software on headless devices.
 
