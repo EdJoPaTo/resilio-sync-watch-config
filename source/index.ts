@@ -6,7 +6,7 @@ import * as fs from 'fs'
 import 'source-map-support/register'
 
 import {ResilioSync} from 'resilio-sync'
-import cli from 'cli'
+import * as cli from 'cli'
 
 import {onlyParseFile, runWithSpecificFiles, runWithShareKey} from './runmode'
 import {ResilioWithOwnConfigs} from './resilio'

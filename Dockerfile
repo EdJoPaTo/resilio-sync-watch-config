@@ -1,4 +1,4 @@
-FROM node:12-alpine AS node-builder
+FROM docker.io/library/node:14-buster AS node-builder
 WORKDIR /build
 
 COPY package.json tsconfig.json ./
@@ -10,10 +10,10 @@ RUN node_modules/.bin/tsc
 RUN rm -rf node_modules && npm ci --production
 
 
-FROM resilio/sync AS rslsync
+FROM docker.io/resilio/sync AS rslsync
 
 
-FROM node:12-buster
+FROM docker.io/library/node:14-buster
 WORKDIR /app
 VOLUME /folders
 
@@ -23,4 +23,4 @@ COPY --from=rslsync /usr/bin/rslsync /usr/bin/rslsync
 COPY --from=node-builder /build/node_modules ./node_modules
 COPY --from=node-builder /build/dist ./
 
-CMD [ "/usr/local/bin/node", "index.js", "--basedir", "/folders", "--keyfile", "/run/secrets/resilio-share.txt" ]
+CMD node --unhandled-rejections=strict -r source-map-support/register index.js --basedir /folders --keyfile /run/secrets/resilio-share.txt

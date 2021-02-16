@@ -1,6 +1,6 @@
 import {watch, FSWatcher} from 'fs'
 
-import debounce from 'debounce-promise'
+import * as debounce from 'debounce-promise'
 
 // Due to debouncing its not clear what exactly changed.
 // Arguments are omited because of that.

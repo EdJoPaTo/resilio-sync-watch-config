@@ -1,6 +1,6 @@
 import * as resilio from 'resilio-sync'
 
-import writeJsonFile from 'write-json-file'
+import * as writeJsonFile from 'write-json-file'
 
 import {parseConfigs} from '../config'
 
