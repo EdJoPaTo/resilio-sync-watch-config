@@ -35,6 +35,8 @@ fn main() {
     fs::create_dir_all(".resilio-sync-watch-config/.sync")
         .expect("failed to create working directory");
 
+    let mut resilio = resilio::Resilio::new("rslsync");
+
     match matches.subcommand() {
         ("single", Some(matches)) => {
             println!("Start in single folder mode...");
@@ -51,7 +53,6 @@ fn main() {
             config.storage_path = Some(".resilio-sync-watch-config/.sync".to_string());
             config.pid_file = Some(".resilio-sync-watch-config/resilio.pid".to_string());
 
-            let mut resilio = resilio::Resilio::new("rslsync");
             resilio.start(&config);
             println!("Resilio started.");
 
@@ -61,10 +62,7 @@ fn main() {
             loop {
                 if let Some(signal) = signals.pending().next() {
                     println!("Received signal {:?}", signal);
-                    println!("Stop Resilio...");
-                    resilio.stop().expect("failed to stop resilio");
-                    println!("Resilio stopped.");
-                    exit(exitcode::OK);
+                    break;
                 }
 
                 if !resilio
@@ -72,11 +70,16 @@ fn main() {
                     .expect("failed to check if resilio is still running")
                 {
                     println!("Resilio stopped unexpectedly!");
+                    drop(resilio);
                     exit(exitcode::SOFTWARE);
                 }
 
                 sleep(Duration::from_millis(50));
             }
+
+            println!("Stop Resilio...");
+            resilio.stop().expect("failed to stop resilio");
+            println!("Resilio stopped.");
         }
         (command, Some(_)) => todo!("Subcommand '{}' not yet implemented", command),
         _ => unimplemented!("You have to use a subcommand to run this tool"),
