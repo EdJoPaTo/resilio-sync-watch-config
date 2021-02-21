@@ -38,7 +38,8 @@ fn main() {
 
             let sync_trash_enabled = matches.is_present("sync trash");
 
-            let mut folder = config::resilio::Folder::new(&share_secret, "folders/single");
+            let mut folder =
+                config::resilio::Folder::new(share_secret, "folders/single".to_string());
             if !sync_trash_enabled {
                 folder.use_sync_trash = Some(false);
             }
