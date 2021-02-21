@@ -1,0 +1,24 @@
+[package]
+name = "resilio-sync-watch-config"
+version = "3.0.0"
+description = "Small tool to create a resilio config and watch for changes to restart the sync daemon on changes"
+authors = ["EdJoPaTo <resilio-sync-watch-config-rust@edjopato.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+exitcode = "1"
+hostname = "0.3"
+nix = "0.20"
+serde_json = "1"
+signal-hook = "0.3"
+tempfile = "3"
+
+[dependencies.clap]
+version = "2"
+features = ["wrap_help"]
+
+[dependencies.serde]
+version = "1"
+features = ["derive"]

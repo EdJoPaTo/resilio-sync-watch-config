@@ -1,9 +1,8 @@
 .*
 *.md
-**/*.test.*
-coverage
-dist
+/target
 Dockerfile
-node_modules
 systemd
-test
+
+/folders
+share.txt

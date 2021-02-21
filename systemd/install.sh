@@ -1,11 +1,14 @@
 #!/bin/sh
 
-# copy stuff
-sudo cp -uv *.service /etc/systemd/system
+nice cargo build --release
 
-# reload systemd
+# systemd stuff
+sudo cp -uv *.service /etc/systemd/system
 sudo systemctl daemon-reload
 
-# start or enable systemd service
+# copy to system
+sudo systemctl stop resilio-sync-watch-config.service
+sudo cp -uv target/release/resilio-sync-watch-config /usr/local/bin/
+
 sudo systemctl enable resilio-sync-watch-config.service
 sudo systemctl start resilio-sync-watch-config.service
