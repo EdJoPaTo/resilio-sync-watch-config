@@ -33,7 +33,7 @@ pub fn build() -> App<'static, 'static> {
         )
         .subcommand(
             SubCommand::with_name("watch")
-                .about("Provide Resilio with a share secret which contains own config files. Start Resilio then with the combined config of these own configs")
+                .about("Provide Resilio with a share secret which contains own config files. Resilio is then started with the combined config of these own config files in the share. Updates the config and restarts Resilio on config changes in the shared folder.")
                 .arg(
                     Arg::with_name("share secret")
                         .value_name("SECRET_OR_FILE")
@@ -56,7 +56,6 @@ pub fn build() -> App<'static, 'static> {
         .arg(
             Arg::with_name("sync trash")
                 .long("enable-trash")
-                .value_name("DIRECTORY")
                 .global(true)
                 .help("Enable rslsync trash (use_sync_trash: true). Defaults to not using sync trash (different to default rslsync)"),
         )
