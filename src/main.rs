@@ -21,8 +21,6 @@ fn main() {
 
     // TODO: handle parse subcommand here before the "running" stuff which has to create folders and so on.
 
-    let sync_trash_enabled = matches.is_present("sync trash");
-
     fs::create_dir_all(basedir).expect("failed to create basedir");
     fs::create_dir_all(".resilio-sync-watch-config/.sync")
         .expect("failed to create working directory");
@@ -37,6 +35,8 @@ fn main() {
             println!("Start in single folder mode...");
             let share_secret = get_share_secret_from_arg(matches.value_of("share secret"))
                 .expect("Share secret could not be read or is invalid");
+
+            let sync_trash_enabled = matches.is_present("sync trash");
 
             let mut folder = config::resilio::Folder::new(&share_secret, "folders/single");
             if !sync_trash_enabled {

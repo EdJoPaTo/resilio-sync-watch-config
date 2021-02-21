@@ -11,6 +11,12 @@ pub fn build() -> App<'static, 'static> {
             SubCommand::with_name("single")
                 .about("Sync a single share with Resilio")
                 .arg(
+                    Arg::with_name("sync trash")
+                        .long("enable-trash")
+                        .global(true)
+                        .help("Enable rslsync trash (use_sync_trash: true). Defaults to not using sync trash (different to default rslsync)"),
+                )
+                        .arg(
                     Arg::with_name("share secret")
                         .value_name("SECRET_OR_FILE")
                         .takes_value(true)
@@ -52,11 +58,5 @@ pub fn build() -> App<'static, 'static> {
                 .takes_value(true)
                 .default_value("folders")
                 .help("Folder in which the resulting share(s) should be synced"),
-        )
-        .arg(
-            Arg::with_name("sync trash")
-                .long("enable-trash")
-                .global(true)
-                .help("Enable rslsync trash (use_sync_trash: true). Defaults to not using sync trash (different to default rslsync)"),
         )
 }
