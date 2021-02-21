@@ -58,11 +58,11 @@ impl Config {
 }
 
 impl Folder {
-    pub fn new(secret: &str, dir: &str) -> Self {
+    pub fn new(secret: String, dir: String) -> Self {
         Self {
-            dir: dir.to_string(),
+            dir,
             search_lan: None,
-            secret: secret.to_string(),
+            secret,
             use_sync_trash: None,
         }
     }
