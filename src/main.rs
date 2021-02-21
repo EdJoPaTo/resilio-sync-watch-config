@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 
+use std::collections::HashMap;
 use std::fs;
 use std::process::exit;
 use std::thread::sleep;
@@ -19,7 +20,38 @@ fn main() {
         .value_of("base directory")
         .expect("Base directory could not be read from command line");
 
-    // TODO: handle parse subcommand here before the "running" stuff which has to create folders and so on.
+    // handle parse subcommand here before the "running" stuff as it has to create folders and so on.
+    if let Some(matches) = matches.subcommand_matches("parse") {
+        let mut merged_own_config = config::own::Config::default();
+
+        let config_files = matches
+            .values_of("config")
+            .expect("failed to read config files from command line");
+
+        for file in config_files {
+            let text_content = fs::read_to_string(file).expect("failed to read config file");
+            merged_own_config = merged_own_config
+                .add(serde_json::from_str(&text_content).expect("failed to parse config file"));
+        }
+
+        let mut final_own_config = config::own::Config {
+            passthrough: merged_own_config.passthrough,
+            folders: HashMap::new(),
+        };
+
+        for (dir, secret) in merged_own_config.folders {
+            final_own_config
+                .folders
+                .insert(format!("folders/{}", dir), secret);
+        }
+
+        let resilio_config = final_own_config.into_resilio_config();
+        let resilio_config_text = serde_json::to_string_pretty(&resilio_config)
+            .expect("failed to parse final resilio config to json");
+
+        println!("{}", resilio_config_text);
+        exit(exitcode::OK);
+    }
 
     fs::create_dir_all(basedir).expect("failed to create basedir");
     fs::create_dir_all(".resilio-sync-watch-config/.sync")
