@@ -15,14 +15,6 @@ mod share;
 fn main() {
     let matches = cli::build().get_matches();
 
-    #[cfg(debug_assertions)]
-    let hostname = "testing please ignore".to_string();
-    #[cfg(not(debug_assertions))]
-    let hostname = hostname::get()
-        .ok()
-        .and_then(|o| o.into_string().ok())
-        .expect("failed to read hostname");
-
     let basedir = matches
         .value_of("base directory")
         .expect("Base directory could not be read from command line");
@@ -48,10 +40,8 @@ fn main() {
                 folder.use_sync_trash = Some(false);
             }
 
-            let mut config = config::resilio::Config::new(&hostname);
+            let mut config = config::resilio::Config::default();
             config.shared_folders.push(folder);
-            config.storage_path = Some(".resilio-sync-watch-config/.sync".to_string());
-            config.pid_file = Some(".resilio-sync-watch-config/resilio.pid".to_string());
 
             resilio.start(&config);
             println!("Resilio started.");
