@@ -29,6 +29,9 @@ fn main() {
 
     let mut resilio = resilio::Resilio::new("rslsync");
 
+    let mut signals = Signals::new(&[nix::libc::SIGINT, nix::libc::SIGTERM])
+        .expect("failed to create signal handler");
+
     match matches.subcommand() {
         ("single", Some(matches)) => {
             println!("Start in single folder mode...");
@@ -45,9 +48,6 @@ fn main() {
 
             resilio.start(&config);
             println!("Resilio started.");
-
-            let mut signals = Signals::new(&[nix::libc::SIGINT, nix::libc::SIGTERM])
-                .expect("failed to create signal handler");
 
             loop {
                 if let Some(signal) = signals.pending().next() {
@@ -66,14 +66,14 @@ fn main() {
 
                 sleep(Duration::from_millis(50));
             }
-
-            println!("Stop Resilio...");
-            resilio.stop().expect("failed to stop resilio");
-            println!("Resilio stopped.");
         }
         (command, Some(_)) => todo!("Subcommand '{}' not yet implemented", command),
         _ => unimplemented!("You have to use a subcommand to run this tool"),
     }
+
+    println!("Stop Resilio...");
+    resilio.stop().expect("failed to stop resilio");
+    println!("Resilio stopped.");
 }
 
 fn get_share_secret_from_arg(secret_or_file_arg: Option<&str>) -> Option<String> {
