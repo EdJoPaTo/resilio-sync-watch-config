@@ -3,13 +3,12 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "cargo"
     directory: "/"
     schedule:
-      interval: "weekly"
-    versioning-strategy: increase-if-necessary
+      interval: "monthly"
     commit-message:
-      prefix: "chore(npm):"
+      prefix: "chore(cargo):"
 
   - package-ecosystem: "github-actions"
     directory: "/"
