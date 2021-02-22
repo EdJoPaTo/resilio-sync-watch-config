@@ -2,8 +2,8 @@
 
 import * as fs from 'fs'
 
-/* eslint import/no-unassigned-import: off */
-import 'source-map-support/register'
+// Do the import here to allow simpler usage as globally installed npm package
+import 'source-map-support/register.js'
 
 import {ResilioSync} from 'resilio-sync'
 import * as cli from 'cli'
