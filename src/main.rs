@@ -140,8 +140,12 @@ fn main() {
     }
 
     println!("Stop Resilio...");
-    resilio.stop().expect("failed to stop resilio");
-    println!("Resilio stopped.");
+    match resilio.stop() {
+        Ok(resilio::StopKind::NotStarted) => println!("Resilio wasnt started."),
+        Ok(resilio::StopKind::StoppedNormally) => println!("Resilio stopped normally."),
+        Ok(resilio::StopKind::Killed) => println!("Resilio was killed as it took too long."),
+        Err(err) => println!("failed to stop Resilio: {}", err),
+    }
 }
 
 fn get_share_secret_from_arg(secret_or_file_arg: Option<&str>) -> Option<String> {
