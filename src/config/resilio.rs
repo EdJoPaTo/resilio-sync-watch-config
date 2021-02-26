@@ -68,6 +68,9 @@ impl Folder {
     }
 }
 
+pub const DEFAULT_STORAGE_PATH: &str = ".resilio-sync-watch-config/.sync";
+pub const DEFAULT_PID_FILE: &str = ".resilio-sync-watch-config/resilio.pid";
+
 impl Default for Config {
     fn default() -> Self {
         #[cfg(debug_assertions)]
@@ -79,8 +82,8 @@ impl Default for Config {
             .expect("failed to read hostname");
 
         let mut config = Self::new(hostname);
-        config.storage_path = Some(".resilio-sync-watch-config/.sync".to_string());
-        config.pid_file = Some(".resilio-sync-watch-config/resilio.pid".to_string());
+        config.storage_path = Some(DEFAULT_STORAGE_PATH.to_string());
+        config.pid_file = Some(DEFAULT_PID_FILE.to_string());
 
         config
     }

@@ -5,6 +5,7 @@ use std::process::exit;
 use std::thread::sleep;
 use std::time::Duration;
 
+use config::resilio::DEFAULT_STORAGE_PATH;
 use signal_hook::iterator::Signals;
 
 mod cli;
@@ -40,8 +41,7 @@ fn main() {
     }
 
     fs::create_dir_all(basedir).expect("failed to create basedir");
-    fs::create_dir_all(".resilio-sync-watch-config/.sync")
-        .expect("failed to create working directory");
+    fs::create_dir_all(DEFAULT_STORAGE_PATH).expect("failed to create working directory");
 
     let mut resilio = resilio::Resilio::new("rslsync");
 
@@ -57,7 +57,7 @@ fn main() {
             let sync_trash_enabled = matches.is_present("sync trash");
 
             let mut folder =
-                config::resilio::Folder::new(share_secret, "folders/single".to_string());
+                config::resilio::Folder::new(share_secret, format!("{}/single", basedir));
             if !sync_trash_enabled {
                 folder.use_sync_trash = Some(false);
             }
