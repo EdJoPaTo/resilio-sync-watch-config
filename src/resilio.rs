@@ -42,9 +42,15 @@ impl Resilio {
     }
 
     pub fn start(&mut self, config: &Config) {
+        self.start_unsafe(config)
+    }
+
+    pub fn start_unsafe<T>(&mut self, config: &T)
+    where
+        T: ?Sized + serde::Serialize,
+    {
         let mut contents = serde_json::to_string_pretty(&config)
             .expect("could not serialize resilio config to json");
-
         contents = contents.replace(": null", ": undefined");
 
         self.stop().expect(
