@@ -1,6 +1,5 @@
 #![forbid(unsafe_code)]
 
-use std::collections::HashMap;
 use std::fs;
 use std::process::exit;
 use std::thread::sleep;
@@ -10,6 +9,7 @@ use signal_hook::iterator::Signals;
 
 mod cli;
 mod config;
+mod parse;
 mod resilio;
 mod share;
 
@@ -22,30 +22,16 @@ fn main() {
 
     // handle parse subcommand here before the "running" stuff as it has to create folders and so on.
     if let Some(matches) = matches.subcommand_matches("parse") {
-        let mut merged_own_config = config::own::Config::default();
-
         let config_files = matches
             .values_of("config")
-            .expect("failed to read config files from command line");
+            .expect("failed to read config files from command line")
+            .collect::<Vec<_>>();
 
-        for file in config_files {
-            let text_content = fs::read_to_string(file).expect("failed to read config file");
-            merged_own_config = merged_own_config
-                .add(serde_json::from_str(&text_content).expect("failed to parse config file"));
-        }
+        let raw_merged =
+            parse::read_and_merge(&config_files).expect("failed to get and merge all config files");
+        let own_config = parse::apply_base_folder(raw_merged, basedir);
 
-        let mut final_own_config = config::own::Config {
-            passthrough: merged_own_config.passthrough,
-            folders: HashMap::new(),
-        };
-
-        for (dir, secret) in merged_own_config.folders {
-            final_own_config
-                .folders
-                .insert(format!("folders/{}", dir), secret);
-        }
-
-        let resilio_config = final_own_config.into_resilio_config();
+        let resilio_config = own_config.into_resilio_config();
         let resilio_config_text = serde_json::to_string_pretty(&resilio_config)
             .expect("failed to parse final resilio config to json");
 
