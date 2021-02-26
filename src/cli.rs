@@ -39,7 +39,7 @@ pub fn build() -> App<'static, 'static> {
         )
         .subcommand(
             SubCommand::with_name("watch")
-                .about("Provide Resilio with a share secret which contains own config files. Resilio is then started with the combined config of these own config files in the share. Updates the config and restarts Resilio on config changes in the shared folder.")
+                .about("Provide Resilio with a share secret which contains own config files. These are parsed into a Resilio config and Resilio is started with it. The config files in the share are watched and Resilio is restarted on changes.")
                 .arg(
                     Arg::with_name("share secret")
                         .value_name("SECRET_OR_FILE")
