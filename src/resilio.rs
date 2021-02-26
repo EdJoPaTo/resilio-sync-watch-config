@@ -11,6 +11,13 @@ use tempfile::NamedTempFile;
 use crate::config::resilio::Config;
 
 #[derive(Debug)]
+pub enum StopKind {
+    NotStarted,
+    StoppedNormally,
+    Killed,
+}
+
+#[derive(Debug)]
 pub struct Resilio {
     config_file: NamedTempFile,
     binary: &'static str,
@@ -73,17 +80,21 @@ impl Resilio {
         self.process = Some(handle);
     }
 
-    pub fn stop(&mut self) -> std::io::Result<()> {
+    pub fn stop(&mut self) -> std::io::Result<StopKind> {
         const MAX_DURATION: Duration = Duration::from_secs(10);
         const STEPS: u32 = 200;
         // TODO: wait for some divide function to be stable in const
         // const SINGLE_DURATION: Duration = MAX_DURATION.checked_div(STEPS).unwrap();
 
-        if let Some(handle) = &mut self.process {
+        let stop_kind = if let Some(handle) = &mut self.process {
             if handle.try_wait()?.is_none() {
                 #[allow(clippy::cast_possible_wrap)]
-                signal::kill(Pid::from_raw(handle.id() as i32), Signal::SIGTERM)
-                    .expect("failed to gracefully stop rslsync");
+                if let Err(err) = signal::kill(Pid::from_raw(handle.id() as i32), Signal::SIGTERM) {
+                    println!(
+                        "WARNING: failed to gracefully signal Resilio to stop: {}",
+                        err
+                    );
+                }
             }
 
             let single_duration = MAX_DURATION.div(STEPS);
@@ -98,16 +109,21 @@ impl Resilio {
             // If its still not stopped use SIGKILL
             if handle.try_wait()?.is_none() {
                 handle.kill()?;
+                StopKind::Killed
+            } else {
+                StopKind::StoppedNormally
             }
-        }
+        } else {
+            StopKind::NotStarted
+        };
 
         self.process = None;
-        Ok(())
+        Ok(stop_kind)
     }
 }
 
 impl Drop for Resilio {
     fn drop(&mut self) {
-        self.stop().expect("failed to stop the resilio process");
+        self.stop().expect("failed to stop the Resilio process");
     }
 }
