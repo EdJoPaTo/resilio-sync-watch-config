@@ -69,7 +69,7 @@ fn main() {
 
             loop {
                 if let Some(signal) = signals.pending().next() {
-                    println!("Received signal {:?}", signal);
+                    println!("Received signal {}", signal);
                     break;
                 }
 
@@ -112,7 +112,7 @@ fn main() {
 
                 loop {
                     if let Some(signal) = signals.pending().next() {
-                        println!("Received signal {:?}", signal);
+                        println!("Received signal {}", signal);
                         exits = true;
                         break;
                     }
