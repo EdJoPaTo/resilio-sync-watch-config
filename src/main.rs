@@ -104,10 +104,11 @@ fn main() {
                 }
 
                 fs::create_dir_all(CONFIGS_FOLDER).expect("failed to create configs folder");
-                let watchcat = crate::watch::files::Watchcat::new(CONFIGS_FOLDER)
+                let watchcat = crate::watch::Watchcat::new(CONFIGS_FOLDER)
                     .expect("failed to create config folder watcher");
 
-                let resilio_config = generate_watch_config(share_secret.to_owned(), basedir);
+                let resilio_config =
+                    watch::generate_config(CONFIGS_FOLDER, share_secret.to_owned(), basedir);
                 let mut resilio = resilio::Resilio::new_unsafe("rslsync", &resilio_config);
 
                 loop {
@@ -162,66 +163,4 @@ fn get_share_secret_from_arg(secret_or_file_arg: Option<&str>) -> Option<String>
     } else {
         None
     }
-}
-
-fn get_currently_existing_config_file_names(folder: &str) -> Vec<String> {
-    match fs::read_dir(folder) {
-        Ok(dir_contents) => {
-            let mut list = Vec::new();
-            for entry in dir_contents {
-                if let Ok(entry) = entry {
-                    let is_file = entry.file_type().map_or(false, |o| o.is_file());
-                    if is_file {
-                        if let Ok(file_name) = entry.file_name().into_string() {
-                            if file_name.ends_with(".json") {
-                                list.push(file_name);
-                            }
-                        }
-                    }
-                }
-            }
-
-            list.sort();
-            list
-        }
-        Err(_) => vec![],
-    }
-}
-
-fn generate_watch_config(
-    config_share_secret: String,
-    base_folder: &str,
-) -> serde_json::Map<String, serde_json::Value> {
-    let config_files = get_currently_existing_config_file_names(CONFIGS_FOLDER);
-    println!(
-        "detected config files ({}): {:?}",
-        config_files.len(),
-        config_files
-    );
-    let mut config_files_in_config_dir = Vec::new();
-    for file in config_files {
-        config_files_in_config_dir.push(format!("{}/{}", CONFIGS_FOLDER, file));
-    }
-
-    let config_file_refs = config_files_in_config_dir
-        .iter()
-        .map(String::as_ref)
-        .collect::<Vec<_>>();
-
-    let mut own_config = match parse::read_and_merge(&config_file_refs) {
-        Ok(merged) => parse::apply_base_folder(merged, base_folder),
-        Err(err) => {
-            println!(
-                "WARNING: failed to parse config. Fall back to safe mode. Error: {}",
-                err
-            );
-            config::own::Config::default()
-        }
-    };
-
-    own_config
-        .folders
-        .insert(CONFIGS_FOLDER.to_string(), config_share_secret);
-
-    own_config.into_resilio_config()
 }
