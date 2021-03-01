@@ -45,8 +45,6 @@ fn main() {
     fs::create_dir_all(basedir).expect("failed to create basedir");
     fs::create_dir_all(DEFAULT_STORAGE_PATH).expect("failed to create working directory");
 
-    let mut resilio = resilio::Resilio::new("rslsync");
-
     let mut signals = Signals::new(&[nix::libc::SIGINT, nix::libc::SIGTERM])
         .expect("failed to create signal handler");
 
@@ -67,8 +65,7 @@ fn main() {
             let mut config = config::resilio::Config::default();
             config.shared_folders.push(folder);
 
-            resilio.start(&config);
-            println!("Resilio started.");
+            let mut resilio = resilio::Resilio::new("rslsync", &config);
 
             loop {
                 if let Some(signal) = signals.pending().next() {
@@ -101,17 +98,13 @@ fn main() {
                     break;
                 }
 
-                // Ensure the last resilio is stopped before stuff is done.
-                resilio.stop().expect("failed to stop resilio");
-
                 if safe_start {
                     let _ = fs::remove_dir_all(CONFIGS_FOLDER);
                     safe_start = false;
                 }
 
                 let resilio_config = generate_watch_config(share_secret.to_owned(), basedir);
-                resilio.start_unsafe(&resilio_config);
-                println!("Resilio started.");
+                let mut resilio = resilio::Resilio::new_unsafe("rslsync", &resilio_config);
 
                 loop {
                     if let Some(signal) = signals.pending().next() {
@@ -137,14 +130,6 @@ fn main() {
         }
         (command, Some(_)) => todo!("Subcommand '{}' not yet implemented", command),
         _ => unimplemented!("You have to use a subcommand to run this tool"),
-    }
-
-    println!("Stop Resilio...");
-    match resilio.stop() {
-        Ok(resilio::StopKind::NotStarted) => println!("Resilio wasnt started."),
-        Ok(resilio::StopKind::StoppedNormally) => println!("Resilio stopped normally."),
-        Ok(resilio::StopKind::Killed) => println!("Resilio was killed as it took too long."),
-        Err(err) => println!("failed to stop Resilio: {}", err),
     }
 }
 
