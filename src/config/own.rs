@@ -11,6 +11,7 @@ pub struct Config {
 
     #[serde(default)]
     pub passthrough: HashMap<String, serde_json::Value>,
+    // TODO: folder_passthrough
 }
 
 impl Default for Config {
