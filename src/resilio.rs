@@ -11,12 +11,6 @@ use tempfile::NamedTempFile;
 use crate::config::resilio::Config;
 
 #[derive(Debug)]
-pub enum StopKind {
-    Normally,
-    Killed,
-}
-
-#[derive(Debug)]
 pub struct Resilio {
     config_file: NamedTempFile,
     process: Child,
@@ -71,15 +65,15 @@ impl Resilio {
         Ok(!has_exitstatus)
     }
 
-    fn stop(&mut self) -> std::io::Result<StopKind> {
+    fn stop(&mut self) -> std::io::Result<()> {
         const MAX_DURATION: Duration = Duration::from_secs(10);
         const STEPS: u32 = 200;
         // TODO: wait for some divide function to be stable in const
         // const SINGLE_DURATION: Duration = MAX_DURATION.checked_div(STEPS).unwrap();
 
-        println!("Stop Resilio...");
-
         if self.process.try_wait()?.is_none() {
+            println!("Stop Resilio...");
+
             #[allow(clippy::cast_possible_wrap)]
             if let Err(err) = signal::kill(Pid::from_raw(self.process.id() as i32), Signal::SIGTERM)
             {
@@ -99,15 +93,18 @@ impl Resilio {
             }
         }
 
-        // If its still not stopped use SIGKILL
-        if self.process.try_wait()?.is_none() {
+        if let Some(exit_status) = self.process.try_wait()? {
+            match exit_status.code() {
+                Some(0) => println!("Resilio stopped normally."),
+                Some(exit_code) => println!("Resilio exited with exit code {}", exit_code),
+                None => println!("Resilio was terminated by a signal."),
+            }
+        } else {
+            // If its still not stopped use SIGKILL
             self.process.kill()?;
             println!("Resilio was killed as it took too long.");
-            Ok(StopKind::Killed)
-        } else {
-            println!("Resilio stopped normally.");
-            Ok(StopKind::Normally)
         }
+        Ok(())
     }
 }
 
