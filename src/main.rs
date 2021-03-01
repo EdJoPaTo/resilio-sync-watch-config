@@ -82,7 +82,7 @@ fn main() {
                     exit(exitcode::SOFTWARE);
                 }
 
-                sleep(Duration::from_millis(50));
+                sleep(Duration::from_millis(250));
             }
         }
         ("watch", Some(matches)) => {
@@ -124,7 +124,7 @@ fn main() {
                         break;
                     }
 
-                    sleep(Duration::from_millis(50));
+                    sleep(Duration::from_millis(250));
                 }
             }
         }
