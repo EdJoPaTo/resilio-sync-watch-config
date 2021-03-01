@@ -120,6 +120,10 @@ fn main() {
                         .expect("failed to check if resilio is still running")
                     {
                         println!("Resilio stopped unexpectedly! Restart with safe mode...");
+
+                        // Prevent endless crash loop to kill the hardware resources
+                        sleep(Duration::from_secs(5));
+
                         safe_start = true;
                         break;
                     }
