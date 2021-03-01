@@ -13,6 +13,7 @@ mod config;
 mod parse;
 mod resilio;
 mod share;
+mod watch;
 
 const CONFIGS_FOLDER: &str = ".resilio-sync-watch-config/configs";
 
@@ -103,6 +104,10 @@ fn main() {
                     safe_start = false;
                 }
 
+                fs::create_dir_all(CONFIGS_FOLDER).expect("failed to create configs folder");
+                let watchcat = crate::watch::files::Watchcat::new(CONFIGS_FOLDER)
+                    .expect("failed to create config folder watcher");
+
                 let resilio_config = generate_watch_config(share_secret.to_owned(), basedir);
                 let mut resilio = resilio::Resilio::new_unsafe("rslsync", &resilio_config);
 
@@ -113,7 +118,14 @@ fn main() {
                         break;
                     }
 
-                    // TODO: check for changed files
+                    let changed = watchcat.get_changed_filenames();
+                    if !changed.is_empty() {
+                        println!(
+                            "Config change detected. Restart with new config. Changed: {:?}",
+                            changed
+                        );
+                        break;
+                    }
 
                     if !resilio
                         .is_running()
