@@ -1,3 +1,4 @@
+use std::fs;
 use std::io::Write;
 use std::ops::Div;
 use std::process::{Child, Command, Stdio};
@@ -27,8 +28,6 @@ impl Resilio {
     {
         println!("Start Resilio...");
 
-        // TODO: create storage_path
-
         let mut config_file = tempfile::Builder::new()
             .prefix("resilio-sync-watch-config-")
             .suffix(".conf")
@@ -42,6 +41,12 @@ impl Resilio {
         config_file
             .write_all(contents.as_bytes())
             .expect("could not write resilio config to the temporary config file");
+
+        let storage_path = serde_json::from_str::<Config>(&contents)
+            .expect("failed to deserialize resilio config string")
+            .storage_path
+            .unwrap_or_else(|| ".sync".to_string());
+        fs::create_dir_all(storage_path).expect("failed to create storage_path folder");
 
         let handle = Command::new(binary)
             .arg("--nodaemon")

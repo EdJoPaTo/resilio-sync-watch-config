@@ -5,7 +5,7 @@ use std::process::exit;
 use std::thread::sleep;
 use std::time::Duration;
 
-use config::resilio::DEFAULT_STORAGE_PATH;
+use crate::config::resilio::DEFAULT_META_FOLDER;
 use signal_hook::iterator::Signals;
 
 mod cli;
@@ -44,7 +44,6 @@ fn main() {
     }
 
     fs::create_dir_all(basedir).expect("failed to create basedir");
-    fs::create_dir_all(DEFAULT_STORAGE_PATH).expect("failed to create working directory");
 
     let mut signals = Signals::new(&[nix::libc::SIGINT, nix::libc::SIGTERM])
         .expect("failed to create signal handler");
@@ -100,7 +99,7 @@ fn main() {
                 }
 
                 if safe_start {
-                    let _ = fs::remove_dir_all(CONFIGS_FOLDER);
+                    let _ = fs::remove_dir_all(DEFAULT_META_FOLDER);
                     safe_start = false;
                 }
 

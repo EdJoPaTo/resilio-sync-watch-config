@@ -68,6 +68,7 @@ impl Folder {
     }
 }
 
+pub const DEFAULT_META_FOLDER: &str = ".resilio-sync-watch-config";
 pub const DEFAULT_STORAGE_PATH: &str = ".resilio-sync-watch-config/.sync";
 pub const DEFAULT_PID_FILE: &str = ".resilio-sync-watch-config/resilio.pid";
 
