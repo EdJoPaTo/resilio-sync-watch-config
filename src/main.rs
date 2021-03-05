@@ -17,6 +17,7 @@ mod watch;
 
 const CONFIGS_FOLDER: &str = ".resilio-sync-watch-config/configs";
 
+#[allow(clippy::too_many_lines)]
 fn main() {
     let matches = cli::build().get_matches();
 
