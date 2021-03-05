@@ -11,7 +11,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os:
+          - ubuntu-latest
+          - macOS-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -27,7 +29,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --verbose --all-targets --all-features -- -D clippy::all -D clippy::pedantic
+          args: --verbose --locked --all-targets --all-features -- -D clippy::all -D clippy::pedantic
 
   rustfmt:
     name: Rustfmt
@@ -57,8 +59,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest]
-        toolchain: [stable, nightly]
+        os:
+          - ubuntu-latest
+          - macOS-latest
+        toolchain:
+          - stable
+          - nightly
     steps:
       - uses: actions/checkout@v2
 
