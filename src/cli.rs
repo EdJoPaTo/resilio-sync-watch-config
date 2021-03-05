@@ -55,6 +55,12 @@ pub fn build() -> App<'static, 'static> {
                         .help("clean all state of Resilio before starting")
                         .long_help("clean all state of Resilio before starting. Ensures old runs of Resilio dont influence the correct syncing. Basically removes the storage_path. This is helpful when switching the share key. Only the first start of Resilio will be done with safe-mode. When Resilio stops/crashes when it shouldnt safe-mode is enabled for the next start regardless of this flag.")
                 )
+                .arg(
+                    Arg::with_name("cleanup folders")
+                        .long("cleanup")
+                        .help("remove superfluous folders")
+                        .long_help("remove superfluous folders. Folders which are not included in the current config are deleted after the current config is running successfully for 5 minutes.")
+                )
         )
         .arg(
             Arg::with_name("base directory")
