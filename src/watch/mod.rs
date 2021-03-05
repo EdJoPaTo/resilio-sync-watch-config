@@ -8,7 +8,7 @@ pub fn generate_config(
     configs_folder: &str,
     config_share_secret: String,
     base_folder: &str,
-) -> serde_json::Map<String, serde_json::Value> {
+) -> (Vec<String>, serde_json::Map<String, serde_json::Value>) {
     let config_files = get_currently_existing_config_file_names(configs_folder);
     println!(
         "detected config files ({}): {:?}",
@@ -25,14 +25,22 @@ pub fn generate_config(
         .map(String::as_ref)
         .collect::<Vec<_>>();
 
-    let mut own_config = match crate::parse::read_and_merge(&config_file_refs) {
-        Ok(merged) => crate::parse::apply_base_folder(merged, base_folder),
+    let (folders, mut own_config) = match crate::parse::read_and_merge(&config_file_refs) {
+        Ok(merged) => {
+            let mut folders = Vec::new();
+            for folder in merged.folders.keys() {
+                folders.push(folder.to_owned());
+            }
+
+            let config = crate::parse::apply_base_folder(merged, base_folder);
+            (folders, config)
+        }
         Err(err) => {
             println!(
-                "WARNING: failed to parse config. Fall back to safe mode. Error: {}",
+                "WARNING: failed to parse config. Fall back to minimal config. Error: {}",
                 err
             );
-            crate::config::own::Config::default()
+            (Vec::new(), crate::config::own::Config::default())
         }
     };
 
@@ -40,7 +48,7 @@ pub fn generate_config(
         .folders
         .insert(configs_folder.to_string(), config_share_secret);
 
-    own_config.into_resilio_config()
+    (folders, own_config.into_resilio_config())
 }
 
 fn get_currently_existing_config_file_names(folder: &str) -> Vec<String> {
@@ -65,4 +73,37 @@ fn get_currently_existing_config_file_names(folder: &str) -> Vec<String> {
         }
         Err(_) => vec![],
     }
+}
+
+pub fn cleanup_base_folder(
+    base_folder: &str,
+    expected_folders: &[String],
+) -> Result<(), std::io::Error> {
+    println!("cleanup folders...");
+    for entry in fs::read_dir(base_folder)? {
+        if let Ok(entry) = entry {
+            let file_type = entry.file_type()?;
+
+            if file_type.is_dir() {
+                if let Ok(name) = entry.file_name().into_string() {
+                    if !expected_folders.contains(&name) {
+                        println!("cleanup removes folder {}", name);
+                        fs::remove_dir_all(entry.path())?;
+                    }
+                } else {
+                    println!(
+                        "WARNING: cleanup found {:?} in base directory",
+                        entry.file_name()
+                    );
+                }
+            } else {
+                println!(
+                    "WARNING: cleanup found {:?} in base directory",
+                    entry.file_name()
+                );
+            }
+        }
+    }
+    println!("cleanup done");
+    Ok(())
 }

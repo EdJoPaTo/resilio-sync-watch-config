@@ -3,7 +3,7 @@
 use std::fs;
 use std::process::exit;
 use std::thread::sleep;
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 
 use crate::config::resilio::DEFAULT_META_FOLDER;
 use signal_hook::iterator::Signals;
@@ -14,8 +14,6 @@ mod parse;
 mod resilio;
 mod share;
 mod watch;
-
-const CONFIGS_FOLDER: &str = ".resilio-sync-watch-config/configs";
 
 #[allow(clippy::too_many_lines)]
 fn main() {
@@ -87,11 +85,15 @@ fn main() {
             }
         }
         ("watch", Some(matches)) => {
+            const CLEANUP_AFTER_SUCCESSFUL_SECONDS: u64 = 60 * 5; // 5 min
+            const CONFIGS_FOLDER: &str = ".resilio-sync-watch-config/configs";
+
             println!("Start in watch share mode...");
             let share_secret = get_share_secret_from_arg(matches.value_of("share secret"))
                 .expect("Share secret could not be read or is invalid");
 
             let mut safe_start = matches.is_present("safe start");
+            let cleanup = matches.is_present("cleanup folders");
             let mut exits = false;
 
             loop {
@@ -108,9 +110,12 @@ fn main() {
                 let watchcat = crate::watch::Watchcat::new(CONFIGS_FOLDER)
                     .expect("failed to create config folder watcher");
 
-                let resilio_config =
+                let (folders, resilio_config) =
                     watch::generate_config(CONFIGS_FOLDER, share_secret.to_owned(), basedir);
                 let mut resilio = resilio::Resilio::new_unsafe("rslsync", &resilio_config);
+
+                let start_time = SystemTime::now();
+                let mut cleanup_done = false;
 
                 loop {
                     if let Some(signal) = signals.pending().next() {
@@ -139,6 +144,16 @@ fn main() {
 
                         safe_start = true;
                         break;
+                    }
+
+                    if cleanup && !cleanup_done {
+                        if let Ok(passed) = SystemTime::now().duration_since(start_time) {
+                            if passed.as_secs() > CLEANUP_AFTER_SUCCESSFUL_SECONDS {
+                                watch::cleanup_base_folder(basedir, &folders)
+                                    .expect("failed to cleanup base directory");
+                                cleanup_done = true;
+                            }
+                        }
                     }
 
                     sleep(Duration::from_millis(250));
