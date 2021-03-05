@@ -90,7 +90,7 @@ fn main() {
             let share_secret = get_share_secret_from_arg(matches.value_of("share secret"))
                 .expect("Share secret could not be read or is invalid");
 
-            let mut safe_start = false; // TODO: as cli argument
+            let mut safe_start = matches.is_present("safe start");
             let mut exits = false;
 
             loop {
