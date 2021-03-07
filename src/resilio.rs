@@ -72,13 +72,13 @@ impl Resilio {
     }
 
     fn stop(&mut self) -> std::io::Result<()> {
-        const MAX_DURATION: Duration = Duration::from_secs(10);
+        const MAX_DURATION: Duration = Duration::from_secs(30);
         const STEPS: u32 = 200;
         // TODO: wait for some divide function to be stable in const
         // const SINGLE_DURATION: Duration = MAX_DURATION.checked_div(STEPS).unwrap();
 
         if self.process.try_wait()?.is_none() {
-            println!("Stop Resilio...");
+            println!("Stop Resilio... (wait up to {} seconds for Resilio to stop gracefully)", MAX_DURATION.as_secs());
 
             #[allow(clippy::cast_possible_wrap)]
             if let Err(err) = signal::kill(Pid::from_raw(self.process.id() as i32), Signal::SIGTERM)
