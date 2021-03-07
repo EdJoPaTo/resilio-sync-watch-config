@@ -44,6 +44,7 @@ fn main() {
 
     fs::create_dir_all(basedir).expect("failed to create basedir");
 
+    // TODO: maybe bad performance of pending().next()
     let mut signals = Signals::new(&[nix::libc::SIGINT, nix::libc::SIGTERM])
         .expect("failed to create signal handler");
 
@@ -106,6 +107,7 @@ fn main() {
                     safe_start = false;
                 }
 
+                // TODO: stricten permissions on configs folder (chmod -R go-rwx)
                 fs::create_dir_all(CONFIGS_FOLDER).expect("failed to create configs folder");
                 let watchcat = crate::watch::Watchcat::new(CONFIGS_FOLDER)
                     .expect("failed to create config folder watcher");
@@ -167,6 +169,8 @@ fn main() {
 
 fn get_share_secret_from_arg(secret_or_file_arg: Option<&str>) -> Option<String> {
     let arg = secret_or_file_arg?;
+
+    // TODO: try to stricten permissions on share file (chmod -R go-rwx)
 
     let share_secret = if let Ok(content) = fs::read_to_string(arg) {
         content.trim().to_owned()

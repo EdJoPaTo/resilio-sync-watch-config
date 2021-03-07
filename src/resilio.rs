@@ -46,6 +46,7 @@ impl Resilio {
             .expect("failed to deserialize resilio config string")
             .storage_path
             .unwrap_or_else(|| ".sync".to_string());
+        // TODO: stricten permissions on configs folder (chmod -R go-rwx)
         fs::create_dir_all(storage_path).expect("failed to create storage_path folder");
 
         let handle = Command::new(binary)
