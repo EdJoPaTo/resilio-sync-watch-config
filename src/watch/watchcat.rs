@@ -35,7 +35,9 @@ impl Watchcat {
                 | DebouncedEvent::Rename(_, path)
                 | DebouncedEvent::Write(path) => {
                     if let Some(filename) = get_filename_as_string(&path) {
-                        filenames.push(filename);
+                        if filename.ends_with(".json") {
+                            filenames.push(filename);
+                        }
                     }
                 }
                 _ => {}
