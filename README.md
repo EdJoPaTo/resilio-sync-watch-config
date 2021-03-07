@@ -1,78 +1,72 @@
 # Resilio Sync Watch Config
 
-[![NPM Version](https://img.shields.io/npm/v/resilio-sync-watch-config.svg)](https://www.npmjs.com/package/resilio-sync-watch-config)
-[![node](https://img.shields.io/node/v/resilio-sync-watch-config.svg)](https://www.npmjs.com/package/resilio-sync-watch-config)
-[![Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config)
-[![Dev Dependency Status](https://david-dm.org/edjopato/resilio-sync-watch-config/dev-status.svg)](https://david-dm.org/edjopato/resilio-sync-watch-config?type=dev)
 [![Docker Hub Image](https://img.shields.io/docker/image-size/edjopato/resilio-sync-watch-config)](https://hub.docker.com/r/edjopato/resilio-sync-watch-config)
 
 This tool was created to support the [Resilio Sync Home](//www.resilio.com/individuals/) software on headless devices.
 
-## Install locally
+## Install
 
-Just install it globally with npm:
+### Prebuilt
 
-```sh
-npm i -g resilio-sync-watch-config
-```
+Check the [Releases](https://github.com/EdJoPaTo/resilio-sync-watch-config/releases).
 
-## Usage
+### From Source
 
-```sh
-resilio-sync-watch-config [options] config.json
-Usage:
-  index.js [options] config.json
+- Clone this repository
+- `cargo install --path .`
 
-Options:
-  -b, --resilioBin [FILE]Binary of Resilio. Can be used if rslsync is not in
-                         PATH.  (Default is rslsync)
-  -s, --start BOOL       Start resilio sync after config generation
-  -w, --watchmode BOOL   Watch config changes and restart Resilio Sync on
-                         change. Implies -s
-  -k, --key STRING       Key of Resilio Sync Share which contains configs to
-                         load. Should be read-only key. Implies -sw and
-                         requires --basedir
-  -f, --keyfile FILE     File containing the key of a Resilio Sync Share. See
-                         --key
-  -b, --basedir DIR      Basedir used to sync Resilio Sync Share into. See
-                         --key
-  -v, --version          Display the current version
-  -h, --help             Display help and usage details
-```
+### Docker container
 
-Multiple config.json are possible in order to combine multiple configs into one.
-When using `--key` or `--keyfile` every `*.json` directly placed into the shared folder is combined and used.
+Use the [Docker Image](https://hub.docker.com/r/edjopato/resilio-sync-watch-config).
 
-### systemd Service
+Provide the secret `/run/secrets/share.txt` or override `/share.txt` with the share you want to sync.
+Environment variables are currently not supported (but that can change when someone wants to use that).
 
-Instructions for this are in the subfolder `systemd`
-
-## Install via docker
-
-Use the [Docker Image](https://hub.docker.com/r/edjopato/resilio-sync-watch-config) inside a Docker Swarm.
-Provide the secret `/run/secrets/resilio-share.txt` which will be used as `--keyfile`.
-
-See [Usage](#Usage) and the Dockerfile CMD for more info what happens there.
-
-Example compose file which is deployed as a docker stack:
+Example compose file for `single` folder syncing:
 
 ```yml
 version: '3.7'
 
 secrets:
-  resilio-share.txt:
+  share.txt:
+    file: secrets/resilio-share.txt
+
+volumes:
+  share:
+  workdir:
+
+services:
+  watch-config:
+    image: edjopato/resilio-sync-watch-config:3
+    secrets:
+      - share.txt
+    volumes:
+      - share:/folders/single
+      - workdir:/.resilio-sync-watch-config
+```
+
+Example compose file for `watch` mode syncing:
+
+```yml
+version: '3.7'
+
+secrets:
+  share.txt:
     file: secrets/resilio-share.txt
 
 volumes:
   folders:
+  workdir:
 
 services:
   watch-config:
-    image: edjopato/resilio-sync-watch-config:2
+    image: edjopato/resilio-sync-watch-config:3
+    command: watch --cleanup
     secrets:
-      - resilio-share.txt
+      - share.txt
     volumes:
       - folders:/folders
+      - workdir:/.resilio-sync-watch-config
 ```
 
 ## Backstory
@@ -146,3 +140,120 @@ The `passthrough` key contains an object, that can contain any offical resilio s
 These settings will override any other settings.
 For example will this tool generate the `device_name` key in the resilio config.
 if the `device_name` key is set in the passthrough section too, it will override it.
+
+## Usage
+
+```plaintext
+Resilio Sync Watch Config 3.0.0
+EdJoPaTo <resilio-sync-watch-config-rust@edjopato.de>
+Small tool to create a resilio config and watch for changes to restart the sync daemon
+on changes
+
+USAGE:
+    resilio-sync-watch-config [OPTIONS] <SUBCOMMAND>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -b, --basedir <DIRECTORY>    Folder in which the resulting share(s) should be synced
+                                 [default: folders]
+
+SUBCOMMANDS:
+    help      Prints this message or the help of the given subcommand(s)
+    parse     Reads (multiple) own JSON config files and prints the resulting
+              Resilio config to stdout
+    single    Sync a single share with Resilio
+    watch     Provide Resilio with a share secret which contains own config files.
+              These are parsed into a Resilio config and Resilio is started with it.
+              The config files in the share are watched and Resilio is restarted on
+              changes.
+```
+
+### Single Mode
+
+```plaintext
+Sync a single share with Resilio
+
+USAGE:
+    resilio-sync-watch-config single [FLAGS] [OPTIONS] <SECRET_OR_FILE>
+
+FLAGS:
+    -h, --help            Prints help information
+        --enable-trash    Enable rslsync trash (use_sync_trash: true). Defaults to not
+                          using sync trash (different to default rslsync)
+    -V, --version         Prints version information
+
+OPTIONS:
+    -b, --basedir <DIRECTORY>    Folder in which the resulting share(s) should be synced
+                                 [default: folders]
+
+ARGS:
+    <SECRET_OR_FILE>    Share secret to be synced. Can be the secret itself or a
+                        filename which contains the secret [default:
+                        share.txt]
+```
+
+### Watch Mode
+
+```plaintext
+Provide Resilio with a share secret which contains own config files. These are parsed
+into a Resilio config and Resilio is started with it. The config files in the share are
+watched and Resilio is restarted on changes.
+
+USAGE:
+    resilio-sync-watch-config watch [FLAGS] [OPTIONS] <SECRET_OR_FILE>
+
+FLAGS:
+        --cleanup
+            remove superfluous folders. Folders which are not included in the current
+            config are deleted after the current config is running successfully for 5
+            minutes.
+    -h, --help
+            Prints help information
+
+    -s, --safe-start
+            clean all state of Resilio before starting. Ensures old runs of Resilio dont
+            influence the correct syncing. Basically removes the storage_path. This is
+            helpful when switching the share key. Only the first start of Resilio will
+            be done with safe-mode. When Resilio stops/crashes when it shouldnt safe-
+            mode is enabled for the next start regardless of this flag.
+    -V, --version
+            Prints version information
+
+
+OPTIONS:
+    -b, --basedir <DIRECTORY>
+            Folder in which the resulting share(s) should be synced [default:
+            folders]
+
+ARGS:
+    <SECRET_OR_FILE>
+            Share secret to be synced which contains the own configs. Can be the secret
+            itself or a filename which contains the secret [default: share.txt]
+```
+
+### Parse
+
+```
+Reads (multiple) own JSON config files and prints the resulting Resilio config to stdout
+
+USAGE:
+    resilio-sync-watch-config parse [OPTIONS] <FILE>...
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -b, --basedir <DIRECTORY>    Folder in which the resulting share(s) should be synced
+                                 [default: folders]
+
+ARGS:
+    <FILE>...    Path(s) to own JSON config files
+```
+
+## systemd Service
+
+Instructions for this are in the subfolder [`systemd`](systemd)
