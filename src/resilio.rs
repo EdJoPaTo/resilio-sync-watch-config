@@ -78,7 +78,10 @@ impl Resilio {
         // const SINGLE_DURATION: Duration = MAX_DURATION.checked_div(STEPS).unwrap();
 
         if self.process.try_wait()?.is_none() {
-            println!("Stop Resilio... (wait up to {} seconds for Resilio to stop gracefully)", MAX_DURATION.as_secs());
+            println!(
+                "Stop Resilio... (wait up to {} seconds for Resilio to stop gracefully)",
+                MAX_DURATION.as_secs()
+            );
 
             #[allow(clippy::cast_possible_wrap)]
             if let Err(err) = signal::kill(Pid::from_raw(self.process.id() as i32), Signal::SIGTERM)
