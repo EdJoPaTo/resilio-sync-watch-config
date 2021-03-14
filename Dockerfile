@@ -25,7 +25,7 @@ RUN strip target/x86_64-unknown-linux-musl/release/resilio-sync-watch-config
 
 
 # Start building the final image
-FROM docker.io/library/debian:buster
+FROM docker.io/bitnami/minideb:buster
 WORKDIR /
 VOLUME /folders
 VOLUME /.resilio-sync-watch-config
