@@ -54,11 +54,9 @@ fn main() {
             let share_secret = get_share_secret_from_arg(matches.value_of("share secret"))
                 .expect("Share secret could not be read or is invalid");
 
-            let sync_trash_enabled = matches.is_present("sync trash");
-
             let mut folder =
                 config::resilio::Folder::new(share_secret, format!("{}/single", basedir));
-            if !sync_trash_enabled {
+            if !matches.is_present("sync trash") {
                 folder.use_sync_trash = Some(false);
             }
 
