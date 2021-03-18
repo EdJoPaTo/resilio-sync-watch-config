@@ -80,4 +80,14 @@ pub fn build() -> App<'static, 'static> {
                 .takes_value(true)
                 .help("Override the device name. Defaults to the hostname."),
         )
+        .arg(
+            Arg::with_name("listening port")
+                .long("listening-port")
+                .short("p")
+                .value_name("INT")
+                .global(true)
+                .takes_value(true)
+                .help("Set a specific listening port")
+                .long_help("Set a specific listening port. Helpful in combination with NAT like in a container environment."),
+        )
 }

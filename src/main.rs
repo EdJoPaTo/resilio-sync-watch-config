@@ -23,6 +23,11 @@ fn main() {
         .value_of("base directory")
         .expect("Base directory could not be read from command line");
 
+    let listening_port = matches.value_of("listening port").map(|s| {
+        s.parse::<u32>()
+            .expect("failed to parse listening port from command line")
+    });
+
     // handle parse subcommand here before the "running" stuff as it has to create folders and so on.
     if let Some(matches) = matches.subcommand_matches("parse") {
         let config_files = matches
@@ -38,6 +43,12 @@ fn main() {
 
         if let Some(device_name) = matches.value_of("device name") {
             resilio_config.insert("device_name".to_owned(), serde_json::json!(device_name));
+        }
+        if let Some(listening_port) = listening_port {
+            resilio_config.insert(
+                "listening_port".to_owned(),
+                serde_json::json!(listening_port),
+            );
         }
 
         let resilio_config_text = serde_json::to_string_pretty(&resilio_config)
@@ -65,7 +76,10 @@ fn main() {
                 folder.use_sync_trash = Some(false);
             }
 
-            let mut config = config::resilio::Config::default();
+            let mut config = config::resilio::Config {
+                listening_port,
+                ..config::resilio::Config::default()
+            };
             config.shared_folders.push(folder);
 
             if let Some(device_name) = matches.value_of("device name") {
@@ -124,6 +138,12 @@ fn main() {
 
                 if let Some(device_name) = matches.value_of("device name") {
                     resilio_config.insert("device_name".to_owned(), serde_json::json!(device_name));
+                }
+                if let Some(listening_port) = listening_port {
+                    resilio_config.insert(
+                        "listening_port".to_owned(),
+                        serde_json::json!(listening_port),
+                    );
                 }
 
                 let mut resilio = resilio::Resilio::new_unsafe("rslsync", &resilio_config);

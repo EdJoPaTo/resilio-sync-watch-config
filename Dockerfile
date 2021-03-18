@@ -29,10 +29,11 @@ FROM docker.io/bitnami/minideb:buster
 WORKDIR /
 VOLUME /folders
 VOLUME /.resilio-sync-watch-config
+EXPOSE 55555/tcp 55555/udp
 
 RUN ln -sf /run/secrets/share.txt .
 COPY --from=rslsync /usr/bin/rslsync /usr/bin/
 COPY --from=builder /home/rust/target/x86_64-unknown-linux-musl/release/resilio-sync-watch-config /usr/bin/
 
 ENTRYPOINT ["resilio-sync-watch-config"]
-CMD ["single"]
+CMD ["single", "--listening-port", "55555"]
