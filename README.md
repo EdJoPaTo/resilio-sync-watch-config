@@ -38,6 +38,7 @@ volumes:
 services:
   watch-config:
     image: edjopato/resilio-sync-watch-config:3
+    command: single --listening-port 666
     secrets:
       - share.txt
     volumes:
@@ -153,12 +154,23 @@ USAGE:
     resilio-sync-watch-config [OPTIONS] <SUBCOMMAND>
 
 FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help
+            Prints help information
+
+    -V, --version
+            Prints version information
+
 
 OPTIONS:
-    -b, --basedir <DIRECTORY>    Folder in which the resulting share(s) should be synced
-                                 [default: folders]
+    -b, --basedir <DIRECTORY>
+            Folder in which the resulting share(s) should be synced [default:
+            folders]
+    -n, --device-name <NAME>
+            Override the device name. Defaults to the hostname.
+
+    -p, --listening-port <INT>
+            Set a specific listening port. Helpful in combination with NAT like in a
+            container environment.
 
 SUBCOMMANDS:
     help      Prints this message or the help of the given subcommand(s)
@@ -180,19 +192,31 @@ USAGE:
     resilio-sync-watch-config single [FLAGS] [OPTIONS] <SECRET_OR_FILE>
 
 FLAGS:
-    -h, --help            Prints help information
-        --enable-trash    Enable rslsync trash (use_sync_trash: true). Defaults to not
-                          using sync trash (different to default rslsync)
-    -V, --version         Prints version information
+    -h, --help
+            Prints help information
+
+        --enable-trash
+            Enable rslsync trash (use_sync_trash: true). Defaults to not using sync
+            trash (different to default rslsync)
+    -V, --version
+            Prints version information
+
 
 OPTIONS:
-    -b, --basedir <DIRECTORY>    Folder in which the resulting share(s) should be synced
-                                 [default: folders]
+    -b, --basedir <DIRECTORY>
+            Folder in which the resulting share(s) should be synced [default:
+            folders]
+    -n, --device-name <NAME>
+            Override the device name. Defaults to the hostname.
+
+    -p, --listening-port <INT>
+            Set a specific listening port. Helpful in combination with NAT like in a
+            container environment.
 
 ARGS:
-    <SECRET_OR_FILE>    Share secret to be synced. Can be the secret itself or a
-                        filename which contains the secret [default:
-                        share.txt]
+    <SECRET_OR_FILE>
+            Share secret to be synced. Can be the secret itself or a filename which
+            contains the secret [default: share.txt]
 ```
 
 ### Watch Mode
@@ -227,6 +251,12 @@ OPTIONS:
     -b, --basedir <DIRECTORY>
             Folder in which the resulting share(s) should be synced [default:
             folders]
+    -n, --device-name <NAME>
+            Override the device name. Defaults to the hostname.
+
+    -p, --listening-port <INT>
+            Set a specific listening port. Helpful in combination with NAT like in a
+            container environment.
 
 ARGS:
     <SECRET_OR_FILE>
@@ -243,15 +273,27 @@ USAGE:
     resilio-sync-watch-config parse [OPTIONS] <FILE>...
 
 FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help
+            Prints help information
+
+    -V, --version
+            Prints version information
+
 
 OPTIONS:
-    -b, --basedir <DIRECTORY>    Folder in which the resulting share(s) should be synced
-                                 [default: folders]
+    -b, --basedir <DIRECTORY>
+            Folder in which the resulting share(s) should be synced [default:
+            folders]
+    -n, --device-name <NAME>
+            Override the device name. Defaults to the hostname.
+
+    -p, --listening-port <INT>
+            Set a specific listening port. Helpful in combination with NAT like in a
+            container environment.
 
 ARGS:
-    <FILE>...    Path(s) to own JSON config files
+    <FILE>...
+            Path(s) to own JSON config files
 ```
 
 ## systemd Service
