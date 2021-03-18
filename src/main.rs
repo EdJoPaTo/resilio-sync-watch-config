@@ -34,7 +34,12 @@ fn main() {
             parse::read_and_merge(&config_files).expect("failed to get and merge all config files");
         let own_config = parse::apply_base_folder(raw_merged, basedir);
 
-        let resilio_config = own_config.into_resilio_config();
+        let mut resilio_config = own_config.into_resilio_config();
+
+        if let Some(device_name) = matches.value_of("device name") {
+            resilio_config.insert("device_name".to_owned(), serde_json::json!(device_name));
+        }
+
         let resilio_config_text = serde_json::to_string_pretty(&resilio_config)
             .expect("failed to parse final resilio config to json");
 
@@ -62,6 +67,10 @@ fn main() {
 
             let mut config = config::resilio::Config::default();
             config.shared_folders.push(folder);
+
+            if let Some(device_name) = matches.value_of("device name") {
+                config.device_name = device_name.to_owned();
+            }
 
             let mut resilio = resilio::Resilio::new("rslsync", &config);
 
@@ -110,8 +119,13 @@ fn main() {
                 let watchcat = crate::watch::Watchcat::new(CONFIGS_FOLDER)
                     .expect("failed to create config folder watcher");
 
-                let (folders, resilio_config) =
+                let (folders, mut resilio_config) =
                     watch::generate_config(CONFIGS_FOLDER, share_secret.to_owned(), basedir);
+
+                if let Some(device_name) = matches.value_of("device name") {
+                    resilio_config.insert("device_name".to_owned(), serde_json::json!(device_name));
+                }
+
                 let mut resilio = resilio::Resilio::new_unsafe("rslsync", &resilio_config);
 
                 let start_time = SystemTime::now();
