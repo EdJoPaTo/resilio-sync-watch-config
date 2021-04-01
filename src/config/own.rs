@@ -52,6 +52,25 @@ impl Config {
                 obj.insert(key, value);
             }
 
+            match serde_json::from_value::<super::resilio::Config>(serde_json::json!(obj))
+                .and_then(serde_json::to_value)
+            {
+                Ok(serde_json::Value::Object(safe_obj)) => {
+                    let missing_keys = obj.keys().cloned().filter(|key| !safe_obj.contains_key(key)).collect::<Vec<_>>();
+                    if !missing_keys.is_empty() {
+                        eprintln!(
+                            "WARNING: final config contains unknown keys. Either something is misspelled or not added to resilio-sync-watch-config. If you are sure its correctly spelled and working please open an issue on https://github.com/EdJoPaTo/resilio-sync-watch-config/issues. Missing keys: {:?}",
+                            missing_keys
+                        );
+                    }
+                }
+                Ok(value) => panic!(
+                    "resilio config was parsed into something not being a JSON object. Resilio wont work with that: {:?}",
+                    value
+                ),
+                Err(err) => eprintln!("WARNING: failed to validate config: {}", err),
+            }
+
             obj
         } else {
             panic!("I just created an object... this has to be an object.");
