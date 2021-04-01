@@ -59,7 +59,7 @@ impl Config {
                     let missing_keys = obj.keys().cloned().filter(|key| !safe_obj.contains_key(key)).collect::<Vec<_>>();
                     if !missing_keys.is_empty() {
                         eprintln!(
-                            "WARNING: final config contains unknown keys. Either something is misspelled or not added to resilio-sync-watch-config. If you are sure its correctly spelled and working please open an issue on https://github.com/EdJoPaTo/resilio-sync-watch-config/issues. Missing keys: {:?}",
+                            "WARNING: final config contains unknown keys: {:?} Either something is misspelled or not known to resilio-sync-watch-config. If you are sure its correctly spelled and working please open an issue on https://github.com/EdJoPaTo/resilio-sync-watch-config/issues.",
                             missing_keys
                         );
                     }
