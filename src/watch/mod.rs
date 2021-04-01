@@ -60,7 +60,8 @@ fn get_currently_existing_config_file_names(folder: &str) -> Vec<String> {
                     let is_file = entry.file_type().map_or(false, |o| o.is_file());
                     if is_file {
                         if let Ok(file_name) = entry.file_name().into_string() {
-                            if file_name.ends_with(".json") {
+                            #[allow(clippy::case_sensitive_file_extension_comparisons)]
+                            if file_name.to_lowercase().ends_with(".json") {
                                 list.push(file_name);
                             }
                         }

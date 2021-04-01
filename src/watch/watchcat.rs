@@ -35,7 +35,8 @@ impl Watchcat {
                 | DebouncedEvent::Rename(_, path)
                 | DebouncedEvent::Write(path) => {
                     if let Some(filename) = get_filename_as_string(&path) {
-                        if filename.ends_with(".json") {
+                        #[allow(clippy::case_sensitive_file_extension_comparisons)]
+                        if filename.to_lowercase().ends_with(".json") {
                             filenames.push(filename);
                         }
                     }
