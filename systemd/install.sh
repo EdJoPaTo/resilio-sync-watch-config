@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 nice cargo build --release
 
