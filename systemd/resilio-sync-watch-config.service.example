@@ -14,4 +14,4 @@ User=rslsync
 Group=rslsync
 
 [Install]
-RequiredBy=multi-user.target
+WantedBy=multi-user.target
