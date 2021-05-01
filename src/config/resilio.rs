@@ -18,6 +18,9 @@ pub struct Config {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_trash_ttl: Option<u32>,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_min_free_space_gb: Option<u32>,
+
     /// limit in kB/s
     #[serde(skip_serializing_if = "Option::is_none")]
     pub download_limit: Option<u32>,
@@ -46,6 +49,7 @@ impl Config {
     pub fn new(device_name: String) -> Self {
         Self {
             device_name,
+            disk_min_free_space_gb: None,
             download_limit: None,
             listening_port: None,
             pid_file: None,
