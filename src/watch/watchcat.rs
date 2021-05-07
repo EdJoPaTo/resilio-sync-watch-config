@@ -23,7 +23,7 @@ impl Watchcat {
             .watch(folder, RecursiveMode::NonRecursive)
             .map_err(|err| format!("failed to watch {} Error: {}", folder, err))?;
 
-        Ok(Self { watcher, rx })
+        Ok(Self { rx, watcher })
     }
 
     pub fn get_changed_filenames(&self) -> Vec<String> {

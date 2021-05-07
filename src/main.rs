@@ -124,7 +124,7 @@ fn main() {
                 }
 
                 if safe_start {
-                    let _ = fs::remove_dir_all(DEFAULT_META_FOLDER);
+                    drop(fs::remove_dir_all(DEFAULT_META_FOLDER));
                     safe_start = false;
                 }
 

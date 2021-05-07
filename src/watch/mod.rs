@@ -55,6 +55,7 @@ fn get_currently_existing_config_file_names(folder: &str) -> Vec<String> {
     match fs::read_dir(folder) {
         Ok(dir_contents) => {
             let mut list = Vec::new();
+            #[allow(clippy::manual_flatten)]
             for entry in dir_contents {
                 if let Ok(entry) = entry {
                     let is_file = entry.file_type().map_or(false, |o| o.is_file());
@@ -81,6 +82,8 @@ pub fn cleanup_base_folder(
     expected_folders: &[String],
 ) -> Result<(), std::io::Error> {
     println!("cleanup folders...");
+
+    #[allow(clippy::manual_flatten)]
     for entry in fs::read_dir(base_folder)? {
         if let Ok(entry) = entry {
             let file_type = entry.file_type()?;
