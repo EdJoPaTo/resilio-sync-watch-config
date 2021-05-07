@@ -134,7 +134,7 @@ fn main() {
                     .expect("failed to create config folder watcher");
 
                 let (folders, mut resilio_config) =
-                    watch::generate_config(CONFIGS_FOLDER, share_secret.to_owned(), basedir);
+                    watch::generate_config(CONFIGS_FOLDER, share_secret.clone(), basedir);
 
                 if let Some(device_name) = matches.value_of("device name") {
                     resilio_config.insert("device_name".to_owned(), serde_json::json!(device_name));

@@ -29,7 +29,7 @@ pub fn generate_config(
         Ok(merged) => {
             let mut folders = Vec::new();
             for folder in merged.folders.keys() {
-                folders.push(folder.to_owned());
+                folders.push(folder.clone());
             }
 
             let config = crate::parse::apply_base_folder(merged, base_folder);
