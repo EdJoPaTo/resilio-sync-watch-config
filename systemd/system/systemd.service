@@ -1,5 +1,5 @@
 [Unit]
-Description=Run Resilio Sync Watch Config
+Description=Run resilio-sync-watch-config
 Wants=network-online.target
 After=network-online.target
 StartLimitIntervalSec=0
