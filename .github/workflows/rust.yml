@@ -121,7 +121,7 @@ jobs:
         run: >
           tar --gzip -cvf ${{ env.ARTIFACT_NAME }}.tar.gz
           completions LICENSE README.md
-          systemd/**/*.service systemd/**/*.timer systemd/**/*.conf
+          systemd/**/*.service
           -C target/${{ matrix.triple }}/release resilio-sync-watch-config
       - name: Package (windows)
         if: runner.os == 'Windows'
