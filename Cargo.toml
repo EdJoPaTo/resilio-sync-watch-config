@@ -3,6 +3,7 @@ name = "resilio-sync-watch-config"
 description = "Small tool to create a resilio config and watch for changes to restart the sync daemon on changes"
 version = "3.1.0"
 license = "MIT"
+repository = "https://github.com/EdJoPaTo/resilio-sync-watch-config"
 authors = ["EdJoPaTo <resilio-sync-watch-config-rust@edjopato.de>"]
 edition = "2018"
 
