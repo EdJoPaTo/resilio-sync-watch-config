@@ -1,8 +1,9 @@
 .*
 *.md
+/completions
+/systemd
 /target
 Dockerfile
-systemd
 
 /folders
 share.txt

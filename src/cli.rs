@@ -1,5 +1,6 @@
 use clap::{App, AppSettings, Arg, SubCommand};
 
+#[must_use]
 pub fn build() -> App<'static, 'static> {
     App::new("Resilio Sync Watch Config")
         .version(env!("CARGO_PKG_VERSION"))
