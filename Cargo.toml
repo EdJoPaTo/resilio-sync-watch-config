@@ -15,7 +15,7 @@ codegen-units = 1
 lto = true
 
 [build-dependencies]
-clap = "2"
+clap = "3"
 
 [dependencies]
 exitcode = "1"
@@ -27,7 +27,7 @@ signal-hook = "0.3"
 tempfile = "3"
 
 [dependencies.clap]
-version = "2"
+version = "3"
 features = ["wrap_help"]
 
 [dependencies.serde]
