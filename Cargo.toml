@@ -6,7 +6,6 @@ license = "MIT"
 repository = "https://github.com/EdJoPaTo/resilio-sync-watch-config"
 authors = ["EdJoPaTo <resilio-sync-watch-config-rust@edjopato.de>"]
 edition = "2018"
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [profile.release]
@@ -15,9 +14,11 @@ codegen-units = 1
 lto = true
 
 [build-dependencies]
-clap = "2"
+clap = { version = "3", features = ["cargo"] }
+clap_complete = "3"
 
 [dependencies]
+clap = { version = "3", features = ["cargo", "wrap_help"] }
 exitcode = "1"
 hostname = "0.3"
 nix = "0.23"
@@ -25,10 +26,6 @@ notify = "4"
 serde_json = "1"
 signal-hook = "0.3"
 tempfile = "3"
-
-[dependencies.clap]
-version = "2"
-features = ["wrap_help"]
 
 [dependencies.serde]
 version = "1"

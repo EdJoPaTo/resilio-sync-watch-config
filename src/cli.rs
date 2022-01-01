@@ -1,70 +1,65 @@
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{app_from_crate, App, AppSettings, Arg};
 
 #[must_use]
-pub fn build() -> App<'static, 'static> {
-    App::new("Resilio Sync Watch Config")
-        .version(env!("CARGO_PKG_VERSION"))
-        .author(env!("CARGO_PKG_AUTHORS"))
-        .about(env!("CARGO_PKG_DESCRIPTION"))
+pub fn build() -> App<'static> {
+    app_from_crate!()
+        .name("Resilio Sync Watch Config")
         .setting(AppSettings::SubcommandRequired)
-        .global_setting(AppSettings::ColoredHelp)
         .subcommand(
-            SubCommand::with_name("single")
+            App::new("single")
                 .about("Sync a single share with Resilio")
                 .arg(
-                    Arg::with_name("sync trash")
+                    Arg::new("sync trash")
                         .long("enable-trash")
                         .help("Enable rslsync trash (use_sync_trash: true). Defaults to not using sync trash (different to default rslsync)"),
                 )
                 .arg(
-                    Arg::with_name("share secret")
+                    Arg::new("share secret")
                         .value_name("SECRET_OR_FILE")
                         .takes_value(true)
-                        .required(true)
                         .default_value("share.txt")
                         .help("Share secret to be synced. Can be the secret itself or a filename which contains the secret"),
                 )
         )
         .subcommand(
-            SubCommand::with_name("parse")
+            App::new("parse")
                 .about("Reads (multiple) own JSON config files and prints the resulting Resilio config to stdout")
                 .arg(
-                    Arg::with_name("config")
+                    Arg::new("config")
                         .value_name("FILE")
-                        .multiple(true)
+                        .multiple_occurrences(true)
                         .takes_value(true)
                         .required(true)
                         .help("Path(s) to own JSON config files"),
                 )
         )
         .subcommand(
-            SubCommand::with_name("watch")
+            App::new("watch")
                 .about("Provide Resilio with a share secret which contains own config files. These are parsed into a Resilio config and Resilio is started with it. The config files in the share are watched and Resilio is restarted on changes.")
                 .arg(
-                    Arg::with_name("share secret")
+                    Arg::new("share secret")
                         .value_name("SECRET_OR_FILE")
                         .takes_value(true)
-                        .required(true)
                         .default_value("share.txt")
                         .help("Share secret to be synced which contains the own configs. Can be the secret itself or a filename which contains the secret"),
                 )
                 .arg(
-                    Arg::with_name("safe start")
+                    Arg::new("safe start")
                         .long("safe-start")
-                        .short("s")
+                        .short('s')
                         .help("clean all state of Resilio before starting")
                         .long_help("clean all state of Resilio before starting. Ensures old runs of Resilio dont influence the correct syncing. Basically removes the storage_path. This is helpful when switching the share key. Only the first start of Resilio will be done with safe-mode. When Resilio stops/crashes when it shouldnt safe-mode is enabled for the next start regardless of this flag.")
                 )
                 .arg(
-                    Arg::with_name("cleanup folders")
+                    Arg::new("cleanup folders")
                         .long("cleanup")
                         .help("remove superfluous folders")
                         .long_help("remove superfluous folders. Folders which are not included in the current config are deleted after the current config is running successfully for 5 minutes.")
                 )
         )
         .arg(
-            Arg::with_name("base directory")
-                .short("b")
+            Arg::new("base directory")
+                .short('b')
                 .long("basedir")
                 .value_name("DIRECTORY")
                 .global(true)
@@ -73,22 +68,27 @@ pub fn build() -> App<'static, 'static> {
                 .help("Folder in which the resulting share(s) should be synced"),
         )
         .arg(
-            Arg::with_name("device name")
+            Arg::new("device name")
                 .long("device-name")
-                .short("n")
+                .short('n')
                 .value_name("NAME")
                 .global(true)
                 .takes_value(true)
                 .help("Override the device name. Defaults to the hostname."),
         )
         .arg(
-            Arg::with_name("listening port")
+            Arg::new("listening port")
                 .long("listening-port")
-                .short("p")
+                .short('p')
                 .value_name("INT")
                 .global(true)
                 .takes_value(true)
                 .help("Set a specific listening port")
                 .long_help("Set a specific listening port. Helpful in combination with NAT like in a container environment."),
         )
+}
+
+#[test]
+fn verify_app() {
+    build().debug_assert();
 }

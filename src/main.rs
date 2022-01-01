@@ -64,8 +64,8 @@ fn main() {
     let mut signals = Signals::new(&[nix::libc::SIGINT, nix::libc::SIGTERM])
         .expect("failed to create signal handler");
 
-    match matches.subcommand() {
-        ("single", Some(matches)) => {
+    match matches.subcommand().expect("requires a subcommand") {
+        ("single", matches) => {
             println!("Start in single folder mode...");
             let share_secret = get_share_secret_from_arg(matches.value_of("share secret"))
                 .expect("Share secret could not be read or is invalid");
@@ -106,7 +106,7 @@ fn main() {
                 sleep(Duration::from_millis(250));
             }
         }
-        ("watch", Some(matches)) => {
+        ("watch", matches) => {
             const CLEANUP_AFTER_SUCCESSFUL_SECONDS: u64 = 60 * 5; // 5 min
             const CONFIGS_FOLDER: &str = ".resilio-sync-watch-config/configs";
 
@@ -194,8 +194,7 @@ fn main() {
                 }
             }
         }
-        (command, Some(_)) => todo!("Subcommand '{}' not yet implemented", command),
-        _ => unimplemented!("You have to use a subcommand to run this tool"),
+        (command, _) => todo!("Subcommand '{}' not yet implemented", command),
     }
 }
 
