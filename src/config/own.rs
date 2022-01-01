@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::resilio::Folder;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Config {
     #[serde(default)]
     pub folders: HashMap<String, String>,
@@ -12,15 +12,6 @@ pub struct Config {
     #[serde(default)]
     pub passthrough: HashMap<String, serde_json::Value>,
     // TODO: folder_passthrough
-}
-
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            folders: HashMap::new(),
-            passthrough: HashMap::new(),
-        }
-    }
 }
 
 impl Config {

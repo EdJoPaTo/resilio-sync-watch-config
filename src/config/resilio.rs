@@ -46,7 +46,7 @@ pub struct Folder {
 }
 
 impl Config {
-    pub fn new(device_name: String) -> Self {
+    pub const fn new(device_name: String) -> Self {
         Self {
             device_name,
             disk_min_free_space_gb: None,
@@ -62,7 +62,7 @@ impl Config {
 }
 
 impl Folder {
-    pub fn new(secret: String, dir: String) -> Self {
+    pub const fn new(secret: String, dir: String) -> Self {
         Self {
             dir,
             search_lan: None,

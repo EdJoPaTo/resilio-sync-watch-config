@@ -13,6 +13,7 @@ use crate::config::resilio::Config;
 
 #[derive(Debug)]
 pub struct Resilio {
+    #[allow(dead_code)]
     config_file: NamedTempFile,
     process: Child,
 }
