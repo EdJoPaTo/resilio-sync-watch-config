@@ -11,6 +11,16 @@ use tempfile::NamedTempFile;
 
 use crate::config::resilio::Config;
 
+lazy_static::lazy_static! {
+    static ref NICE_EXISTS: bool = Command::new("nice")
+        .arg("echo")
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .status()
+        .is_ok();
+}
+
 #[derive(Debug)]
 pub struct Resilio {
     #[allow(dead_code)]
@@ -50,15 +60,21 @@ impl Resilio {
         // TODO: stricten permissions on configs folder (chmod -R go-rwx)
         fs::create_dir_all(storage_path).expect("failed to create storage_path folder");
 
-        let handle = Command::new(binary)
-            .arg("--nodaemon")
-            .arg("--config")
-            .arg(&config_file.path())
-            .stdin(Stdio::null())
-            .stdout(Stdio::null())
-            .stderr(Stdio::null())
-            .spawn()
-            .expect("failed to start rslsync process");
+        let handle = if *NICE_EXISTS {
+            let mut command = Command::new("nice");
+            command.arg(binary);
+            command
+        } else {
+            Command::new(binary)
+        }
+        .arg("--nodaemon")
+        .arg("--config")
+        .arg(&config_file.path())
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .expect("failed to start rslsync process");
         println!("Resilio started.");
 
         Self {
@@ -122,4 +138,9 @@ impl Drop for Resilio {
     fn drop(&mut self) {
         self.stop().expect("failed to stop Resilio");
     }
+}
+
+#[test]
+fn nice_exists() {
+    assert!(*NICE_EXISTS);
 }

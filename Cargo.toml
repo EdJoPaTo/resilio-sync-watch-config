@@ -21,6 +21,7 @@ clap_complete = "3"
 clap = { version = "3", features = ["cargo", "wrap_help"] }
 exitcode = "1"
 hostname = "0.3"
+lazy_static = "1"
 nix = "0.23"
 notify = "4"
 serde_json = "1"

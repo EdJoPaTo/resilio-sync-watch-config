@@ -446,6 +446,7 @@ dependencies = [
  "clap_complete",
  "exitcode",
  "hostname",
+ "lazy_static",
  "nix",
  "notify",
  "serde",
