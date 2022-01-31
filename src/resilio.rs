@@ -83,7 +83,7 @@ impl Resilio {
         }
     }
 
-    pub fn is_running(&mut self) -> std::io::Result<bool> {
+    pub fn check_running(&mut self) -> std::io::Result<bool> {
         let has_exitstatus = self.process.try_wait()?.is_some();
         Ok(!has_exitstatus)
     }

@@ -94,7 +94,7 @@ fn main() {
                 }
 
                 if !resilio
-                    .is_running()
+                    .check_running()
                     .expect("failed to check if resilio is still running")
                 {
                     println!("Resilio stopped unexpectedly!");
@@ -167,7 +167,7 @@ fn main() {
                     }
 
                     if !resilio
-                        .is_running()
+                        .check_running()
                         .expect("failed to check if resilio is still running")
                     {
                         println!("Resilio stopped unexpectedly! Restart with safe mode...");
