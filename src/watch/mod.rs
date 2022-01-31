@@ -15,17 +15,11 @@ pub fn generate_config(
         config_files.len(),
         config_files
     );
-    let mut config_files_in_config_dir = Vec::new();
-    for file in config_files {
-        config_files_in_config_dir.push(format!("{}/{}", configs_folder, file));
-    }
-
-    let config_file_refs = config_files_in_config_dir
+    let config_files_in_config_dir = config_files
         .iter()
-        .map(String::as_ref)
-        .collect::<Vec<_>>();
+        .map(|file| format!("{}/{}", configs_folder, file));
 
-    let (folders, mut own_config) = match crate::parse::read_and_merge(&config_file_refs) {
+    let (folders, mut own_config) = match crate::parse::read_and_merge(config_files_in_config_dir) {
         Ok(merged) => {
             let mut folders = Vec::new();
             for folder in merged.folders.keys() {

@@ -32,11 +32,10 @@ fn main() {
     if let Some(matches) = matches.subcommand_matches("parse") {
         let config_files = matches
             .values_of("config")
-            .expect("failed to read config files from command line")
-            .collect::<Vec<_>>();
+            .expect("failed to read config files from command line");
 
         let raw_merged =
-            parse::read_and_merge(&config_files).expect("failed to get and merge all config files");
+            parse::read_and_merge(config_files).expect("failed to get and merge all config files");
         let own_config = parse::apply_base_folder(raw_merged, basedir);
 
         let mut resilio_config = own_config.into_resilio_config();
