@@ -16,7 +16,7 @@ jobs:
           - stable
         os:
           - ubuntu-latest
-          - macos-11
+          - macos-latest
         clippyargs:
           - -D clippy::pedantic -D warnings
         features:
@@ -31,10 +31,6 @@ jobs:
             os: ubuntu-latest
             features: --all-features
             clippyargs: -W clippy::pedantic
-          - os: ubuntu-latest
-            toolchain: nightly
-            clippyargs: -W clippy::pedantic
-            experimental: true
     steps:
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
@@ -88,9 +84,9 @@ jobs:
             os: ubuntu-latest
 
           - triple: x86_64-apple-darwin
-            os: macos-11
+            os: macos-latest
           - triple: aarch64-apple-darwin
-            os: macos-11
+            os: macos-latest
     steps:
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
